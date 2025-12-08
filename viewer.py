@@ -622,14 +622,24 @@ with left:
         with c2:
             reset_btn = st.button("Reset Filters")
 
-# ---- RESET BEHAVIOR (minimal) ----
-if reset_btn:
-    st.session_state.run_filter = ""
-    st.session_state.device_filter = ""
-    st.session_state.fabin_after = None
-    st.session_state.fabout_before = None
-    st.rerun()            # ← ensures UI fields visually clear
+# # ---- RESET BEHAVIOR (minimal) ----
+# if reset_btn:
+#     st.session_state.run_filter = ""
+#     st.session_state.device_filter = ""
+#     st.session_state.fabin_after = None
+#     st.session_state.fabout_before = None
+#     st.rerun()            # ← ensures UI fields visually clear
 
+
+# ---- RESET BEHAVIOR (safe for Streamlit Cloud) ----
+if reset_btn:
+    st.session_state.update({
+        "run_filter": "",
+        "device_filter": "",
+        "fabin_after": None,
+        "fabout_before": None,
+    })
+    st.rerun()
 
 
 
