@@ -1,5 +1,5 @@
 # firebase_client.py
-import pyrebase
+import pyrebase4 as pyrebase
 import requests
 import json
 
