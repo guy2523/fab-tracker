@@ -1,3 +1,3 @@
 streamlit
 requests
-pyrebase
+pyrebase4
