@@ -1,7 +1,8 @@
 # viewer.py  (clean, multi-layer grid with arrows)
 import streamlit as st
 import requests
-from firebase_client import auth, BASE_URL
+# from firebase_client import auth, BASE_URL
+from firebase_client import firebase_sign_in, BASE_URL
 import streamlit.components.v1 as components
 
 
@@ -251,6 +252,7 @@ def get_meta_date(meta_data_child: str, target_key: str):
 
 
 
+
 # ------------------------------------------------------------
 # Chip HTML (horizontal, color-coded)
 # ------------------------------------------------------------
@@ -318,18 +320,34 @@ def layer_card_html(layer, idx=None):
 # Viewer login
 # ------------------------------------------------------------
 
+# if "viewer_user" not in st.session_state:
+#     st.header("🔐 Viewer Login")
+#     email = st.text_input("Email")
+#     pw = st.text_input("Password", type="password")
+#     if st.button("Login"):
+#         try:
+#             u = auth.sign_in_with_email_and_password(email, pw)
+#             st.session_state.viewer_user = u
+#             st.rerun()
+#         except Exception as e:
+#             st.error(str(e))
+#     st.stop()
+
 if "viewer_user" not in st.session_state:
     st.header("🔐 Viewer Login")
     email = st.text_input("Email")
     pw = st.text_input("Password", type="password")
+
     if st.button("Login"):
         try:
-            u = auth.sign_in_with_email_and_password(email, pw)
+            u = firebase_sign_in(email, pw)   # REST SIGN-IN
             st.session_state.viewer_user = u
             st.rerun()
         except Exception as e:
-            st.error(str(e))
+            st.error(f"Login failed: {e}")
+
     st.stop()
+
 
 u = st.session_state.viewer_user
 token = u["idToken"]
@@ -495,16 +513,16 @@ if not runs:
     st.stop()
 
 
-# Helper to extract Fabin/Fabout dates from metadata
-def get_meta_date_for_filter(fields, meta_key):
-    meta = fields.get("metadata", {}).get("mapValue", {}).get("fields", {})
-    fab = meta.get("fab", {}).get("arrayValue", {}).get("values", [])
-    fab_list = firestore_to_python(meta.get("fab", {})) if isinstance(fab, list) else []
+# # Helper to extract Fabin/Fabout dates from metadata
+# def get_meta_date_for_filter(fields, meta_key):
+#     meta = fields.get("metadata", {}).get("mapValue", {}).get("fields", {})
+#     fab = meta.get("fab", {}).get("arrayValue", {}).get("values", [])
+#     fab_list = firestore_to_python(meta.get("fab", {})) if isinstance(fab, list) else []
 
-    for item in fab_list:
-        if item["key"] == meta_key:
-            return item["value"]
-    return ""
+#     for item in fab_list:
+#         if item["key"] == meta_key:
+#             return item["value"]
+#     return ""
     
 
 
@@ -550,6 +568,19 @@ def get_meta_date_for_filter(fields, meta_key):
 #             apply_btn = st.button("Apply Filters")
 #         with c2:
 #             reset_btn = st.button("Reset Filters")
+
+
+def get_meta_date_for_filter(fields, meta_data_child, target_key):
+    # Load metadata
+    meta = fields.get("metadata", {}).get("mapValue", {}).get("fields", {})
+    meta_child = meta.get(meta_data_child, {}).get("arrayValue", {}).get("values", [])
+
+    # Convert Firestore arrayValue → python
+    meta_child_py = [firestore_to_python(v) for v in meta_child]
+
+    # Extract target entry
+    return get_meta_value(meta_child_py, target_key)
+
 
 
 # ----- FILTER EXPANDER (aligned left) -----
@@ -610,6 +641,10 @@ def matches_filters(fields):
     run_no = fields["run_no"]["stringValue"]
     device = fields["device_name"]["stringValue"]
 
+    # metadata dates
+    fabin_str  = get_meta_date_for_filter(fields, "fab", "Fabin")
+    fabout_str = get_meta_date_for_filter(fields, "fab", "Fabout")
+
     # convert date
     import datetime
     def to_date(s):
@@ -618,8 +653,8 @@ def matches_filters(fields):
         except:
             return None
 
-    fabin_date = to_date(fab_in)
-    fabout_date = to_date(fab_out)
+    fabin_date  = to_date(fabin_str)
+    fabout_date = to_date(fabout_str)
 
     # apply filters
     if run_filter and run_filter.lower() not in run_no.lower():
@@ -636,47 +671,6 @@ def matches_filters(fields):
 
     return True
 
-
-# ------------------------------------------------------------
-# APPLY FILTER LOGIC
-# ------------------------------------------------------------
-
-def matches_filters(fields):
-    run_no = fields["run_no"]["stringValue"]
-    device = fields["device_name"]["stringValue"]
-
-    # metadata lookup
-    meta = fields.get("metadata", {}).get("mapValue", {}).get("fields", {})
-    fab_meta = parse_metadata_section(meta.get("fab", {}))
-
-    fabin = next((v for k, v in fab_meta if k == "Fabin"), "")
-    fabout = next((v for k, v in fab_meta if k == "Fabout"), "")
-
-    # convert date
-    import datetime
-    def to_date(s):
-        try:
-            return datetime.datetime.strptime(s, "%Y-%m-%d").date()
-        except:
-            return None
-
-    fabin_date = to_date(fabin)
-    fabout_date = to_date(fabout)
-
-    # apply filters
-    if run_filter and run_filter.lower() not in run_no.lower():
-        return False
-
-    if device_filter and device_filter.lower() not in device.lower():
-        return False
-
-    if fabin_after and fabin_date and fabin_date < fabin_after:
-        return False
-
-    if fabout_before and fabout_date and fabout_date > fabout_before:
-        return False
-
-    return True
 
 
 # ---- NEW: minimal reset behavior ----
@@ -699,8 +693,6 @@ if apply_btn:
     filtered_runs = [doc for doc in runs if matches_filters(doc["fields"])]
 else:
     filtered_runs = runs
-
-
 
 
 

@@ -1,31 +1,40 @@
+
+
 # firebase_client.py
-import pyrebase4 as pyrebase
 import requests
 import json
 
 # ============================================
-# 1. FIREBASE WEB CONFIG (FILL THIS IN)
+# 1. FIREBASE WEB CONFIG
 # ============================================
 firebaseConfig = {
     "apiKey": "AIzaSyC4ekPpnhhwNQU_w78-6NaeITIGe67gS8I",
     "authDomain": "fab-tracker-93819.firebaseapp.com",
     "projectId": "fab-tracker-93819",
     "storageBucket": "fab-tracker-93819.appspot.com",
-  	"messagingSenderId": "516510758182",
-  	"appId": "1:516510758182:web:a632746532b9d49f5a3de7",
-    "databaseURL": "https://fab-tracker-93819.firebaseio.com"  # Pyrebase requires this key even if empty
+    "messagingSenderId": "516510758182",
+    "appId": "1:516510758182:web:a632746532b9d49f5a3de7",
+    "databaseURL": "https://fab-tracker-93819.firebaseio.com"
 }
 
 # ============================================
-# 2. AUTHENTICATION (Pyrebase)
+# 2. AUTHENTICATION (REST API replaces Pyrebase)
 # ============================================
-try:
-    firebase = pyrebase.initialize_app(firebaseConfig)
-    auth = firebase.auth()
-    print("✔ Firebase Auth initialized.")
-except Exception as e:
-    print("❌ ERROR initializing Firebase Auth:", e)
-    auth = None
+API_KEY = firebaseConfig["apiKey"]
+
+def firebase_sign_in(email, password):
+    """Authenticate using Firebase REST API."""
+    url = f"https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key={API_KEY}"
+    payload = {
+        "email": email,
+        "password": password,
+        "returnSecureToken": True
+    }
+
+    res = requests.post(url, json=payload)
+    res.raise_for_status()
+    return res.json()
+
 
 
 # ============================================
@@ -121,15 +130,3 @@ def firestore_list(collection, id_token):
     url = f"https://firestore.googleapis.com/v1/projects/{PROJECT_ID}/databases/(default)/documents/{collection}"
     headers = {"Authorization": f"Bearer {id_token}"}
     return requests.get(url, headers=headers).json()
-
-
-import requests
-
-PROJECT_ID = "fab-tracker-93819"
-BASE_URL = f"https://firestore.googleapis.com/v1/projects/{PROJECT_ID}/databases/(default)/documents"
-
-def firestore_get_collection(collection, id_token):
-    url = f"{BASE_URL}/{collection}"
-    headers = {"Authorization": f"Bearer {id_token}"}
-    response = requests.get(url, headers=headers)
-    return response.json()

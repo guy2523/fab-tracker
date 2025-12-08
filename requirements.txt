@@ -1,3 +1,2 @@
 streamlit
 requests
-pyrebase4==4. 7. 1
