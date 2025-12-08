@@ -516,62 +516,6 @@ if not runs:
     st.stop()
 
 
-# # Helper to extract Fabin/Fabout dates from metadata
-# def get_meta_date_for_filter(fields, meta_key):
-#     meta = fields.get("metadata", {}).get("mapValue", {}).get("fields", {})
-#     fab = meta.get("fab", {}).get("arrayValue", {}).get("values", [])
-#     fab_list = firestore_to_python(meta.get("fab", {})) if isinstance(fab, list) else []
-
-#     for item in fab_list:
-#         if item["key"] == meta_key:
-#             return item["value"]
-#     return ""
-    
-
-
-# # ----- FILTER EXPANDER (aligned left) -----
-# left, _ = st.columns([0.25, 0.75])   # 25% width column for the filter card
-
-# with left:
-#     with st.expander("🔍 Filter Runs", expanded=False):
-#         f_col1, f_col2 = st.columns(2)
-#         with f_col1:
-#             run_filter = st.text_input("Run ID contains…", "")
-#         with f_col2:
-#             device_filter = st.text_input("Device name contains…", "")
-
-#         d1, d2 = st.columns(2)
-#         with d1:
-#             fabin_after = st.date_input("Fab-in after…", value=None)
-#         with d2:
-#             fabout_before = st.date_input("Fab-out before…", value=None)
-
-#         apply_btn = st.button("Apply Filters")
-
-
-# # ----- FILTER EXPANDER (aligned left) -----
-# left, _ = st.columns([0.25, 0.75])   # 25% width column for the filter card
-
-# with left:
-#     with st.expander("🔍 Filter Runs", expanded=False):
-#         f_col1, f_col2 = st.columns(2)
-#         with f_col1:
-#             run_filter = st.text_input("Run ID contains…", "")
-#         with f_col2:
-#             device_filter = st.text_input("Device name contains…", "")
-
-#         d1, d2 = st.columns(2)
-#         with d1:
-#             fabin_after = st.date_input("Fab-in after…", value=None)
-#         with d2:
-#             fabout_before = st.date_input("Fab-out before…", value=None)
-
-#         c1, c2 = st.columns([1,1])
-#         with c1:
-#             apply_btn = st.button("Apply Filters")
-#         with c2:
-#             reset_btn = st.button("Reset Filters")
-
 
 def get_meta_date_for_filter(fields, meta_data_child, target_key):
     # Load metadata
@@ -588,6 +532,20 @@ def get_meta_date_for_filter(fields, meta_data_child, target_key):
 
 # ----- FILTER EXPANDER (aligned left) -----
 left, _ = st.columns([0.25, 0.75])
+
+# ------------------------------------------------------------
+# RESET HANDLING — MUST occur BEFORE widget creation
+# ------------------------------------------------------------
+if "reset_filters_triggered" not in st.session_state:
+    st.session_state.reset_filters_triggered = False
+
+if st.session_state.reset_filters_triggered:
+    st.session_state.run_filter = ""
+    st.session_state.device_filter = ""
+    st.session_state.fabin_after = None
+    st.session_state.fabout_before = None
+    st.session_state.reset_filters_triggered = False
+    st.rerun()
 
 with left:
     with st.expander("🔍 Filter Runs", expanded=False):
@@ -623,7 +581,10 @@ with left:
         with c1:
             apply_btn = st.button("Apply Filters")
         with c2:
-            reset_btn = st.button("Reset Filters")
+            if st.button("Reset Filters"):
+                st.session_state.reset_filters_triggered = True
+                st.rerun()
+
 
 # # ---- RESET BEHAVIOR (minimal) ----
 # if reset_btn:
@@ -634,13 +595,13 @@ with left:
 #     st.rerun()            # ← ensures UI fields visually clear
 
 
-# ---- RESET BEHAVIOR (safe for Streamlit Cloud) ----
-if reset_btn:
-    st.session_state.run_filter = ""
-    st.session_state.device_filter = ""
-    st.session_state.fabin_after = None
-    st.session_state.fabout_before = None
-    st.rerun()
+# # ---- RESET BEHAVIOR (safe for Streamlit Cloud) ----
+# if reset_btn:
+#     st.session_state.run_filter = ""
+#     st.session_state.device_filter = ""
+#     st.session_state.fabin_after = None
+#     st.session_state.fabout_before = None
+#     st.rerun()
 
 
 
@@ -685,16 +646,16 @@ def matches_filters(fields):
 
 
 
-# ---- NEW: minimal reset behavior ----
-if reset_btn:
-    run_filter = ""
-    device_filter = ""
-    fabin_after = None
-    fabout_before = None
-    # simply show all runs (no rerun needed)
-    filtered_runs = runs
-else:
-    filtered_runs = [doc for doc in runs if matches_filters(doc["fields"])]
+# # ---- NEW: minimal reset behavior ----
+# if reset_btn:
+#     run_filter = ""
+#     device_filter = ""
+#     fabin_after = None
+#     fabout_before = None
+#     # simply show all runs (no rerun needed)
+#     filtered_runs = runs
+# else:
+#     filtered_runs = [doc for doc in runs if matches_filters(doc["fields"])]
 
 
 
