@@ -320,18 +320,6 @@ def layer_card_html(layer, idx=None):
 # Viewer login
 # ------------------------------------------------------------
 
-# if "viewer_user" not in st.session_state:
-#     st.header("🔐 Viewer Login")
-#     email = st.text_input("Email")
-#     pw = st.text_input("Password", type="password")
-#     if st.button("Login"):
-#         try:
-#             u = auth.sign_in_with_email_and_password(email, pw)
-#             st.session_state.viewer_user = u
-#             st.rerun()
-#         except Exception as e:
-#             st.error(str(e))
-#     st.stop()
 
 if "viewer_user" not in st.session_state:
     st.header("🔐 Viewer Login")
@@ -352,6 +340,21 @@ if "viewer_user" not in st.session_state:
 u = st.session_state.viewer_user
 token = u["idToken"]
 email = u["email"]
+
+
+# ------------------------------------------------------------
+# Initialize filter keys in session_state (PREVENT Streamlit API errors)
+# ------------------------------------------------------------
+for key, default in {
+    "run_filter": "",
+    "device_filter": "",
+    "fabin_after": None,
+    "fabout_before": None
+}.items():
+    if key not in st.session_state:
+        st.session_state[key] = default
+
+
 
 st.sidebar.write("Logged in as:", email)
 if st.sidebar.button("Logout"):
@@ -633,13 +636,12 @@ with left:
 
 # ---- RESET BEHAVIOR (safe for Streamlit Cloud) ----
 if reset_btn:
-    st.session_state.update({
-        "run_filter": "",
-        "device_filter": "",
-        "fabin_after": None,
-        "fabout_before": None,
-    })
+    st.session_state.run_filter = ""
+    st.session_state.device_filter = ""
+    st.session_state.fabin_after = None
+    st.session_state.fabout_before = None
     st.rerun()
+
 
 
 
