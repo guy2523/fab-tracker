@@ -325,13 +325,7 @@ if "user" not in st.session_state:
             "grant_type": "authorization_code",
         },
     )
-
-    # token_json = token_res.json()
-    # id_token = token_json["id_token"]
-
-    # if "id_token" not in token_json:
-    #     st.error("Google token exchange failed.")
-    #     st.stop()                       
+      
 
     token_json = token_res.json()
 

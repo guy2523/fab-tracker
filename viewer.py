@@ -971,10 +971,15 @@ def parse_metadata_section(section):
     return []
 
 
+# def list_runs(id_token):
+#     url = f"{BASE_URL}/runs"
+#     r = requests.get(url, headers={"Authorization": f"Bearer {id_token}"})
+#     j = r.json()
+#     return j.get("documents", [])
 
-def list_runs(id_token):
+def list_runs():
     url = f"{BASE_URL}/runs"
-    r = requests.get(url, headers={"Authorization": f"Bearer {id_token}"})
+    r = requests.get(url)  # public read
     j = r.json()
     return j.get("documents", [])
 
@@ -1505,88 +1510,98 @@ MEASURE_SPECIAL_KEYS = {
 
 
 
+# # ------------------------------------------------------------
+# # GOOGLE LOGIN
+# # ------------------------------------------------------------
+
+# if "viewer_user" not in st.session_state:
+
+#     client_id = st.secrets["google_oauth"]["client_id"]
+#     client_secret = st.secrets["google_oauth"]["client_secret"]
+
+#     redirect_uri = st.secrets["app"]["viewer_redirect_uri"]
+
+#     params = {
+#         "client_id": client_id,
+#         "redirect_uri": redirect_uri,
+#         "response_type": "code",
+#         "scope": "openid email profile",
+#         "access_type": "offline",
+#         "prompt": "select_account",
+#     }
+
+#     auth_url = "https://accounts.google.com/o/oauth2/v2/auth?" + urllib.parse.urlencode(params)
+
+#     query_params = st.query_params
+
+#     if "code" not in query_params:
+#         st.markdown(f"[Login with Google]({auth_url})")
+#         st.stop()
+
+#     code = query_params["code"]
+
+#     token_res = requests.post(
+#         "https://oauth2.googleapis.com/token",
+#         data={
+#             "code": code,
+#             "client_id": client_id,
+#             "client_secret": client_secret,
+#             "redirect_uri": redirect_uri,
+#             "grant_type": "authorization_code",
+#         },
+#     )
+
+#     token_json = token_res.json()
+
+#     if "id_token" not in token_json:
+#         st.write(token_json)
+#         st.stop()
+
+#     google_id_token = token_json["id_token"]
+
+#     user = firebase_sign_in_with_google(google_id_token, redirect_uri)
+
+#     email = user.get("email", "")
+#     if not email.endswith("@eeroq.com"):
+#         st.error("Unauthorized domain")
+#         st.stop()
+
+#     st.session_state["viewer_user"] = user
+#     st.session_state["viewer_login_time"] = time.time()
+
+#     st.query_params.clear()
+#     st.rerun()
+
+
+
+# # --- Auto-refresh token if expired ---
+# expires_in = int(st.session_state.viewer_user.get("expiresIn", "3600"))
+# login_time = st.session_state.get("login_time", time.time())
+
+# # Check if 55 minutes passed
+# if time.time() - login_time > 3300:  # 55 minutes
+#     refresh_token = st.session_state.viewer_user["refreshToken"]
+#     new_tokens = firebase_refresh_id_token(refresh_token)
+
+#     # Update session_state with new tokens
+#     st.session_state.viewer_user["idToken"] = new_tokens["id_token"]
+#     st.session_state.viewer_user["refreshToken"] = new_tokens["refresh_token"]
+#     st.session_state.viewer_user["expiresIn"] = new_tokens["expires_in"]
+#     st.session_state.login_time = time.time()
+
+# # Always use updated token
+# token = st.session_state.viewer_user["idToken"]
+# email = st.session_state.viewer_user["email"]
+
 # ------------------------------------------------------------
-# GOOGLE LOGIN
+# PUBLIC VIEWER MODE (No Login)
 # ------------------------------------------------------------
 
-if "viewer_user" not in st.session_state:
+# Firestore read is public.
+# Viewer does not require authentication.
 
-    client_id = st.secrets["google_oauth"]["client_id"]
-    client_secret = st.secrets["google_oauth"]["client_secret"]
-
-    redirect_uri = st.secrets["app"]["viewer_redirect_uri"]
-
-    params = {
-        "client_id": client_id,
-        "redirect_uri": redirect_uri,
-        "response_type": "code",
-        "scope": "openid email profile",
-        "access_type": "offline",
-        "prompt": "select_account",
-    }
-
-    auth_url = "https://accounts.google.com/o/oauth2/v2/auth?" + urllib.parse.urlencode(params)
-
-    query_params = st.query_params
-
-    if "code" not in query_params:
-        st.markdown(f"[Login with Google]({auth_url})")
-        st.stop()
-
-    code = query_params["code"]
-
-    token_res = requests.post(
-        "https://oauth2.googleapis.com/token",
-        data={
-            "code": code,
-            "client_id": client_id,
-            "client_secret": client_secret,
-            "redirect_uri": redirect_uri,
-            "grant_type": "authorization_code",
-        },
-    )
-
-    token_json = token_res.json()
-
-    if "id_token" not in token_json:
-        st.write(token_json)
-        st.stop()
-
-    google_id_token = token_json["id_token"]
-
-    user = firebase_sign_in_with_google(google_id_token, redirect_uri)
-
-    email = user.get("email", "")
-    if not email.endswith("@eeroq.com"):
-        st.error("Unauthorized domain")
-        st.stop()
-
-    st.session_state["viewer_user"] = user
-    st.session_state["viewer_login_time"] = time.time()
-
-    st.query_params.clear()
-    st.rerun()
-
-
-
-# --- Auto-refresh token if expired ---
-expires_in = int(st.session_state.viewer_user.get("expiresIn", "3600"))
-login_time = st.session_state.get("login_time", time.time())
-
-# Check if 55 minutes passed
-if time.time() - login_time > 3300:  # 55 minutes
-    refresh_token = st.session_state.viewer_user["refreshToken"]
-    new_tokens = firebase_refresh_id_token(refresh_token)
-
-    # Update session_state with new tokens
-    st.session_state.viewer_user["idToken"] = new_tokens["id_token"]
-    st.session_state.viewer_user["refreshToken"] = new_tokens["refresh_token"]
-    st.session_state.viewer_user["expiresIn"] = new_tokens["expires_in"]
-    st.session_state.login_time = time.time()
-
-# Always use updated token
-token = st.session_state.viewer_user["idToken"]
-email = st.session_state.viewer_user["email"]
+token = None
+email = "public"
 
 
 def reset_filters():
@@ -1627,10 +1642,10 @@ def clear_viewer_state(keep_filters=True):
 
 
 
-st.sidebar.write("Logged in as:", email)
-if st.sidebar.button("Logout"):
-    st.session_state.clear()
-    st.rerun()
+# st.sidebar.write("Logged in as:", email)
+# if st.sidebar.button("Logout"):
+#     st.session_state.clear()
+#     st.rerun()
 
 
 
@@ -1767,7 +1782,9 @@ with top_right:
 
 
 
-runs = list_runs(token)
+# runs = list_runs(token)
+runs = list_runs()
+
 if not runs:
     st.info("No runs found.")
     st.stop()
