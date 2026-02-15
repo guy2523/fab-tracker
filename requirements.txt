@@ -1,0 +1,6 @@
+streamlit
+streamlit-oauth
+streamlit-autorefresh
+requests
+pytz
+notion-client
