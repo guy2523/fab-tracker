@@ -831,6 +831,8 @@ with r1c2:
                         import traceback
                         st.error("Notion creation error:")
                         st.code(traceback.format_exc())
+                        st.write("Notion client version (cloud):", notion_client.__version__)
+
 
                 else:
                     st.warning("Lot ID is empty → skipping Notion page creation.")
