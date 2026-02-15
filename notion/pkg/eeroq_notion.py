@@ -3,8 +3,9 @@ import os
 from notion_client import Client
 from notion_client.helpers import get_id
 import streamlit as st
-notion = Client(auth=NOTION_TOKEN)
+
 NOTION_TOKEN = st.secrets["notion"]["NOTION_TOKEN"]
+notion = Client(auth=NOTION_TOKEN)
 
 
 color_list = [

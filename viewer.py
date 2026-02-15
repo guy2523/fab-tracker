@@ -8,6 +8,7 @@ import time
 import html as html_escape
 from core.metadata import get_measure_fridges
 from ui.metadata_ui import format_range
+import urllib.parse
 
 if "force_reset" not in st.session_state:
     st.session_state.clear()
@@ -1507,7 +1508,6 @@ MEASURE_SPECIAL_KEYS = {
 # ------------------------------------------------------------
 # GOOGLE LOGIN
 # ------------------------------------------------------------
-import urllib.parse
 
 if "viewer_user" not in st.session_state:
 
