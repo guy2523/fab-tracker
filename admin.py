@@ -831,6 +831,7 @@ with r1c2:
                         import traceback
                         st.error("Notion creation error:")
                         st.code(traceback.format_exc())
+                        import notion_client
                         st.write("Notion client version (cloud):", notion_client.__version__)
 
 
