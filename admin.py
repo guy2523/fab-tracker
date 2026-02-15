@@ -824,9 +824,14 @@ with r1c2:
 
                         if not notion_url:
                             st.warning(f"Run will be created, but Notion returned no url: {result}")
-                    except Exception as e:
+                    # except Exception as e:
                         # Do NOT block run creation if Notion fails
-                        st.warning(f"Run will be created, but Notion page creation failed: {e}")
+                        # st.warning(f"Run will be created, but Notion page creation failed: {e}")
+                    except Exception as e:
+                        import traceback
+                        st.error("Notion creation error:")
+                        st.code(traceback.format_exc())
+
                 else:
                     st.warning("Lot ID is empty → skipping Notion page creation.")
 
