@@ -23,26 +23,40 @@ firebaseConfig = {
 # ============================================
 API_KEY = firebaseConfig["apiKey"]
 
-def firebase_sign_in(email, password):
-    """Authenticate using Firebase REST API."""
-    url = f"https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key={API_KEY}"
-    payload = {
-        "email": email,
-        "password": password,
-        "returnSecureToken": True
-    }
+# def firebase_sign_in(email, password):
+#     """Authenticate using Firebase REST API."""
+#     url = f"https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key={API_KEY}"
+#     payload = {
+#         "email": email,
+#         "password": password,
+#         "returnSecureToken": True
+#     }
 
-    res = requests.post(url, json=payload)
-    res.raise_for_status()
-    return res.json()
+#     res = requests.post(url, json=payload)
+#     res.raise_for_status()
+#     return res.json()
 
 
-def firebase_sign_in_with_google(google_id_token):
+# def firebase_sign_in_with_google(google_id_token):
+#     url = f"https://identitytoolkit.googleapis.com/v1/accounts:signInWithIdp?key={API_KEY}"
+
+#     payload = {
+#         "postBody": f"id_token={google_id_token}&providerId=google.com",
+#         "requestUri": "http://localhost",
+#         "returnSecureToken": True,
+#     }
+
+#     res = requests.post(url, json=payload)
+#     res.raise_for_status()
+#     return res.json()
+
+
+def firebase_sign_in_with_google(google_id_token, request_uri):
     url = f"https://identitytoolkit.googleapis.com/v1/accounts:signInWithIdp?key={API_KEY}"
 
     payload = {
         "postBody": f"id_token={google_id_token}&providerId=google.com",
-        "requestUri": "http://localhost",
+        "requestUri": request_uri,
         "returnSecureToken": True,
     }
 

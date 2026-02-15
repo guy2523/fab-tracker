@@ -333,7 +333,7 @@ if "user" not in st.session_state:
         st.error("Google token exchange failed.")
         st.stop()
 
-    user = firebase_sign_in_with_google(id_token)
+    user = firebase_sign_in_with_google(id_token, redirect_uri)
 
     email = user.get("email", "")
     if not email.endswith("@eeroq.com"):

@@ -1554,7 +1554,7 @@ if "viewer_user" not in st.session_state:
 
     google_id_token = token_json["id_token"]
 
-    user = firebase_sign_in_with_google(google_id_token)
+    user = firebase_sign_in_with_google(google_id_token, redirect_uri)
 
     email = user.get("email", "")
     if not email.endswith("@eeroq.com"):
