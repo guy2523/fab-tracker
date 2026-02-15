@@ -3,4 +3,4 @@ streamlit-oauth
 streamlit-autorefresh
 requests
 pytz
-notion-client
+notion-client==2.2.1
