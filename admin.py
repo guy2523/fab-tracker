@@ -16,7 +16,7 @@ from zoneinfo import ZoneInfo
 from notion_client.helpers import get_id
 from notion.notion_ops import update_page_properties, create_measure_page, set_relation, update_date_range, archive_page, get_page, create_fab_page
 import urllib.parse
-
+import notion_client
 
 # optional card CSS (unused directly but kept for consistency)
 st.markdown(
@@ -831,7 +831,6 @@ with r1c2:
                         import traceback
                         st.error("Notion creation error:")
                         st.code(traceback.format_exc())
-                        import notion_client
                         st.write("Notion client version (cloud):", notion_client.__version__)
 
 
