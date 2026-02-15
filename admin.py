@@ -326,12 +326,21 @@ if "user" not in st.session_state:
         },
     )
 
+    # token_json = token_res.json()
+    # id_token = token_json["id_token"]
+
+    # if "id_token" not in token_json:
+    #     st.error("Google token exchange failed.")
+    #     st.stop()                       
+
     token_json = token_res.json()
-    id_token = token_json["id_token"]
 
     if "id_token" not in token_json:
-        st.error("Google token exchange failed.")
+        st.error(f"Google token exchange failed: {token_json}")
         st.stop()
+
+    id_token = token_json["id_token"]
+
 
     user = firebase_sign_in_with_google(id_token, redirect_uri)
 
