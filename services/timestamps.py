@@ -185,30 +185,6 @@ def apply_measurement_auto_dates(
     fridges = measure.setdefault("fridges", {})
     fridge_meta = fridges.setdefault(chip_uid, {})
 
-    # def handle_interval(start_key, end_key):
-    #     if old_status == "pending" and new_status == "in_progress":
-    #         fridge_meta[start_key] = now
-    #         fridge_meta.pop(end_key, None)
-
-    #     elif old_status == "pending" and new_status == "done":
-    #         fridge_meta[start_key] = now
-    #         fridge_meta[end_key] = now
-
-    #     elif old_status == "in_progress" and new_status == "done":
-    #         fridge_meta[end_key] = now
-
-    #     elif old_status == "in_progress" and new_status == "pending":
-    #         fridge_meta.pop(start_key, None)
-    #         fridge_meta.pop(end_key, None)
-
-    #     elif old_status == "done" and new_status == "in_progress":
-    #         fridge_meta[start_key] = now
-    #         fridge_meta.pop(end_key, None)
-
-    #     elif old_status == "done" and new_status == "pending":
-    #         fridge_meta.pop(start_key, None)
-    #         fridge_meta.pop(end_key, None)
-
     def handle_interval(start_key, end_key):
 
         old = (old_status or "").lower()
@@ -260,40 +236,6 @@ def apply_measurement_auto_dates(
     elif chip_name == "warmup":
         handle_interval("warmup_start", "warmup_end")
 
-
-
-
-# def apply_interval_transition(
-#     *,
-#     old_status,
-#     new_status,
-#     row,
-#     start_key,
-#     end_key,
-#     now,
-# ):
-#     if old_status == "pending" and new_status == "in_progress":
-#         row[start_key] = now
-#         row.pop(end_key, None)
-
-#     elif old_status == "pending" and new_status == "done":
-#         row[start_key] = now
-#         row[end_key] = now
-
-#     elif old_status == "in_progress" and new_status == "done":
-#         row[end_key] = now
-
-#     elif old_status == "in_progress" and new_status == "pending":
-#         row.pop(start_key, None)
-#         row.pop(end_key, None)
-
-#     elif old_status == "done" and new_status == "in_progress":
-#         row[start_key] = now
-#         row.pop(end_key, None)
-
-#     elif old_status == "done" and new_status == "pending":
-#         row.pop(start_key, None)
-#         row.pop(end_key, None)
 
 
 def apply_interval_transition(meta_dict, old_status, new_status, start_key, end_key, now_chi):

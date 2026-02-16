@@ -1988,6 +1988,32 @@ with r2c1:
 
                 # st.write(f"property: {props}")
 
+                # ------------------------------------------------------------
+                # 🆕 Derive Fab Status from latest completed fabrication chip
+                # ------------------------------------------------------------
+                layers = st.session_state.get("update_layers", []) or []
+
+                latest_name = None
+                latest_time = None
+
+                for layer in layers:
+                    if (layer.get("layer_name") or "").strip().lower() != "fabrication":
+                        continue
+
+                    for sub in layer.get("substeps", []) or []:
+                        for chip in sub.get("chips", []) or []:
+                            ts = (chip.get("completed_at") or "").strip()
+                            if not ts:
+                                continue
+
+                            if latest_time is None or ts > latest_time:
+                                latest_time = ts
+                                latest_name = chip.get("name")
+
+                # Only update if at least one chip is completed
+                if latest_name:
+                    props["Status"] = [latest_name]
+
                 return props
 
 
