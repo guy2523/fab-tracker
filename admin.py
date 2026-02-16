@@ -2012,7 +2012,10 @@ with r2c1:
 
                 # Only update if at least one chip is completed
                 if latest_name:
-                    props["Status"] = [latest_name]
+                    props["Status"] = [latest_name]  # or latest_name depending on property type
+                else:
+                    props["Status"] = ["In progress"]
+
 
                 return props
 
