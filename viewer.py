@@ -1605,11 +1605,11 @@ email = "public"
 
 
 def reset_filters():
-    st.session_state["run_filter"] = ""
+    st.session_state["lotid_filter"] = ""
     st.session_state["device_filter"] = ""
     st.session_state["fabin_after"] = None
     st.session_state["fabout_before"] = None
-
+    st.rerun()
 
 # ------------------------------------------------------------
 # Initialize filter keys in session_state (PREVENT Streamlit API errors)
@@ -1847,7 +1847,9 @@ def matches_filters(fields):
     # Optional filters
     # if run_filter and run_filter.lower() not in run_no.lower():
     #     return False
-    if lotid_filter and lotid_filter.lower() not in (lot_id or "").lower():
+    # if lotid_filter and lotid_filter.lower() not in (lot_id or "").lower():
+    #     return False
+    if lotid_filter and lotid_filter.strip().lower() != (lot_id or "").strip().lower():
         return False
 
     if device_filter and device_filter.lower() not in device.lower():
