@@ -1669,7 +1669,7 @@ with top_left:
         with st.expander("🔍 Filter Runs", expanded=False):
             f_col1, f_col2 = st.columns(2)
             with f_col1:
-                run_filter = st.text_input(
+                lotid_filter = st.text_input(
                     "Lot ID.",
                     "",
                     key="lotid_filter"        # ← minimal change ①
@@ -1866,7 +1866,6 @@ def matches_filters(fields):
 
 
 refinement_active = (
-    # bool(run_filter)
     bool(lotid_filter)
     or bool(device_filter)
     or fabin_after is not None
