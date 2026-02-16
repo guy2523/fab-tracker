@@ -1615,7 +1615,8 @@ def reset_filters():
 # Initialize filter keys in session_state (PREVENT Streamlit API errors)
 # ------------------------------------------------------------
 for key, default in {
-    "run_filter": "",
+    # "run_filter": "",
+    "lotid_filter": "",
     "device_filter": "",
     "fabin_after": None,
     "fabout_before": None
@@ -1669,9 +1670,9 @@ with top_left:
             f_col1, f_col2 = st.columns(2)
             with f_col1:
                 run_filter = st.text_input(
-                    "Run No.",
+                    "Lot ID.",
                     "",
-                    key="run_filter"        # ← minimal change ①
+                    key="lotid_filter"        # ← minimal change ①
                 )
             with f_col2:
                 device_filter = st.text_input(
@@ -1824,6 +1825,7 @@ def matches_filters(fields):
     # -------------------------
     run_no = fields["run_no"]["stringValue"]
     device = fields["device_name"]["stringValue"]
+    lot_id = get_meta_data(fields, "design", "Lotid")
 
     fabin_str  = get_meta_date_for_filter(fields, "fab", "Fabin")
     fabout_str = get_meta_date_for_filter(fields, "fab", "Fabout")
@@ -1843,7 +1845,9 @@ def matches_filters(fields):
     fabout_date = to_date(fabout_str)
 
     # Optional filters
-    if run_filter and run_filter.lower() not in run_no.lower():
+    # if run_filter and run_filter.lower() not in run_no.lower():
+    #     return False
+    if lotid_filter and lotid_filter.lower() not in (lot_id or "").lower():
         return False
 
     if device_filter and device_filter.lower() not in device.lower():
@@ -1862,7 +1866,8 @@ def matches_filters(fields):
 
 
 refinement_active = (
-    bool(run_filter)
+    # bool(run_filter)
+    bool(lotid_filter)
     or bool(device_filter)
     or fabin_after is not None
     or fabout_before is not None
