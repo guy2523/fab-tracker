@@ -1671,10 +1671,10 @@ top_left, top_right = st.columns([1.5, 1])
 with top_right:
     st.markdown(
         '<div style="text-align: right;">'
-        '<a href="https://your-admin-app.streamlit.app" '
+        '<a href="https://fab-tracker-7uac3bt2l3sad66hgpvjw6.streamlit.app/" '
         'target="_blank" '
         'style="text-decoration: none; font-weight: 600;">'
-        '🔧 Admin Panel'
+        '🔧 Editor'
         '</a>'
         '</div>',
         unsafe_allow_html=True
