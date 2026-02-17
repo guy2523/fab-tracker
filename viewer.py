@@ -1549,13 +1549,7 @@ if "viewer_user" not in st.session_state:
     query_params = st.query_params
 
     if "code" not in query_params:
-        # st.markdown(f"[Login with Google]({auth_url})")
-        # st.markdown(
-        #     f"<a href='{auth_url}' target='_self'>Login with Google</a>",
-        #     unsafe_allow_html=True
-        # )
         st.link_button("Login with Google", auth_url)
-
         st.stop()
 
     code = query_params["code"]
@@ -1574,12 +1568,11 @@ if "viewer_user" not in st.session_state:
     token_json = token_res.json()
 
     if "id_token" not in token_json:
-        st.error("OAuth token exchange failed")
-        st.json(token_json)   # show full Google response
+        st.error(f"Google token exchange failed: {token_json}")
         st.stop()
 
-
     google_id_token = token_json["id_token"]
+
 
     user = firebase_sign_in_with_google(google_id_token, redirect_uri)
 
