@@ -1668,6 +1668,19 @@ def clear_viewer_state(keep_filters=True):
 # ---------------- TOP BAR ----------------
 top_left, top_right = st.columns([1.5, 1])
 
+with top_right:
+    st.markdown(
+        '<div style="text-align: right;">'
+        '<a href="https://your-admin-app.streamlit.app" '
+        'target="_blank" '
+        'style="text-decoration: none; font-weight: 600;">'
+        '🔧 Admin Panel'
+        '</a>'
+        '</div>',
+        unsafe_allow_html=True
+    )
+
+
 with top_left:
     st.markdown(
         "<h1 style='margin-top: -80px; margin-bottom: -1.2rem;'>🔍 Run Tracker</h1>",
