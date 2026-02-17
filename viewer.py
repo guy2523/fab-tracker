@@ -1548,6 +1548,8 @@ if "viewer_user" not in st.session_state:
 
     query_params = st.query_params
 
+    st.code(auth_url)
+
     if "code" not in query_params:
         # st.markdown(f"[Login with Google]({auth_url})")
         st.markdown(
