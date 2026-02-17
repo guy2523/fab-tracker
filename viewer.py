@@ -1554,7 +1554,7 @@ if "viewer_user" not in st.session_state:
             f"<a href='{auth_url}' target='_self'>Login with Google</a>",
             unsafe_allow_html=True
         )
-
+        st.write(auth_url)
         st.stop()
 
     code = query_params["code"]
