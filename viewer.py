@@ -1554,7 +1554,6 @@ if "viewer_user" not in st.session_state:
             f"<a href='{auth_url}' target='_self'>Login with Google</a>",
             unsafe_allow_html=True
         )
-        st.write(auth_url)
         st.stop()
 
     code = query_params["code"]
@@ -1573,6 +1572,7 @@ if "viewer_user" not in st.session_state:
     token_json = token_res.json()
 
     if "id_token" not in token_json:
+        st.query_params.clear()  # handle stale code properly
         st.write(token_json)
         st.stop()
 
