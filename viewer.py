@@ -1668,7 +1668,7 @@ def clear_viewer_state(keep_filters=True):
 # ---------------- TOP BAR ----------------
 top_left, top_right = st.columns([1.5, 1])
 
-with top_right:
+# with top_right:
     # st.markdown(
     #     '<div style="text-align: right;">'
     #     '<a href="https://fab-tracker-7uac3bt2l3sad66hgpvjw6.streamlit.app/" '
