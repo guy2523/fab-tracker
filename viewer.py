@@ -1552,10 +1552,12 @@ if "viewer_user" not in st.session_state:
 
     if "code" not in query_params:
         # st.markdown(f"[Login with Google]({auth_url})")
-        st.markdown(
-            f"<a href='{auth_url}' target='_self'>Login with Google</a>",
-            unsafe_allow_html=True
-        )
+        # st.markdown(
+        #     f"<a href='{auth_url}' target='_self'>Login with Google</a>",
+        #     unsafe_allow_html=True
+        # )
+        st.link_button("Login with Google", auth_url)
+
         st.stop()
 
     code = query_params["code"]
