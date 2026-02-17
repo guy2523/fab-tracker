@@ -1581,7 +1581,7 @@ if "viewer_user" not in st.session_state:
     #     st.stop()
 
     if "id_token" not in token_json:
-        st.error("OAuth token exchange failed")
+        # st.error("OAuth token exchange failed")
         st.json(token_json)   # show full Google response
         st.stop()
 
