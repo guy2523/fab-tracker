@@ -310,7 +310,8 @@ if "user" not in st.session_state:
 
 
     if "code" not in query_params:
-        st.markdown(f"[Login with Google]({auth_url})")
+        # st.markdown(f"[Login with Google]({auth_url})")
+        st.link_button("Login with Google", auth_url)
         st.stop()
 
     code = query_params["code"]

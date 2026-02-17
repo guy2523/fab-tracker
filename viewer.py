@@ -1573,11 +1573,6 @@ if "viewer_user" not in st.session_state:
 
     token_json = token_res.json()
 
-    # if "id_token" not in token_json:
-    #     st.query_params.clear()  # handle stale code properly
-    #     st.write(token_json)
-    #     st.stop()
-
     if "id_token" not in token_json:
         st.error("OAuth token exchange failed")
         st.json(token_json)   # show full Google response
