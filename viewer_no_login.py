@@ -1584,7 +1584,7 @@ top_left, top_right = st.columns([1.5, 1])
     #     unsafe_allow_html=True
     # )
 
-# with top_left:
+with top_left:
 #     st.markdown(
 #         "<h1 style='margin-top: -80px; margin-bottom: -1.2rem;'>🔍 Run Tracker</h1>",
 #         unsafe_allow_html=True,
