@@ -705,6 +705,10 @@ html.dark .fab-progress-fill-complete {
     background: #bbb !important;
 }
 
+html.dark div[data-testid="stExpander"] > div {
+    background: #1e1e1e !important;
+}
+
 </style>
 """, unsafe_allow_html=True)
 
