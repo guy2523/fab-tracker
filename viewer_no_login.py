@@ -444,19 +444,32 @@ st.set_page_config(
 # ------------------------------------------------------------
 
 
+# st.markdown("""
+# <style>
+# .run-card {
+#     border: 1px solid #ddd;
+#     border-radius: 10px;
+#     background: #fafafa;
+#     padding: 14px;
+#     margin-bottom: 10px;
+#     margin-top: 10px;
+# }
+# </style>
+# """, unsafe_allow_html=True)
+
+
 st.markdown("""
 <style>
 .run-card {
-    border: 1px solid #ddd;
+    border: 1px solid var(--secondary-background-color);
     border-radius: 10px;
-    background: #fafafa;
+    background: var(--secondary-background-color);
     padding: 14px;
     margin-bottom: 10px;
     margin-top: 10px;
 }
 </style>
 """, unsafe_allow_html=True)
-
 
 
 st.markdown("""
@@ -470,6 +483,7 @@ st.markdown("""
     align-items: flex-start;
 }
 
+
 .step-block {
     display: flex;
     align-items: center;
@@ -477,10 +491,11 @@ st.markdown("""
 }
 
 .layer-card {
-    border: 1px solid #ddd;
+    border: 1px solid var(--secondary-background-color);
     border-radius: 10px;
     padding: 10px;
-    background: #fafafa;
+    background: var(--secondary-background-color);
+    color: var(--text-color);
     width: 320px;
     min-height: 120px;
     display: flex;
@@ -512,13 +527,14 @@ st.markdown("""
     width: 18px;
     text-align: center;
     font-size: 1.1rem;
-    color: #999;
+    color: var(--text-color);
+    opacity: 0.6;
 }
 
 .step-mini-bar {
     width: 60px;
     height: 10px;
-    background: #e0e0e0;
+    background: var(--secondary-background-color);
     border-radius: 4px;
     overflow: hidden;
     display: inline-block;
@@ -529,7 +545,7 @@ st.markdown("""
 .step-mini-fill {
     display: block;
     height: 100%;
-    background: #555;
+    background: var(--text-color);
 }
 
 </style>
@@ -555,23 +571,23 @@ st.markdown("""
 <style>
 
 .layer-card.terminated-layer {
-    background: #fdecea;
+    background: rgba(244, 67, 54, 0.15);
     border: 1.5px solid #F44336;
 }
 
 .layer-card.done-layer {
     border: 1.5px solid #4caf50 !important;
-    background-color: #e8f5e9 !important;   /* soft green */
+    background-color: rgba(76, 175, 80, 0.15) !important;
 }
 
 .layer-card.progress-layer {
     border: 1.5px solid #f4c542 !important;
-    background-color: #fff8e1 !important;   /* soft yellow */
+    background-color: rgba(244, 197, 66, 0.15) !important;
 }
 
 .layer-card.pending-layer {
-    border: 1px solid #cccccc !important;
-    background-color: #fafafa !important;   /* neutral gray */
+    border: 1px solid var(--secondary-background-color);
+    background-color: var(--secondary-background-color) !important;
 }
 </style>
 """, unsafe_allow_html=True)
@@ -603,8 +619,7 @@ st.markdown("""
     position: relative;
     border-radius: 5px;
     overflow: hidden;
-    background: #e0e0e0;  /* light gray track */
-}
+    background: var(--secondary-background-color);}
 
 /* ==========================
    HEIGHT & WIDTH VARIANTS
@@ -633,7 +648,7 @@ st.markdown("""
    ========================== */
 .fab-progress-fill-complete {
     height: 100%;
-    background: #555;
+    background: var(--text-color);
     transition: width 0.25s ease;
 }
 
@@ -644,10 +659,10 @@ st.markdown("""
     height: 100%;
     background: repeating-linear-gradient(
         45deg,
-        #555 0px,
-        #555 12px,
-        #777 12px,
-        #777 24px
+        rgba(150,150,150,0.5) 0px,
+        rgba(150,150,150,0.5) 12px,
+        rgba(200,200,200,0.5) 12px,
+        rgba(200,200,200,0.5) 24px
     );
     background-size: 24px 24px;
     animation: fabStripe 0.8s linear infinite;
@@ -2197,13 +2212,7 @@ for doc in filtered_runs:
 
             # LEFT SIDE: metadata fields
             "<div style='font-size:0.9rem; white-space:nowrap;'>"
-            # f"  <span style='color:#555; font-weight:400;'>Created {created_date}</span> "
-            # f"|  <span style='color:#555; font-weight:400;'>{device}</span> "
-            # f"| <span style='color:#555; font-weight:400;'>Design {format_date_compact(design_date)}</span> "
-            # f"| <span style='color:#555; font-weight:400;'>Faout {format_date_compact(fab_out)}</span>  "
-            # f"| <span style='color:#555; font-weight:400;'>Bond {bond_date}</span>  "
-            # f"| <span style='color:#555; font-weight:400;'>Cooldown {format_date_compact(cooldown_date)}</span>  "
-
+          
             "</div>"
 
             "<div style='display:flex; align-items:center; justify-content:space-between; width:100%;'>"
