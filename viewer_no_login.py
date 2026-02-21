@@ -479,7 +479,7 @@ st.markdown("""
 }
 
 .layer-card {
-    border: 1px solid var(--secondary-background-color);
+    border: 1px solid rgba(128,128,128,0.25);
     border-radius: 10px;
     padding: 10px;
     background: var(--secondary-background-color);
