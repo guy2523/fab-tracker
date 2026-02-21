@@ -1,7 +1,7 @@
 import json
 import os
 import sys
-from pkg.eeroq_notion import Page, Database, Block, table, toggle_blocks
+from .pkg.eeroq_notion import Page, Database, Block, table, toggle_blocks
 from notion_client import Client as NotionClient
 
 # import any helper you already use in the notebook logic
