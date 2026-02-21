@@ -3826,10 +3826,27 @@ with r2c1:
                                     st.error("Fabout row missing from FAB metadata")
                                     st.stop()
 
-                                # 🔒 RESET FABIN ONLY WHEN FAB PROGRESS IS 0
-                                if fab_progress == 0 and fabin_row and fabin_row.get("value"):
+                                # # 🔒 RESET FABIN ONLY WHEN FAB PROGRESS IS 0
+                                # if fab_progress == 0 and fabin_row and fabin_row.get("value"):
+                                #     fabin_row["value"] = ""
+                                #     firestore_update_field("runs", loaded_run_doc_id, "metadata.fab.fabin", "", id_token)
+
+                                # 🔒 RESET FABIN ONLY WHEN ALL CHIPS ARE PENDING (true not-started state)
+                                all_pending = all(
+                                    (ch.get("status") or "").strip().lower() == "pending"
+                                    for sub in fab_layer.get("substeps", [])
+                                    for ch in sub.get("chips", [])
+                                )
+
+                                if all_pending and fabin_row and fabin_row.get("value"):
                                     fabin_row["value"] = ""
-                                    firestore_update_field("runs", loaded_run_doc_id, "metadata.fab.fabin", "", id_token)
+                                    firestore_update_field(
+                                        "runs",
+                                        loaded_run_doc_id,
+                                        "metadata.fab.fabin",
+                                        "",
+                                        id_token,
+                                    )
 
                                 # FABIN — write once (earliest started_at)
                                 if fabin_row and not fabin_row.get("value"):
