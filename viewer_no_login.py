@@ -659,31 +659,57 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 
-
 st.markdown("""
 <style>
+/* ============================================================
+   DARK MODE (selector-free): uses browser/system dark preference
+   ============================================================ */
+@media (prefers-color-scheme: dark) {
 
-/* DARK MODE */
-div[data-testid="stAppViewContainer"][data-theme="dark"] .layer-card {
-    background: #1e1e1e !important;
-    border-color: #333 !important;
-    color: #e6e6e6 !important;
+  .run-card {
+      background: #1e1e1e !important;
+      border-color: #333 !important;
+      color: #e6e6e6 !important;
+  }
+
+  .layer-card {
+      background: #1e1e1e !important;
+      border-color: #333 !important;
+      color: #e6e6e6 !important;
+  }
+
+  .layer-card.pending-layer {
+      background: #1e1e1e !important;
+  }
+
+  .layer-card.done-layer {
+      background-color: rgba(76, 175, 80, 0.18) !important;
+  }
+
+  .layer-card.progress-layer {
+      background-color: rgba(244, 197, 66, 0.18) !important;
+  }
+
+  .layer-card.terminated-layer {
+      background-color: rgba(244, 67, 54, 0.18) !important;
+  }
+
+  .step-mini-bar {
+      background: #333 !important;
+  }
+
+  .arrow-cell {
+      color: #aaa !important;
+  }
+
+  .fab-progress {
+      background: #333 !important;
+  }
+
+  .fab-progress-fill-complete {
+      background: #bbb !important;
+  }
 }
-
-div[data-testid="stAppViewContainer"][data-theme="dark"] .run-card {
-    background: #1e1e1e !important;
-    border-color: #333 !important;
-    color: #e6e6e6 !important;
-}
-
-div[data-testid="stAppViewContainer"][data-theme="dark"] .step-mini-bar {
-    background: #333 !important;
-}
-
-div[data-testid="stAppViewContainer"][data-theme="dark"] .fab-progress {
-    background: #333 !important;
-}
-
 </style>
 """, unsafe_allow_html=True)
 
