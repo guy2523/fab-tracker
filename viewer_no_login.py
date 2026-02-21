@@ -2255,7 +2255,8 @@ for doc in filtered_runs:
                 "<div style='flex:1;'></div>"
 
                 # dashboard text
-                "<div style='font-size:0.9rem; color:#1f3b63; white-space:nowrap;'>"
+                # "<div style='font-size:0.9rem; color:#1f3b63; white-space:nowrap;'>"
+                "<div style='font-size:0.9rem; color:var(--text-color); white-space:nowrap;'>"
                     f"{dashboard_text}"
                 "</div>"
 
@@ -2266,8 +2267,9 @@ for doc in filtered_runs:
         # ---------------------------------------------------------------
 
         # 🔥 RED LINE ADDED HERE
-        "<div style='width:100%; height:4px; background:#eee; margin:10px 0 20px 0;'></div>"
-
+        # "<div style='width:100%; height:4px; background:#eee; margin:10px 0 20px 0;'></div>"
+        "<div style='width:100%; height:4px; background:var(--secondary-background-color); margin:10px 0 20px 0;'></div>"
+        
         "<div class='layer-grid'>"
         f"{layers_html}"
         "</div>"
