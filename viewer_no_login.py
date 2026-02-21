@@ -569,11 +569,6 @@ st.markdown("""
     border: 1.5px solid rgba(244, 197, 66, 0.65);
     background-color: rgba(244, 197, 66, 0.12);
 }
-
-.layer-card.pending-layer {
-    border: 1px solid rgba(255,255,255,0.08);
-    background-color: transparent;
-}
 </style>
 """, unsafe_allow_html=True)
 
