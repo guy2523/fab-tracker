@@ -444,32 +444,20 @@ st.set_page_config(
 # ------------------------------------------------------------
 
 
-# st.markdown("""
-# <style>
-# .run-card {
-#     border: 1px solid #ddd;
-#     border-radius: 10px;
-#     background: #fafafa;
-#     padding: 14px;
-#     margin-bottom: 10px;
-#     margin-top: 10px;
-# }
-# </style>
-# """, unsafe_allow_html=True)
-
 
 st.markdown("""
 <style>
 .run-card {
-    border: 1px solid var(--secondary-background-color);
+    border: 1px solid #ddd;
     border-radius: 10px;
-    background: var(--secondary-background-color);
+    background: #fafafa;
     padding: 14px;
     margin-bottom: 10px;
     margin-top: 10px;
 }
 </style>
 """, unsafe_allow_html=True)
+
 
 
 st.markdown("""
@@ -483,7 +471,6 @@ st.markdown("""
     align-items: flex-start;
 }
 
-
 .step-block {
     display: flex;
     align-items: center;
@@ -491,11 +478,10 @@ st.markdown("""
 }
 
 .layer-card {
-    border: 1px solid var(--secondary-background-color);
+    border: 1px solid #ddd;
     border-radius: 10px;
     padding: 10px;
-    background: var(--secondary-background-color);
-    color: var(--text-color);
+    background: #fafafa;
     width: 320px;
     min-height: 120px;
     display: flex;
@@ -527,14 +513,13 @@ st.markdown("""
     width: 18px;
     text-align: center;
     font-size: 1.1rem;
-    color: var(--text-color);
-    opacity: 0.6;
+    color: #999;
 }
 
 .step-mini-bar {
     width: 60px;
     height: 10px;
-    background: var(--secondary-background-color);
+    background: #e0e0e0;
     border-radius: 4px;
     overflow: hidden;
     display: inline-block;
@@ -545,7 +530,7 @@ st.markdown("""
 .step-mini-fill {
     display: block;
     height: 100%;
-    background: var(--text-color);
+    background: #555;
 }
 
 </style>
@@ -569,25 +554,19 @@ div[data-testid="stExpander"][aria-expanded="true"] .completed-run-header {
 
 st.markdown("""
 <style>
-
-.layer-card.terminated-layer {
-    background: rgba(244, 67, 54, 0.15);
-    border: 1.5px solid #F44336;
-}
-
 .layer-card.done-layer {
     border: 1.5px solid #4caf50 !important;
-    background-color: rgba(76, 175, 80, 0.15) !important;
+    background-color: #e8f5e9 !important;   /* soft green */
 }
 
 .layer-card.progress-layer {
     border: 1.5px solid #f4c542 !important;
-    background-color: rgba(244, 197, 66, 0.15) !important;
+    background-color: #fff8e1 !important;   /* soft yellow */
 }
 
 .layer-card.pending-layer {
-    border: 1px solid var(--secondary-background-color);
-    background-color: var(--secondary-background-color) !important;
+    border: 1px solid #cccccc !important;
+    background-color: #fafafa !important;   /* neutral gray */
 }
 </style>
 """, unsafe_allow_html=True)
@@ -619,7 +598,8 @@ st.markdown("""
     position: relative;
     border-radius: 5px;
     overflow: hidden;
-    background: var(--secondary-background-color);}
+    background: #e0e0e0;  /* light gray track */
+}
 
 /* ==========================
    HEIGHT & WIDTH VARIANTS
@@ -648,7 +628,7 @@ st.markdown("""
    ========================== */
 .fab-progress-fill-complete {
     height: 100%;
-    background: var(--text-color);
+    background: #555;
     transition: width 0.25s ease;
 }
 
@@ -659,10 +639,10 @@ st.markdown("""
     height: 100%;
     background: repeating-linear-gradient(
         45deg,
-        rgba(150,150,150,0.5) 0px,
-        rgba(150,150,150,0.5) 12px,
-        rgba(200,200,200,0.5) 12px,
-        rgba(200,200,200,0.5) 24px
+        #555 0px,
+        #555 12px,
+        #777 12px,
+        #777 24px
     );
     background-size: 24px 24px;
     animation: fabStripe 0.8s linear infinite;
@@ -678,6 +658,54 @@ st.markdown("""
 </style>
 """, unsafe_allow_html=True)
 
+
+st.markdown("""
+<style>
+
+/* =========================
+   DARK MODE OVERRIDES ONLY
+========================= */
+[data-theme="dark"] .run-card,
+[data-theme="dark"] .layer-card {
+    background: #1e1e1e !important;
+    border-color: #333 !important;
+    color: #e6e6e6 !important;
+}
+
+[data-theme="dark"] .layer-card.pending-layer {
+    background: #1e1e1e !important;
+}
+
+[data-theme="dark"] .layer-card.done-layer {
+    background: rgba(76, 175, 80, 0.18) !important;
+}
+
+[data-theme="dark"] .layer-card.progress-layer {
+    background: rgba(244, 197, 66, 0.18) !important;
+}
+
+[data-theme="dark"] .layer-card.terminated-layer {
+    background: rgba(244, 67, 54, 0.18) !important;
+}
+
+[data-theme="dark"] .step-mini-bar {
+    background: #333 !important;
+}
+
+[data-theme="dark"] .arrow-cell {
+    color: #aaa !important;
+}
+
+[data-theme="dark"] .fab-progress {
+    background: #333 !important;
+}
+
+[data-theme="dark"] .fab-progress-fill-complete {
+    background: #bbb !important;
+}
+
+</style>
+""", unsafe_allow_html=True)
 
 
 from streamlit_autorefresh import st_autorefresh
