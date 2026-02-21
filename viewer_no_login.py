@@ -445,19 +445,19 @@ st.set_page_config(
 
 
 
-st.markdown("""
-<style>
-.run-card {
-    border: 1px solid var(--secondary-background-color);
-    border-radius: 10px;
-    background: var(--secondary-background-color);
-    color: var(--text-color);
-    padding: 14px;
-    margin-bottom: 10px;
-    margin-top: 10px;
-}
-</style>
-""", unsafe_allow_html=True)
+# st.markdown("""
+# <style>
+# .run-card {
+#     border: 1px solid var(--secondary-background-color);
+#     border-radius: 10px;
+#     background: var(--secondary-background-color);
+#     color: var(--text-color);
+#     padding: 14px;
+#     margin-bottom: 10px;
+#     margin-top: 10px;
+# }
+# </style>
+# """, unsafe_allow_html=True)
 
 
 
@@ -2301,7 +2301,8 @@ for doc in filtered_runs:
         # ---------------------------------------------------
 
         # run card UI
-        st.markdown("<div class='run-card'>" + html + "</div>", unsafe_allow_html=True)
+        # st.markdown("<div class='run-card'>" + html + "</div>", unsafe_allow_html=True)
+        st.markdown(html, unsafe_allow_html=True)
 
         # -------- Metadata tables -------
         meta = fields.get("metadata", {}).get("mapValue", {}).get("fields", {})
