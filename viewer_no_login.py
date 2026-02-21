@@ -535,7 +535,7 @@ st.markdown("""
     background: #555;
 }
 
-html[data-theme="dark"] .layer-card {
+body[data-theme="dark"] .layer-card {
     border: 1px solid rgba(255,255,255,0.15);
 }
 
