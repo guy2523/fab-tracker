@@ -661,61 +661,71 @@ st.markdown("""
 
 st.markdown("""
 <style>
-
-/* =========================
-   DARK MODE OVERRIDES ONLY
-========================= */
-
-html.dark .run-card,
-html.dark .layer-card {
-    background: #1e1e1e !important;
-    border-color: #333 !important;
-    color: #e6e6e6 !important;
-}
-
-html.dark .layer-card.pending-layer {
-    background: #1e1e1e !important;
-}
-
-html.dark .layer-card.done-layer {
-    background: rgba(76, 175, 80, 0.18) !important;
-}
-
-html.dark .layer-card.progress-layer {
-    background: rgba(244, 197, 66, 0.18) !important;
-}
-
-html.dark .layer-card.terminated-layer {
-    background: rgba(244, 67, 54, 0.18) !important;
-}
-
-html.dark .step-mini-bar {
-    background: #333 !important;
-}
-
-html.dark .arrow-cell {
-    color: #aaa !important;
-}
-
-html.dark .fab-progress {
-    background: #333 !important;
-}
-
-html.dark .fab-progress-fill-complete {
-    background: #bbb !important;
-}
-
-html.dark div[data-testid="stExpander"] {
+div[data-testid="stExpander"] > div {
     background: transparent !important;
 }
-
-html.dark div[data-testid="stExpander"] > div {
-    background: #1e1e1e !important;
-    border: 1px solid #333 !important;
-}
-
 </style>
 """, unsafe_allow_html=True)
+
+
+
+# st.markdown("""
+# <style>
+
+# /* =========================
+#    DARK MODE OVERRIDES ONLY
+# ========================= */
+
+# html.dark .run-card,
+# html.dark .layer-card {
+#     background: #1e1e1e !important;
+#     border-color: #333 !important;
+#     color: #e6e6e6 !important;
+# }
+
+# html.dark .layer-card.pending-layer {
+#     background: #1e1e1e !important;
+# }
+
+# html.dark .layer-card.done-layer {
+#     background: rgba(76, 175, 80, 0.18) !important;
+# }
+
+# html.dark .layer-card.progress-layer {
+#     background: rgba(244, 197, 66, 0.18) !important;
+# }
+
+# html.dark .layer-card.terminated-layer {
+#     background: rgba(244, 67, 54, 0.18) !important;
+# }
+
+# html.dark .step-mini-bar {
+#     background: #333 !important;
+# }
+
+# html.dark .arrow-cell {
+#     color: #aaa !important;
+# }
+
+# html.dark .fab-progress {
+#     background: #333 !important;
+# }
+
+# html.dark .fab-progress-fill-complete {
+#     background: #bbb !important;
+# }
+
+# html.dark div[data-testid="stExpander"] {
+#     background: transparent !important;
+# }
+
+# html.dark div[data-testid="stExpander"] > div {
+#     background: #1e1e1e !important;
+#     border: 1px solid #333 !important;
+# }
+
+# </style>
+# """, unsafe_allow_html=True)
 
 
 from streamlit_autorefresh import st_autorefresh
