@@ -479,10 +479,10 @@ st.markdown("""
 }
 
 .layer-card {
-    border: 1px solid rgba(128,128,128,0.25);
+    border: 1px solid rgba(255,255,255,0.08);   /* subtle base border */
     border-radius: 10px;
     padding: 10px;
-    background: var(--secondary-background-color);
+    background: transparent;
     color: var(--text-color);
     width: 320px;
     min-height: 120px;
@@ -557,18 +557,18 @@ div[data-testid="stExpander"][aria-expanded="true"] .completed-run-header {
 st.markdown("""
 <style>
 .layer-card.done-layer {
-    border: 1.5px solid #4caf50;
-    background-color: #e8f5e9 !important;   /* soft green */
+    border: 1.5px solid rgba(76, 175, 80, 0.65);
+    background-color: rgba(76, 175, 80, 0.12);
 }
 
 .layer-card.progress-layer {
-    border: 1.5px solid #f4c542;
-    background-color: #fff8e1 !important;   /* soft yellow */
+    border: 1.5px solid rgba(244, 197, 66, 0.65);
+    background-color: rgba(244, 197, 66, 0.12);
 }
 
 .layer-card.pending-layer {
-    border: 1px solid rgba(128,128,128,0.3);
-    background-color: var(--secondary-background-color);
+    border: 1px solid rgba(255,255,255,0.08);
+    background-color: transparent;
 }
 </style>
 """, unsafe_allow_html=True)
@@ -2262,41 +2262,6 @@ for doc in filtered_runs:
         f"#️ {run_no} ㅤ ⌨ {device} ㅤ 🆔 {lot_id} ㅤ ⚒️ fab {date_only(fab_in)} ➔ {date_only(fab_out)} ㅤ ❄️ Cooldown Start : {cooldown_banner_text}"
     )
     with st.expander(visible_label, expanded=auto_expand):
-
-
-        # dashboard_events = collect_dashboard_events_from_metadata(
-        #     fields=fields,
-        #     layers=layers,
-        # )
-
-        # dashboard_text = ""
-
-        # if dashboard_events:
-        #     # 1️⃣ Find highest-priority event group (lowest number wins)
-        #     best_priority = min(e["priority"] for e in dashboard_events)
-
-        #     best_events = [
-        #         e for e in dashboard_events
-        #         if e["priority"] == best_priority
-        #     ]
-
-        #     # Most recent among highest-priority events
-        #     primary = max(best_events, key=lambda e: e["timestamp"])
-
-        #     # 2️⃣ Check for newer lower-priority events
-        #     newer_lower = [
-        #         e for e in dashboard_events
-        #         if e["priority"] > best_priority and e["timestamp"] > primary["timestamp"]
-        #     ]
-
-        #     if newer_lower:
-        #         secondary = max(newer_lower, key=lambda e: e["timestamp"])
-        #         dashboard_text = f"{secondary['message']}  ||  {primary['message']}"
-        #         # st.info(combined_msg)
-        #     else:
-        #         # st.info(primary["message"])
-        #         dashboard_text = primary["message"]
-
 
         # ---------------------------------------------------
 
