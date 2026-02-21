@@ -1,3 +1,8 @@
+import os, sys
+PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
+if PROJECT_ROOT not in sys.path:
+    sys.path.insert(0, PROJECT_ROOT)
+
 import pytz
 import streamlit as st
 from firebase_client import firebase_sign_in_with_google, firestore_set, firestore_get, firestore_delete, firestore_list, firestore_update_field, firestore_to_python, firebase_refresh_id_token
@@ -11,12 +16,7 @@ from core.metadata import normalize_meta, ensure_kv_rows, build_package_chip_met
 from ui.flow_editor import flow_editor, update_flow_editor
 from ui.metadata_ui import render_metadata_ui, save_package_info_core, save_measure_info_core
 from services.drive import upload_file_via_cleanroom_api, delete_file_via_cleanroom_api
-import requests, os, time, json, subprocess, sys
-
-PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
-if PROJECT_ROOT not in sys.path:
-    sys.path.insert(0, PROJECT_ROOT)
-
+import requests, time, json, subprocess
 from zoneinfo import ZoneInfo
 from notion_client.helpers import get_id
 from notion.notion_ops import update_page_properties, create_measure_page, set_relation, update_date_range, archive_page, get_page, create_fab_page
