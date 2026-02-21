@@ -479,7 +479,7 @@ st.markdown("""
 }
 
 .layer-card {
-    border: 1px solid rgba(255,255,255,0.08);   /* subtle base border */
+    border: 1px solid rgba(0,0,0,0.12);
     border-radius: 10px;
     padding: 10px;
     background: transparent;
@@ -533,6 +533,10 @@ st.markdown("""
     display: block;
     height: 100%;
     background: #555;
+}
+
+html[data-theme="dark"] .layer-card {
+    border: 1px solid rgba(255,255,255,0.15);
 }
 
 </style>
