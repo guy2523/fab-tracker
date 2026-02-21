@@ -1574,7 +1574,7 @@ top_left, top_right = st.columns([1.5, 1])
 
 with top_right:
     redirect_uri = st.secrets["app"]["admin_redirect_uri"]
-    st.link_button("Editor", redirect_url)
+    st.link_button("Editor", redirect_uri)
 
     # st.markdown(
     #     '<div style="text-align: right;">'
