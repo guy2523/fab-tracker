@@ -665,42 +665,43 @@ st.markdown("""
 /* =========================
    DARK MODE OVERRIDES ONLY
 ========================= */
-html[data-theme="dark"] .run-card,
-html[data-theme="dark"] .layer-card {
+
+html.dark .run-card,
+html.dark .layer-card {
     background: #1e1e1e !important;
     border-color: #333 !important;
     color: #e6e6e6 !important;
 }
 
-[data-theme="dark"] .layer-card.pending-layer {
+html.dark .layer-card.pending-layer {
     background: #1e1e1e !important;
 }
 
-[data-theme="dark"] .layer-card.done-layer {
+html.dark .layer-card.done-layer {
     background: rgba(76, 175, 80, 0.18) !important;
 }
 
-[data-theme="dark"] .layer-card.progress-layer {
+html.dark .layer-card.progress-layer {
     background: rgba(244, 197, 66, 0.18) !important;
 }
 
-[data-theme="dark"] .layer-card.terminated-layer {
+html.dark .layer-card.terminated-layer {
     background: rgba(244, 67, 54, 0.18) !important;
 }
 
-[data-theme="dark"] .step-mini-bar {
+html.dark .step-mini-bar {
     background: #333 !important;
 }
 
-[data-theme="dark"] .arrow-cell {
+html.dark .arrow-cell {
     color: #aaa !important;
 }
 
-[data-theme="dark"] .fab-progress {
+html.dark .fab-progress {
     background: #333 !important;
 }
 
-[data-theme="dark"] .fab-progress-fill-complete {
+html.dark .fab-progress-fill-complete {
     background: #bbb !important;
 }
 
