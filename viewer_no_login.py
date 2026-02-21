@@ -557,18 +557,18 @@ div[data-testid="stExpander"][aria-expanded="true"] .completed-run-header {
 st.markdown("""
 <style>
 .layer-card.done-layer {
-    border: 1.5px solid #4caf50 !important;
+    border: 1.5px solid #4caf50;
     background-color: #e8f5e9 !important;   /* soft green */
 }
 
 .layer-card.progress-layer {
-    border: 1.5px solid #f4c542 !important;
+    border: 1.5px solid #f4c542;
     background-color: #fff8e1 !important;   /* soft yellow */
 }
 
 .layer-card.pending-layer {
-    border: 1px solid #cccccc !important;
-    background-color: #fafafa !important;   /* neutral gray */
+    border: 1px solid rgba(128,128,128,0.3);
+    background-color: var(--secondary-background-color);
 }
 </style>
 """, unsafe_allow_html=True)
