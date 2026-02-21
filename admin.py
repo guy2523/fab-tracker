@@ -15,7 +15,7 @@ import requests, os, time, json, subprocess, sys
 from zoneinfo import ZoneInfo
 from notion_client.helpers import get_id
 from notion.notion_ops import update_page_properties, create_measure_page, set_relation, update_date_range, archive_page, get_page, create_fab_page
-from notion_add_fab_content import add_fab_content
+from notion.notion_add_fab_content import add_fab_content
 import urllib.parse
 import notion_client
 import inspect
