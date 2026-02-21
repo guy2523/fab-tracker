@@ -665,8 +665,8 @@ st.markdown("""
 /* =========================
    DARK MODE OVERRIDES ONLY
 ========================= */
-[data-theme="dark"] .run-card,
-[data-theme="dark"] .layer-card {
+html[data-theme="dark"] .run-card,
+html[data-theme="dark"] .layer-card {
     background: #1e1e1e !important;
     border-color: #333 !important;
     color: #e6e6e6 !important;
