@@ -1656,7 +1656,7 @@ with top_left:
         if run_class_view == "Main":
             st.success("Electron-on-helium device")
         elif run_class_view == "Test":
-            st.success("Non-electron-on-helium device still requires cooldown")
+            st.success("Non-electron-on-helium device with cooldown")
 
 
 with top_right:
