@@ -1,8 +1,4 @@
 import os, sys
-PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
-if PROJECT_ROOT not in sys.path:
-    sys.path.insert(0, PROJECT_ROOT)
-
 import pytz
 import streamlit as st
 from firebase_client import firebase_sign_in_with_google, firestore_set, firestore_get, firestore_delete, firestore_list, firestore_update_field, firestore_to_python, firebase_refresh_id_token
@@ -16,7 +12,7 @@ from core.metadata import normalize_meta, ensure_kv_rows, build_package_chip_met
 from ui.flow_editor import flow_editor, update_flow_editor
 from ui.metadata_ui import render_metadata_ui, save_package_info_core, save_measure_info_core
 from services.drive import upload_file_via_cleanroom_api, delete_file_via_cleanroom_api
-import requests, time, json, subprocess
+import requests, time, json
 from zoneinfo import ZoneInfo
 from notion_client.helpers import get_id
 from notion.notion_ops import update_page_properties, create_measure_page, set_relation, update_date_range, archive_page, get_page, create_fab_page
@@ -196,58 +192,58 @@ def build_steps_from_flow(flow):
 
 
 
-def run_notion_subprocess(*, script_path: str, payload: dict, on_stderr_line=None) -> dict:
-    env = os.environ.copy()
-    env["NOTION_TOKEN"] = st.secrets["notion"]["NOTION_TOKEN"]
-    # env["NOTION_FAB_DB_URL"] = st.secrets["notion"]["NOTION_FAB_DB_URL"]
-    env["NOTION_MEAS_DB_URL_ICEOXFORD"] = st.secrets["notion"]["NOTION_MEAS_DB_URL_ICEOXFORD"]
-    env["NOTION_MEAS_DB_URL_BLUEFORS"]  = st.secrets["notion"]["NOTION_MEAS_DB_URL_BLUEFORS"]
+# def run_notion_subprocess(*, script_path: str, payload: dict, on_stderr_line=None) -> dict:
+#     env = os.environ.copy()
+#     env["NOTION_TOKEN"] = st.secrets["notion"]["NOTION_TOKEN"]
+#     # env["NOTION_FAB_DB_URL"] = st.secrets["notion"]["NOTION_FAB_DB_URL"]
+#     env["NOTION_MEAS_DB_URL_ICEOXFORD"] = st.secrets["notion"]["NOTION_MEAS_DB_URL_ICEOXFORD"]
+#     env["NOTION_MEAS_DB_URL_BLUEFORS"]  = st.secrets["notion"]["NOTION_MEAS_DB_URL_BLUEFORS"]
 
-    p = subprocess.Popen(
-        [sys.executable, script_path, json.dumps(payload)],
-        stdout=subprocess.PIPE,
-        stderr=subprocess.PIPE,
-        text=True,
-        env=env,
-        bufsize=1,
-    )
+#     p = subprocess.Popen(
+#         [sys.executable, script_path, json.dumps(payload)],
+#         stdout=subprocess.PIPE,
+#         stderr=subprocess.PIPE,
+#         text=True,
+#         env=env,
+#         bufsize=1,
+#     )
 
-    stderr_lines = []
-    stdout_lines = []
+#     stderr_lines = []
+#     stdout_lines = []
 
-    # stream stderr live (progress logs)
-    while True:
-        line = p.stderr.readline()
-        if line:
-            line = line.rstrip("\n")
-            stderr_lines.append(line)
-            if on_stderr_line is not None:
-                try:
-                    on_stderr_line(line)
-                except Exception:
-                    pass
-        else:
-            if p.poll() is not None:
-                break
+#     # stream stderr live (progress logs)
+#     while True:
+#         line = p.stderr.readline()
+#         if line:
+#             line = line.rstrip("\n")
+#             stderr_lines.append(line)
+#             if on_stderr_line is not None:
+#                 try:
+#                     on_stderr_line(line)
+#                 except Exception:
+#                     pass
+#         else:
+#             if p.poll() is not None:
+#                 break
 
-    # now collect the rest
-    out, err = p.communicate()
-    if out:
-        stdout_lines.append(out)
-    if err:
-        stderr_lines.append(err)
+#     # now collect the rest
+#     out, err = p.communicate()
+#     if out:
+#         stdout_lines.append(out)
+#     if err:
+#         stderr_lines.append(err)
 
-    stdout = ("".join(stdout_lines) or "").strip()
-    stderr = ("\n".join(stderr_lines) or "").strip()
+#     stdout = ("".join(stdout_lines) or "").strip()
+#     stderr = ("\n".join(stderr_lines) or "").strip()
 
-    if p.returncode != 0:
-        raise RuntimeError(stderr or stdout or f"Notion script failed (code={p.returncode})")
+#     if p.returncode != 0:
+#         raise RuntimeError(stderr or stdout or f"Notion script failed (code={p.returncode})")
 
-    # IMPORTANT: stdout must be JSON only
-    try:
-        return json.loads(stdout)
-    except Exception:
-        raise RuntimeError(f"Notion script returned non-JSON output: {stdout[:400]}")
+#     # IMPORTANT: stdout must be JSON only
+#     try:
+#         return json.loads(stdout)
+#     except Exception:
+#         raise RuntimeError(f"Notion script returned non-JSON output: {stdout[:400]}")
 
 
 
