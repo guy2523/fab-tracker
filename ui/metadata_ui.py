@@ -1165,10 +1165,17 @@ def render_metadata_ui(
 
 
         # 🔒 PRESERVE Fabin / Fabout from PRE-EDIT state
+        # old_fabin = next(
+        #     (r for r in fab_meta_norm if r["key"].strip().lower() == "fabin"),
+        #     None
+        # )
+
         old_fabin = next(
-            (r for r in fab_meta_norm if r["key"].strip().lower() == "fabin"),
+            (r for r in update_meta["fab"] if r["key"].strip().lower() == "fabin"),
             None
         )
+
+
 
         old_fabout = next(
             (r for r in fab_meta_norm if r["key"].strip().lower() == "fabout"),
