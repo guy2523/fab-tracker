@@ -1577,7 +1577,7 @@ with top_left:
     # st.link_button("Editor", redirect_uri)
 
     st.markdown(
-        '<div style="text-align: right;">'
+        '<div style="text-align: left;">'
         '<a href="https://fab-tracker-7uac3bt2l3sad66hgpvjw6.streamlit.app/" '
         'target="_blank" '
         'style="text-decoration: none; font-weight: 600;">'
