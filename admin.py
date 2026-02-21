@@ -15,6 +15,7 @@ import requests, os, time, json, subprocess, sys
 from zoneinfo import ZoneInfo
 from notion_client.helpers import get_id
 from notion.notion_ops import update_page_properties, create_measure_page, set_relation, update_date_range, archive_page, get_page, create_fab_page
+from notion_add_fab_content import add_fab_content
 import urllib.parse
 import notion_client
 import inspect
@@ -3657,27 +3658,36 @@ with r2c1:
                                     )
 
 
-                                    prog = st.progress(0)
-                                    msg = st.empty()
+                                    # prog = st.progress(0)
+                                    # msg = st.empty()
 
-                                    total_events = 18  # 9 "main page content..." + 9 "{label} page content..."
-                                    seen = {"n": 0}
+                                    # total_events = 18  # 9 "main page content..." + 9 "{label} page content..."
+                                    # seen = {"n": 0}
 
-                                    def _on_line(line: str):
-                                        msg.write(line)
-                                        if "page content is created" in line:
-                                            seen["n"] += 1
-                                            pct = int(min(95, (seen["n"] / total_events) * 95))
-                                            prog.progress(pct)
+                                    # def _on_line(line: str):
+                                    #     msg.write(line)
+                                    #     if "page content is created" in line:
+                                    #         seen["n"] += 1
+                                    #         pct = int(min(95, (seen["n"] / total_events) * 95))
+                                    #         prog.progress(pct)
+
+                                    # with st.spinner("Applying Fab content template (Notion)…"):
+                                    #     result = run_notion_subprocess(
+                                    #         script_path="notion/notion_add_fab_content.py",
+                                    #         payload=payload,
+                                    #         on_stderr_line=_on_line,
+                                    #     )
+
+                                    # prog.progress(100)
 
                                     with st.spinner("Applying Fab content template (Notion)…"):
-                                        result = run_notion_subprocess(
-                                            script_path="notion/notion_add_fab_content.py",
+                                        result = add_fab_content(
+                                            notion_token=st.secrets["notion"]["NOTION_TOKEN"],
+                                            page_url=payload["page_url"],
+                                            num_chips=payload["num_chips"],
                                             payload=payload,
-                                            on_stderr_line=_on_line,
+                                            mode="all",
                                         )
-
-                                    prog.progress(100)
 
                                     # if result.get("success"):
                                     #     st.success("Fab content added.")

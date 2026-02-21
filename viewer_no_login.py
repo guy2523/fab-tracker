@@ -2216,13 +2216,9 @@ for doc in filtered_runs:
 
 
         "</div>"
-        # ---------------------------------------------------------------
 
-        # 🔥 RED LINE ADDED HERE
-        # "<div style='width:100%; height:4px; background:#eee; margin:10px 0 20px 0;'></div>"
-        # "<div style='width:100%; height:4px; background:var(--secondary-background-color); margin:10px 0 20px 0;'></div>"
         "<div style='width:100%; height:4px; background: var(--secondary-background-color); margin: 6px 0px 8px;'></div>"
-        
+
         "<div class='layer-grid'>"
         f"{layers_html}"
         "</div>"
