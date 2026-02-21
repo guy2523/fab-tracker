@@ -12,6 +12,11 @@ from ui.flow_editor import flow_editor, update_flow_editor
 from ui.metadata_ui import render_metadata_ui, save_package_info_core, save_measure_info_core
 from services.drive import upload_file_via_cleanroom_api, delete_file_via_cleanroom_api
 import requests, os, time, json, subprocess, sys
+
+PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
+if PROJECT_ROOT not in sys.path:
+    sys.path.insert(0, PROJECT_ROOT)
+
 from zoneinfo import ZoneInfo
 from notion_client.helpers import get_id
 from notion.notion_ops import update_page_properties, create_measure_page, set_relation, update_date_range, archive_page, get_page, create_fab_page
