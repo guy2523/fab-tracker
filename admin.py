@@ -3523,6 +3523,11 @@ with r2c1:
                             with col_link:
                                 if st.button("Link", key=f"btn_design_notion_{loaded_run_doc_id}"):
 
+                                    # 🔒 Write-once guard
+                                    if existing_url:
+                                        st.warning("Design Notion page already linked. Use Reset first.")
+                                        st.stop()
+
                                     page_url = get_page_url_by_title(
                                         notion_token=st.secrets["notion"]["NOTION_TOKEN"],
                                         db_url=design_db_url,
