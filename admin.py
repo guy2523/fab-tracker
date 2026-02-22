@@ -3582,19 +3582,67 @@ with r2c1:
                             # RESET BUTTON
                             # ==========================================================
                             
+                            # with col_reset:
+                            #     if existing_url:
+                            #         if st.button("Reset", key=f"btn_reset_design_notion_{loaded_run_doc_id}"):
+
+                            #             new_design_meta = [
+                            #                 item for item in design_meta
+                            #                 if (item.get("key") or "").strip() not in ("Notion", "NotionTitle")
+                            #             ]
+
+                            #             # ✅ Update session metadata first
+                            #             st.session_state["update_meta"]["design"] = new_design_meta
+
+                            #             # ✅ Update Firestore
+                            #             firestore_update_field(
+                            #                 "runs",
+                            #                 loaded_run_doc_id,
+                            #                 "metadata.design",
+                            #                 new_design_meta,
+                            #                 id_token,
+                            #             )
+
+                            #             # ✅ DELETE widget state instead of setting it
+                            #             title_key = f"design_notion_title_{loaded_run_doc_id}"
+                            #             if title_key in st.session_state:
+                            #                 del st.session_state[title_key]
+
+                            #             st.success("Design Notion link removed.")
+                            #             st.rerun()
+
                             with col_reset:
                                 if existing_url:
                                     if st.button("Reset", key=f"btn_reset_design_notion_{loaded_run_doc_id}"):
 
-                                        new_design_meta = [
-                                            item for item in design_meta
-                                            if (item.get("key") or "").strip() not in ("Notion", "NotionTitle")
-                                        ]
+                                        new_design_meta = []
+                                        notion_found = False
+                                        title_found = False
 
-                                        # ✅ Update session metadata first
+                                        for item in design_meta:
+                                            key = (item.get("key") or "").strip()
+
+                                            if key == "Notion":
+                                                new_design_meta.append({"key": "Notion", "value": ""})
+                                                notion_found = True
+
+                                            elif key == "NotionTitle":
+                                                new_design_meta.append({"key": "NotionTitle", "value": ""})
+                                                title_found = True
+
+                                            else:
+                                                new_design_meta.append(item)
+
+                                        # Ensure keys always exist (even if they didn't before)
+                                        if not notion_found:
+                                            new_design_meta.append({"key": "Notion", "value": ""})
+                                        if not title_found:
+                                            new_design_meta.append({"key": "NotionTitle", "value": ""})
+
+                                        # Update session
                                         st.session_state["update_meta"]["design"] = new_design_meta
 
-                                        # ✅ Update Firestore
+                                        # Update Firestore
                                         firestore_update_field(
                                             "runs",
                                             loaded_run_doc_id,
@@ -3603,14 +3651,60 @@ with r2c1:
                                             id_token,
                                         )
 
-                                        # ✅ DELETE widget state instead of setting it
+                                        # Clear widget state
                                         title_key = f"design_notion_title_{loaded_run_doc_id}"
                                         if title_key in st.session_state:
                                             del st.session_state[title_key]
 
-                                        st.success("Design Notion link removed.")
+                                        st.success("Design Notion link cleared.")
                                         st.rerun()
+                            with col_reset:
+                                if existing_url:
+                                    if st.button("Reset", key=f"btn_reset_design_notion_{loaded_run_doc_id}"):
 
+                                        new_design_meta = []
+                                        notion_found = False
+                                        title_found = False
+
+                                        for item in design_meta:
+                                            key = (item.get("key") or "").strip()
+
+                                            if key == "Notion":
+                                                new_design_meta.append({"key": "Notion", "value": ""})
+                                                notion_found = True
+
+                                            elif key == "NotionTitle":
+                                                new_design_meta.append({"key": "NotionTitle", "value": ""})
+                                                title_found = True
+
+                                            else:
+                                                new_design_meta.append(item)
+
+                                        # Ensure keys always exist (even if they didn't before)
+                                        if not notion_found:
+                                            new_design_meta.append({"key": "Notion", "value": ""})
+                                        if not title_found:
+                                            new_design_meta.append({"key": "NotionTitle", "value": ""})
+
+                                        # Update session
+                                        st.session_state["update_meta"]["design"] = new_design_meta
+
+                                        # Update Firestore
+                                        firestore_update_field(
+                                            "runs",
+                                            loaded_run_doc_id,
+                                            "metadata.design",
+                                            new_design_meta,
+                                            id_token,
+                                        )
+
+                                        # Clear widget state
+                                        title_key = f"design_notion_title_{loaded_run_doc_id}"
+                                        if title_key in st.session_state:
+                                            del st.session_state[title_key]
+
+                                        st.success("Design Notion link cleared.")
+                                        st.rerun()
 
 
                         elif target_meta == "fab":
