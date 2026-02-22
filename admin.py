@@ -3569,8 +3569,109 @@ with r2c1:
                                     "top_callout": fab_top_note,
                                 }
 
-                            # Use a per-run key to avoid collisions when switching runs
-                            if st.button("Create", key=f"btn_apply_fab_content_{loaded_run_doc_id}"):
+                            # # Use a per-run key to avoid collisions when switching runs
+                            # if st.button("Create", key=f"btn_apply_fab_content_{loaded_run_doc_id}"):
+
+
+                            #     # -------------------------------------------------
+                            #     # Write-once guard: prevent duplicate Fab creation
+                            #     # -------------------------------------------------
+                            #     fab_list = st.session_state.get("update_meta", {}).get("fab", [])
+                            #     existing_child_ids = None
+
+                            #     for it in fab_list:
+                            #         if (it.get("key") or "").strip() == "Fab Child Page IDs":
+                            #             existing_child_ids = it.get("value")
+                            #             break
+
+                            #     # if existing_child_ids and len(existing_child_ids) > 0:
+                            #     #     st.warning("Fab content already exists. Duplicate creation prevented.")
+                            #     #     st.rerun()
+
+                            #     already_created = existing_child_ids and len(existing_child_ids) > 0
+
+                            #     if payload is None:
+                            #         # Don't st.stop() here; just do nothing
+                            #         st.warning("Fix missing fields above, then try again.")
+                            #     else:
+
+                            #         # -----------------------------------------
+                            #         # Persist Fab Top Callout together with template
+                            #         # -----------------------------------------
+                            #         meta = st.session_state.setdefault("update_meta", {})
+                            #         fab_meta = meta.setdefault("fab", [])
+
+                            #         for it in fab_meta:
+                            #             if (it.get("key") or "") == "Fab Top Callout":
+                            #                 it["value"] = fab_top_note
+                            #                 break
+                            #         else:
+                            #             fab_meta.append({
+                            #                 "key": "Fab Top Callout",
+                            #                 "value": fab_top_note,
+                            #             })
+
+                            #         firestore_update_field(
+                            #             "runs",
+                            #             # loaded_run_no,
+                            #             loaded_run_doc_id,
+                            #             "metadata.fab",
+                            #             fab_meta,
+                            #             id_token,
+                            #         )
+
+
+                            #         with st.spinner("Applying Fab content template (Notion)…"):
+                            #             result = add_fab_content(
+                            #                 notion_token=st.secrets["notion"]["NOTION_TOKEN"],
+                            #                 page_url=payload["page_url"],
+                            #                 num_chips=payload["num_chips"],
+                            #                 payload=payload,
+                            #                 fabdata_db_urls=st.secrets["notion"]["NOTION_FABDATA_DB_URLS"],
+                            #                 mode="all",
+                            #             )
+                            #         ###
+                            #         # if result.get("success"):
+                            #         #     st.success("Fab content added.")
+                            #         if result.get("success"):
+                            #             child_ids = result.get("fab_child_page_ids", [])
+
+                            #             if child_ids:
+                            #                 # Persist as write-once Fab system metadata
+                            #                 fab_list = st.session_state.get("update_meta", {}).get("fab", [])
+
+                            #                 already_has_ids = any(
+                            #                     (it.get("key") or "").strip() == "Fab Child Page IDs"
+                            #                     for it in fab_list
+                            #                 )
+
+                            #                 if not already_has_ids and child_ids:
+                            #                     fab_list.append({
+                            #                         "key": "Fab Child Page IDs",
+                            #                         "value": child_ids,
+                            #                     })
+
+                            #                 firestore_update_field(
+                            #                     "runs",
+                            #                     # loaded_run_no,
+                            #                     loaded_run_doc_id,
+                            #                     "metadata.fab",
+                            #                     fab_list,
+                            #                     id_token,
+                            #                 )
+
+                            #             st.success("Fab content added and page IDs saved.")
+
+
+                            #         else:
+                            #             st.warning(f"Fab content failed: {result}")
+
+                            create_clicked = st.button(
+                                "Create",
+                                key=f"btn_apply_fab_content_{loaded_run_doc_id}",
+                            )
+
+                            if create_clicked:
 
                                 # -------------------------------------------------
                                 # Write-once guard: prevent duplicate Fab creation
@@ -3583,15 +3684,15 @@ with r2c1:
                                         existing_child_ids = it.get("value")
                                         break
 
-                                if existing_child_ids and len(existing_child_ids) > 0:
+                                already_created = existing_child_ids and len(existing_child_ids) > 0
+
+                                if already_created:
                                     st.warning("Fab content already exists. Duplicate creation prevented.")
-                                    st.rerun()
 
-                                if payload is None:
-                                    # Don't st.stop() here; just do nothing
+                                elif payload is None:
                                     st.warning("Fix missing fields above, then try again.")
-                                else:
 
+                                else:
                                     # -----------------------------------------
                                     # Persist Fab Top Callout together with template
                                     # -----------------------------------------
@@ -3610,13 +3711,11 @@ with r2c1:
 
                                     firestore_update_field(
                                         "runs",
-                                        # loaded_run_no,
                                         loaded_run_doc_id,
                                         "metadata.fab",
                                         fab_meta,
                                         id_token,
                                     )
-
 
                                     with st.spinner("Applying Fab content template (Notion)…"):
                                         result = add_fab_content(
@@ -3627,14 +3726,11 @@ with r2c1:
                                             fabdata_db_urls=st.secrets["notion"]["NOTION_FABDATA_DB_URLS"],
                                             mode="all",
                                         )
-                                    ###
-                                    # if result.get("success"):
-                                    #     st.success("Fab content added.")
+
                                     if result.get("success"):
                                         child_ids = result.get("fab_child_page_ids", [])
 
                                         if child_ids:
-                                            # Persist as write-once Fab system metadata
                                             fab_list = st.session_state.get("update_meta", {}).get("fab", [])
 
                                             already_has_ids = any(
@@ -3650,7 +3746,6 @@ with r2c1:
 
                                             firestore_update_field(
                                                 "runs",
-                                                # loaded_run_no,
                                                 loaded_run_doc_id,
                                                 "metadata.fab",
                                                 fab_list,
@@ -3659,9 +3754,11 @@ with r2c1:
 
                                         st.success("Fab content added and page IDs saved.")
 
-
                                     else:
                                         st.warning(f"Fab content failed: {result}")
+
+
+
 
                         elif target_meta == "package":
                             st.info("Package Notion content will be added later.")
