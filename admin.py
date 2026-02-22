@@ -3572,6 +3572,21 @@ with r2c1:
                             # Use a per-run key to avoid collisions when switching runs
                             if st.button("Create", key=f"btn_apply_fab_content_{loaded_run_doc_id}"):
 
+                                # -------------------------------------------------
+                                # Write-once guard: prevent duplicate Fab creation
+                                # -------------------------------------------------
+                                fab_list = st.session_state.get("update_meta", {}).get("fab", [])
+                                existing_child_ids = None
+
+                                for it in fab_list:
+                                    if (it.get("key") or "").strip() == "Fab Child Page IDs":
+                                        existing_child_ids = it.get("value")
+                                        break
+
+                                if existing_child_ids and len(existing_child_ids) > 0:
+                                    st.warning("Fab content already exists. Duplicate creation prevented.")
+                                    st.stop()
+
                                 if payload is None:
                                     # Don't st.stop() here; just do nothing
                                     st.warning("Fix missing fields above, then try again.")
@@ -3602,28 +3617,6 @@ with r2c1:
                                         id_token,
                                     )
 
-
-                                    # prog = st.progress(0)
-                                    # msg = st.empty()
-
-                                    # total_events = 18  # 9 "main page content..." + 9 "{label} page content..."
-                                    # seen = {"n": 0}
-
-                                    # def _on_line(line: str):
-                                    #     msg.write(line)
-                                    #     if "page content is created" in line:
-                                    #         seen["n"] += 1
-                                    #         pct = int(min(95, (seen["n"] / total_events) * 95))
-                                    #         prog.progress(pct)
-
-                                    # with st.spinner("Applying Fab content template (Notion)…"):
-                                    #     result = run_notion_subprocess(
-                                    #         script_path="notion/notion_add_fab_content.py",
-                                    #         payload=payload,
-                                    #         on_stderr_line=_on_line,
-                                    #     )
-
-                                    # prog.progress(100)
 
                                     with st.spinner("Applying Fab content template (Notion)…"):
                                         result = add_fab_content(
