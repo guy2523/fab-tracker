@@ -3604,10 +3604,12 @@ with r2c1:
                             #                 new_design_meta,
                             #                 id_token,
                             #             )
-
+                            #
                             #             st.success("Design Notion link removed.")
                                         # st.rerun()
 
+                            col_link, col_reset = st.columns([1, 1])
+                            
                             # -----------------------------------------
                             # LINK BUTTON
                             # -----------------------------------------
