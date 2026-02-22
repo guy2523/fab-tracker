@@ -1110,7 +1110,7 @@ def render_metadata_ui(
             "🎨 Design",
             design_meta_norm,
             disable_keys=("completed", "notion", "notion_page_id"),
-            hide_keys=("file", "fileid", "filename", "filed"),
+            hide_keys=("file", "fileid", "filename", "filed", "notiontitle"),
             render_footer=design_footer,
         )
 
