@@ -3510,10 +3510,20 @@ with r2c1:
                                     existing_title = (it.get("value") or "").strip()
 
                             # -------- Title Input --------
+                            # design_title_input = st.text_input(
+                            #     "Page title",
+                            #     value=existing_title if existing_title else "",
+                            #     key=f"design_notion_title_{loaded_run_doc_id}",
+                            # )
+
+                            title_key = f"design_notion_title_{loaded_run_doc_id}"
+
+                            if title_key not in st.session_state:
+                                st.session_state[title_key] = existing_title or ""
+
                             design_title_input = st.text_input(
                                 "Page title",
-                                value=existing_title if existing_title else "",
-                                key=f"design_notion_title_{loaded_run_doc_id}",
+                                key=title_key,
                             )
 
                             col_link, col_reset = st.columns([1, 1])
