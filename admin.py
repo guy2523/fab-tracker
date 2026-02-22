@@ -3552,17 +3552,30 @@ with r2c1:
                                 f"{design_db_url}"
                             )
 
-                            meta = st.session_state.get("update_meta", {})
-                            design_meta = meta.get("design", [])
+                            # meta = st.session_state.get("update_meta", {})
+                            # design_meta = meta.get("design", [])
 
-                            # -----------------------------------------
-                            # Check existing Notion URL
-                            # -----------------------------------------
-                            existing_url = None
-                            for it in design_meta:
-                                if (it.get("key") or "").strip() == "Notion":
-                                    existing_url = it.get("value")
-                                    break
+                            # # -----------------------------------------
+                            # # Check existing Notion URL
+                            # # -----------------------------------------
+                            # existing_url = None
+                            # for it in design_meta:
+                            #     if (it.get("key") or "").strip() == "Notion":
+                            #         existing_url = it.get("value")
+                            #         break
+
+                            meta = st.session_state.get("update_meta", {})
+                            design_meta = meta.get("design", []) or []
+
+                            # Robust existing URL detection
+                            existing_url = next(
+                                (
+                                    (it.get("value") or "").strip()
+                                    for it in design_meta
+                                    if (it.get("key") or "").strip() == "Notion"
+                                ),
+                                ""
+                            )
 
                             # -----------------------------------------
                             # Title input
@@ -3581,7 +3594,7 @@ with r2c1:
                             with col_link:
                                 if st.button("Link", key=f"btn_design_notion_{loaded_run_doc_id}"):
 
-                                    if existing_url:
+                                    if existing_url.strip():
                                         st.warning("Design Notion URL already exists.")
                                     else:
                                         page_url = get_page_url_by_title(
