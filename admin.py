@@ -3552,18 +3552,6 @@ with r2c1:
                                 f"{design_db_url}"
                             )
 
-                            # meta = st.session_state.get("update_meta", {})
-                            # design_meta = meta.get("design", [])
-
-                            # # -----------------------------------------
-                            # # Check existing Notion URL
-                            # # -----------------------------------------
-                            # existing_url = None
-                            # for it in design_meta:
-                            #     if (it.get("key") or "").strip() == "Notion":
-                            #         existing_url = it.get("value")
-                            #         break
-
                             meta = st.session_state.get("update_meta", {})
                             design_meta = meta.get("design", []) or []
 
@@ -3606,11 +3594,17 @@ with r2c1:
                                         if not page_url:
                                             st.warning("No matching page found.")
                                         else:
+                                            # Remove any existing Notion keys first (guarantee uniqueness)
+                                            design_meta = [
+                                                item for item in design_meta
+                                                if (item.get("key") or "").strip() != "Notion"
+                                            ]
+
+                                            # Add exactly one Notion entry
                                             design_meta.append({
                                                 "key": "Notion",
                                                 "value": page_url,
                                             })
-
                                             # Update session_state first
                                             st.session_state["update_meta"]["design"] = design_meta
 
