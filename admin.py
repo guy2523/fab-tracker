@@ -128,24 +128,22 @@ def _pick_fab_db_url(run_class: str | None) -> str:
     return st.secrets["notion"]["NOTION_FAB_DB_URL"]
 
 
-# def _dbg_read_fridge(label: str):
-#     run_dbg = firestore_get("runs", loaded_run_doc_id, id_token)
-#     meta_dbg = firestore_to_python((run_dbg or {}).get("fields", {}).get("metadata", {}))
-#     fr_db = (meta_dbg.get("measure", {}).get("fridges", {}).get(fridge_uid, {}) or {})
+def get_page_url(notion, database_url: str, title: str):
+    database_id = get_parent_id(database_url)
 
-#     fr_ss = (
-#         st.session_state.get("update_meta", {})
-#         .get("measure", {})
-#         .get("fridges", {})
-#         .get(fridge_uid, {})
-#         or {}
-#     )
+    results = notion.databases.query(
+        database_id=database_id,
+        filter={
+            "property": "title",  # make sure this matches your DB title property
+            "rich_text": {"contains": title},
+        },
+    )
 
-#     st.caption(
-#         f"🧪 {label} [{fridge_uid}] "
-#         f"DB(url='{fr_db.get('notion','')}', id='{fr_db.get('notion_page_id','')}') | "
-#         f"SS(url='{fr_ss.get('notion','')}', id='{fr_ss.get('notion_page_id','')}')"
-#     )
+    pages = results.get("results", [])
+    if not pages:
+        return None
+
+    return pages[0]["url"]
 
 
 def run_exists(run_no, id_token):
@@ -3488,7 +3486,55 @@ with r2c1:
                     with sub_notion:
                         # Show different Notion UI depending on which stage we are in
                         if target_meta == "design":
-                            st.info("Design Notion content will be added later.")
+                            # st.info("Design Notion content will be added later.")
+                            st.write("**Link existing Design Notion page**")
+
+                            design_title_input = st.text_input(
+                                "Design page title",
+                                value=st.session_state.get("loaded_device_name", ""),
+                                key=f"design_notion_title_{loaded_run_doc_id}",
+                            )
+
+                            if st.button("Fetch & Save Notion URL", key=f"btn_design_notion_{loaded_run_doc_id}"):
+
+                                meta = st.session_state.get("update_meta", {})
+                                design_meta = meta.get("design", [])
+
+                                # Write-once guard
+                                existing_url = None
+                                for it in design_meta:
+                                    if (it.get("key") or "").strip() == "Notion":
+                                        existing_url = it.get("value")
+                                        break
+
+                                if existing_url:
+                                    st.warning("Design Notion URL already exists. Skipping.")
+                                else:
+                                    notion = notion_client.Client(
+                                        auth=st.secrets["notion"]["NOTION_TOKEN"]
+                                    )
+
+                                    db_url = st.secrets["notion"]["NOTION_DESIGN_DB_URL"]
+
+                                    page_url = get_page_url(notion, db_url, design_title_input)
+
+                                    if not page_url:
+                                        st.warning("No matching page found.")
+                                    else:
+                                        design_meta.append({
+                                            "key": "Notion",
+                                            "value": page_url,
+                                        })
+
+                                        firestore_update_field(
+                                            "runs",
+                                            loaded_run_doc_id,
+                                            "metadata.design",
+                                            design_meta,
+                                            id_token,
+                                        )
+
+                                        st.success("Design Notion URL saved.")
 
                         elif target_meta == "fab":
                             st.write(
@@ -3568,103 +3614,6 @@ with r2c1:
                                     "type": fab_type,
                                     "top_callout": fab_top_note,
                                 }
-
-                            # # Use a per-run key to avoid collisions when switching runs
-                            # if st.button("Create", key=f"btn_apply_fab_content_{loaded_run_doc_id}"):
-
-
-                            #     # -------------------------------------------------
-                            #     # Write-once guard: prevent duplicate Fab creation
-                            #     # -------------------------------------------------
-                            #     fab_list = st.session_state.get("update_meta", {}).get("fab", [])
-                            #     existing_child_ids = None
-
-                            #     for it in fab_list:
-                            #         if (it.get("key") or "").strip() == "Fab Child Page IDs":
-                            #             existing_child_ids = it.get("value")
-                            #             break
-
-                            #     # if existing_child_ids and len(existing_child_ids) > 0:
-                            #     #     st.warning("Fab content already exists. Duplicate creation prevented.")
-                            #     #     st.rerun()
-
-                            #     already_created = existing_child_ids and len(existing_child_ids) > 0
-
-                            #     if payload is None:
-                            #         # Don't st.stop() here; just do nothing
-                            #         st.warning("Fix missing fields above, then try again.")
-                            #     else:
-
-                            #         # -----------------------------------------
-                            #         # Persist Fab Top Callout together with template
-                            #         # -----------------------------------------
-                            #         meta = st.session_state.setdefault("update_meta", {})
-                            #         fab_meta = meta.setdefault("fab", [])
-
-                            #         for it in fab_meta:
-                            #             if (it.get("key") or "") == "Fab Top Callout":
-                            #                 it["value"] = fab_top_note
-                            #                 break
-                            #         else:
-                            #             fab_meta.append({
-                            #                 "key": "Fab Top Callout",
-                            #                 "value": fab_top_note,
-                            #             })
-
-                            #         firestore_update_field(
-                            #             "runs",
-                            #             # loaded_run_no,
-                            #             loaded_run_doc_id,
-                            #             "metadata.fab",
-                            #             fab_meta,
-                            #             id_token,
-                            #         )
-
-
-                            #         with st.spinner("Applying Fab content template (Notion)…"):
-                            #             result = add_fab_content(
-                            #                 notion_token=st.secrets["notion"]["NOTION_TOKEN"],
-                            #                 page_url=payload["page_url"],
-                            #                 num_chips=payload["num_chips"],
-                            #                 payload=payload,
-                            #                 fabdata_db_urls=st.secrets["notion"]["NOTION_FABDATA_DB_URLS"],
-                            #                 mode="all",
-                            #             )
-                            #         ###
-                            #         # if result.get("success"):
-                            #         #     st.success("Fab content added.")
-                            #         if result.get("success"):
-                            #             child_ids = result.get("fab_child_page_ids", [])
-
-                            #             if child_ids:
-                            #                 # Persist as write-once Fab system metadata
-                            #                 fab_list = st.session_state.get("update_meta", {}).get("fab", [])
-
-                            #                 already_has_ids = any(
-                            #                     (it.get("key") or "").strip() == "Fab Child Page IDs"
-                            #                     for it in fab_list
-                            #                 )
-
-                            #                 if not already_has_ids and child_ids:
-                            #                     fab_list.append({
-                            #                         "key": "Fab Child Page IDs",
-                            #                         "value": child_ids,
-                            #                     })
-
-                            #                 firestore_update_field(
-                            #                     "runs",
-                            #                     # loaded_run_no,
-                            #                     loaded_run_doc_id,
-                            #                     "metadata.fab",
-                            #                     fab_list,
-                            #                     id_token,
-                            #                 )
-
-                            #             st.success("Fab content added and page IDs saved.")
-
-
-                            #         else:
-                            #             st.warning(f"Fab content failed: {result}")
 
                             create_clicked = st.button(
                                 "Create",
