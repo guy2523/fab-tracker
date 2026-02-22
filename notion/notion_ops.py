@@ -4,6 +4,7 @@ from __future__ import annotations
 from typing import Iterable, Optional
 from notion_client import Client as NotionClient
 from notion.pkg.eeroq_notion import Page, Database
+from notion_client.helpers import get_id
 
 
 # ----------------------------------------------------------------------
@@ -296,11 +297,10 @@ def get_page_url_by_title(
 
     client = get_notion_client(notion_token)
 
-    # Use your existing Database wrapper
-    db = Database("Design", url=db_url)
+    db_id = get_id(db_url)
 
     results = client.databases.query(
-        database_id=db.id,   # ← IMPORTANT: use db.id, not get_parent_id
+        database_id=db_id,
         filter={
             "property": "title",
             "rich_text": {
