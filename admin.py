@@ -3581,36 +3581,6 @@ with r2c1:
                             # ==========================================================
                             # RESET BUTTON
                             # ==========================================================
-                            
-                            # with col_reset:
-                            #     if existing_url:
-                            #         if st.button("Reset", key=f"btn_reset_design_notion_{loaded_run_doc_id}"):
-
-                            #             new_design_meta = [
-                            #                 item for item in design_meta
-                            #                 if (item.get("key") or "").strip() not in ("Notion", "NotionTitle")
-                            #             ]
-
-                            #             # ✅ Update session metadata first
-                            #             st.session_state["update_meta"]["design"] = new_design_meta
-
-                            #             # ✅ Update Firestore
-                            #             firestore_update_field(
-                            #                 "runs",
-                            #                 loaded_run_doc_id,
-                            #                 "metadata.design",
-                            #                 new_design_meta,
-                            #                 id_token,
-                            #             )
-
-                            #             # ✅ DELETE widget state instead of setting it
-                            #             title_key = f"design_notion_title_{loaded_run_doc_id}"
-                            #             if title_key in st.session_state:
-                            #                 del st.session_state[title_key]
-
-                            #             st.success("Design Notion link removed.")
-                            #             st.rerun()
-
 
                             with col_reset:
                                 if existing_url:
@@ -3653,9 +3623,13 @@ with r2c1:
                                         )
 
                                         # Clear widget state
+                                        # title_key = f"design_notion_title_{loaded_run_doc_id}"
+                                        # if title_key in st.session_state:
+                                        #     del st.session_state[title_key]
+
+                                        # Clear widget state properly
                                         title_key = f"design_notion_title_{loaded_run_doc_id}"
-                                        if title_key in st.session_state:
-                                            del st.session_state[title_key]
+                                        st.session_state[title_key] = ""
 
                                         st.success("Design Notion link cleared.")
                                         st.rerun()
