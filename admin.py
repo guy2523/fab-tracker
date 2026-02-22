@@ -3495,33 +3495,6 @@ with r2c1:
                                 f"{design_db_url}"
                             )
 
-                            # meta = st.session_state.get("update_meta", {})
-                            # design_meta = meta.get("design", []) or []
-
-                            # Robust existing URL detection
-                            # existing_url = next(
-                            #     (
-                            #         (it.get("value") or "").strip()
-                            #         for it in design_meta
-                            #         if (it.get("key") or "").strip() == "Notion"
-                            #     ),
-                            #     ""
-                            # )
-
-                            # meta = st.session_state.get("update_meta", {})
-                            # design_meta = meta.get("design", [])
-
-                            # # Extract existing values
-                            # existing_url = ""
-                            # existing_title = ""
-
-                            # for it in design_meta:
-                            #     key = (it.get("key") or "").strip()
-                            #     if key == "Notion":
-                            #         existing_url = it.get("value") or ""
-                            #     if key == "NotionTitle":
-                            #         existing_title = it.get("value") or ""
-                            
                             meta = st.session_state.get("update_meta", {})
                             design_meta = meta.get("design", []) or []
 
@@ -3576,6 +3549,8 @@ with r2c1:
                                             "value": design_title_input,
                                         })
 
+                                        st.session_state["update_meta"]["design"] = design_meta
+
                                         firestore_update_field(
                                             "runs",
                                             loaded_run_doc_id,
@@ -3600,6 +3575,8 @@ with r2c1:
                                             if (item.get("key") or "").strip() not in ("Notion", "NotionTitle")
                                         ]
 
+                                        st.session_state["update_meta"]["design"] = design_meta
+
                                         firestore_update_field(
                                             "runs",
                                             loaded_run_doc_id,
@@ -3610,23 +3587,6 @@ with r2c1:
 
                                         st.success("Design Notion link removed.")
                                         st.rerun()
-
-                            # design_meta = [
-                            #     item for item in design_meta
-                            #     if (item.get("key") or "").strip() not in ("Notion", "NotionTitle")
-                            # ]
-
-                            # firestore_update_field(
-                            #     "runs",
-                            #     loaded_run_doc_id,
-                            #     "metadata.design",
-                            #     design_meta,
-                            #     id_token,
-                            # )
-
-                            # st.success("Design Notion link removed.")
-                            # st.rerun()
-
 
 
                         elif target_meta == "fab":
