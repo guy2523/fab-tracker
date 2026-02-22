@@ -299,25 +299,25 @@ def get_page_url_by_title(
 
     db_id = get_id(db_url)
 
-    print(f"db id : {db_id}")
-    print(f"db_url: {db_url}")
+    # print(f"db id : {db_id}")
+    # print(f"db_url: {db_url}")
 
-    db_info = client.databases.retrieve(db_id)
-    for k, v in db_info["properties"].items():
-        print(k, "->", v["type"])
+    # db_info = client.databases.retrieve(db_id)
+    # for k, v in db_info["properties"].items():
+    #     print(k, "->", v["type"])
 
-    # results = client.databases.query(
-    #     database_id=db_id,
-    #     filter={
-    #         "property": "title",
-    #         "rich_text": {
-    #             "contains": title,
-    #         },
-    #     },
-    # )
+    results = client.databases.query(
+        database_id=db_id,
+        filter={
+            "property": "title",
+            "rich_text": {
+                "contains": title,
+            },
+        },
+    )
 
-    # items = results.get("results", [])
-    # if not items:
-    #     return ""
+    items = results.get("results", [])
+    if not items:
+        return ""
 
-    # return items[0].get("url", "")
+    return items[0].get("url", "")
