@@ -3487,7 +3487,11 @@ with r2c1:
                         # Show different Notion UI depending on which stage we are in
                         if target_meta == "design":
                             # st.info("Design Notion content will be added later.")
-                            st.write("__Link Design Page__")
+                            st.write("__Link design page__")
+                            design_db_url = st.secrets["notion"]["NOTION_DESIGN_DB_URL"]
+                            st.warning(
+                                f"Link to an existing Notion page is only available within the following database:\n\n{design_db_url}"
+                            )
 
                             design_title_input = st.text_input(
                                 "Page title",
