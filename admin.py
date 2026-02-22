@@ -191,62 +191,6 @@ def build_steps_from_flow(flow):
     return steps
 
 
-
-# def run_notion_subprocess(*, script_path: str, payload: dict, on_stderr_line=None) -> dict:
-#     env = os.environ.copy()
-#     env["NOTION_TOKEN"] = st.secrets["notion"]["NOTION_TOKEN"]
-#     # env["NOTION_FAB_DB_URL"] = st.secrets["notion"]["NOTION_FAB_DB_URL"]
-#     env["NOTION_MEAS_DB_URL_ICEOXFORD"] = st.secrets["notion"]["NOTION_MEAS_DB_URL_ICEOXFORD"]
-#     env["NOTION_MEAS_DB_URL_BLUEFORS"]  = st.secrets["notion"]["NOTION_MEAS_DB_URL_BLUEFORS"]
-
-#     p = subprocess.Popen(
-#         [sys.executable, script_path, json.dumps(payload)],
-#         stdout=subprocess.PIPE,
-#         stderr=subprocess.PIPE,
-#         text=True,
-#         env=env,
-#         bufsize=1,
-#     )
-
-#     stderr_lines = []
-#     stdout_lines = []
-
-#     # stream stderr live (progress logs)
-#     while True:
-#         line = p.stderr.readline()
-#         if line:
-#             line = line.rstrip("\n")
-#             stderr_lines.append(line)
-#             if on_stderr_line is not None:
-#                 try:
-#                     on_stderr_line(line)
-#                 except Exception:
-#                     pass
-#         else:
-#             if p.poll() is not None:
-#                 break
-
-#     # now collect the rest
-#     out, err = p.communicate()
-#     if out:
-#         stdout_lines.append(out)
-#     if err:
-#         stderr_lines.append(err)
-
-#     stdout = ("".join(stdout_lines) or "").strip()
-#     stderr = ("\n".join(stderr_lines) or "").strip()
-
-#     if p.returncode != 0:
-#         raise RuntimeError(stderr or stdout or f"Notion script failed (code={p.returncode})")
-
-#     # IMPORTANT: stdout must be JSON only
-#     try:
-#         return json.loads(stdout)
-#     except Exception:
-#         raise RuntimeError(f"Notion script returned non-JSON output: {stdout[:400]}")
-
-
-
 # -------------------------------------------------
 # 🔑 Status editor widget nonce (init ONCE)
 # -------------------------------------------------
@@ -3687,6 +3631,7 @@ with r2c1:
                                             page_url=payload["page_url"],
                                             num_chips=payload["num_chips"],
                                             payload=payload,
+                                            fabdata_db_urls=st.secrets["notion"]["NOTION_FABDATA_DB_URLS"],
                                             mode="all",
                                         )
 

@@ -13,6 +13,7 @@ def add_fab_content(
     page_url: str,
     num_chips: int,
     payload: dict,
+    fabdata_db_urls: list[str],
     mode: str = "all",
 ):
     notion = NotionClient(auth=notion_token)  
@@ -21,18 +22,8 @@ def add_fab_content(
 
     fabdata_db = []
     created_page_ids = []
-    fabdata_db_url = ['https://www.notion.so/eeroq/4a3b49a78ddf40b5bd7e5d299d61b21d?v=ba924f789e90485fb33862bc39252e60',
-     'https://www.notion.so/eeroq/3be71cbfccff40b986c0d5e112339d84?v=80f4ede71808417cbe0b29ae257b3548',
-     'https://www.notion.so/eeroq/1783a2c724ad4a7f9d8e8d8b2cc258ba?v=4b73e0ffb48145c685ff4ca717e12694',
-     'https://www.notion.so/eeroq/c8431c33e4a04d32a3dfdd0524c36856?v=b21a8edd59b74bf99580213abc16cc0b',
-     'https://www.notion.so/eeroq/eaa7767f48c6493ea266661c8626ccdc?v=8d10e6243e154bea92c022ae5d1f153a',
-     'https://www.notion.so/eeroq/1ba410f6a1834fada426149ede3a5dd1?v=ab73c4fdd7144fd6be525f7f7eaa8e2a',
-     'https://www.notion.so/eeroq/e5d8409c22264fc2bc81ac6a6e57a2a7?v=44dda9b9042a42d18ffb2a446c8693c3',
-     'https://www.notion.so/eeroq/7fd84100628147e19194aa1eb87708b1?v=b8930e40f75c4297b67ae51abd0f9455',
-     'https://www.notion.so/eeroq/57abf492052c48e2bd9c6089f140f97a?v=bd73509e705745ada5d82d9b2fa54ce8']
-
-
-    for url in fabdata_db_url:
+  
+    for url in fabdata_db_urls:
         db = Database(url=url)
         fabdata_db.append(db)
     
@@ -79,7 +70,7 @@ def add_fab_content(
         # create 9 DB pages + add properties
 
         db_page_list = []
-        for i in range(len(fabdata_db_url)):
+        for i in range(len(fabdata_db_urls)):
             new_db_page = Page()
             db_page_list.append(new_db_page)
 
@@ -98,7 +89,7 @@ def add_fab_content(
 
         ### create db page content
         ###
-        n_databases = len(fabdata_db_url)
+        n_databases = len(fabdata_db_urls)
         sync_block_list = [Block(sync=True) for i in range(n_databases)]
 
         sync_block_list[0].heading("History", header_type=2).divider().toggle_blocks("data").space()
