@@ -3585,7 +3585,7 @@ with r2c1:
 
                                 if existing_child_ids and len(existing_child_ids) > 0:
                                     st.warning("Fab content already exists. Duplicate creation prevented.")
-                                    st.stop()
+                                    st.rerun()
 
                                 if payload is None:
                                     # Don't st.stop() here; just do nothing
