@@ -3522,91 +3522,11 @@ with r2c1:
                                 if key == "NotionTitle":
                                     existing_title = it.get("value") or ""
 
-                            # -----------------------------------------
-                            # Title input
-                            # -----------------------------------------
-                            # design_title_input = st.text_input(
-                            #     "Page title",
-                            #     value=st.session_state.get("loaded_device_name", ""),
-                            #     key=f"design_notion_title_{loaded_run_doc_id}",
-                            # )
-
                             design_title_input = st.text_input(
                                 "Page title",
                                 value=existing_title if existing_title else st.session_state.get("loaded_device_name", ""),
                                 key=f"design_notion_title_{loaded_run_doc_id}",
                             )
-
-
-                            # -----------------------------------------
-                            # LINK BUTTON
-                            # -----------------------------------------
-                            # with col_link:
-                            #     if st.button("Link", key=f"btn_design_notion_{loaded_run_doc_id}"):
-
-                            #         if existing_url.strip():
-                            #             st.warning("Design Notion URL already exists.")
-                            #         else:
-                            #             page_url = get_page_url_by_title(
-                            #                 notion_token=st.secrets["notion"]["NOTION_TOKEN"],
-                            #                 db_url=design_db_url,
-                            #                 title=design_title_input,
-                            #             )
-
-                            #             if not page_url:
-                            #                 st.warning("No matching page found.")
-                            #             else:
-                            #                 # Remove any existing Notion keys first (guarantee uniqueness)
-                            #                 design_meta = [
-                            #                     item for item in design_meta
-                            #                     if (item.get("key") or "").strip() != "Notion"
-                            #                 ]
-
-                            #                 # Add exactly one Notion entry
-                            #                 design_meta.append({
-                            #                     "key": "Notion",
-                            #                     "value": page_url,
-                            #                 })
-                            #                 # Update session_state first
-                            #                 st.session_state["update_meta"]["design"] = design_meta
-
-                            #                 firestore_update_field(
-                            #                     "runs",
-                            #                     loaded_run_doc_id,
-                            #                     "metadata.design",
-                            #                     design_meta,
-                            #                     id_token,
-                            #                 )
-
-                            #                 st.success("Design Notion URL saved.")
-                            #                 st.rerun()
-                          
-
-
-                            # -----------------------------------------
-                            # RESET BUTTON (only if link exists)
-                            # -----------------------------------------
-                            # with col_reset:
-                            #     if existing_url:
-                            #         if st.button("Reset", key=f"btn_reset_design_notion_{loaded_run_doc_id}"):
-
-                            #             new_design_meta = [
-                            #                 it for it in design_meta
-                            #                 if (it.get("key") or "").strip() != "Notion"
-                            #             ]
-
-                            #             st.session_state["update_meta"]["design"] = new_design_meta
-
-                            #             firestore_update_field(
-                            #                 "runs",
-                            #                 loaded_run_doc_id,
-                            #                 "metadata.design",
-                            #                 new_design_meta,
-                            #                 id_token,
-                            #             )
-                            #
-                            #             st.success("Design Notion link removed.")
-                                        # st.rerun()
 
                             col_link, col_reset = st.columns([1, 1])
                             
@@ -3677,21 +3597,21 @@ with r2c1:
                                         st.success("Design Notion link removed.")
                                         st.rerun()
 
-                            design_meta = [
-                                item for item in design_meta
-                                if (item.get("key") or "").strip() not in ("Notion", "NotionTitle")
-                            ]
+                            # design_meta = [
+                            #     item for item in design_meta
+                            #     if (item.get("key") or "").strip() not in ("Notion", "NotionTitle")
+                            # ]
 
-                            firestore_update_field(
-                                "runs",
-                                loaded_run_doc_id,
-                                "metadata.design",
-                                design_meta,
-                                id_token,
-                            )
+                            # firestore_update_field(
+                            #     "runs",
+                            #     loaded_run_doc_id,
+                            #     "metadata.design",
+                            #     design_meta,
+                            #     id_token,
+                            # )
 
-                            st.success("Design Notion link removed.")
-                            st.rerun()
+                            # st.success("Design Notion link removed.")
+                            # st.rerun()
 
 
 
