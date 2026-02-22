@@ -2330,17 +2330,51 @@ for doc in filtered_runs:
 
             row = {k: row_raw.get(k, "") for k in design_order if k in row_raw}
 
+            # st.dataframe(
+            #     [row],
+            #     hide_index=True,
+            #     use_container_width=True,
+            #     column_config={
+            #         "File": st.column_config.LinkColumn(
+            #             "File (chip)", display_text=r".*#(.*)"
+            #         ),
+            #     },
+            # )
+            col_cfg = {
+                "File": st.column_config.LinkColumn(
+                    "File (chip)", display_text=r".*#(.*)"
+                ),
+            }
+
+            if row.get("Notion"):
+                notion_url = row.get("Notion")
+
+                display_text = notion_url
+
+                if isinstance(notion_url, str) and "/" in notion_url:
+                    # Get last path segment
+                    slug = notion_url.rstrip("/").split("/")[-1]
+
+                    # Remove trailing 32-char page ID
+                    if "-" in slug:
+                        slug = slug.rsplit("-", 1)[0]
+
+                    # Replace hyphens with spaces
+                    display_text = slug.replace("-", " ")
+
+                col_cfg["Notion"] = st.column_config.LinkColumn(
+                    "Notion",
+                    display_text=display_text,
+                )
+
             st.dataframe(
                 [row],
                 hide_index=True,
                 use_container_width=True,
-                column_config={
-                    "File": st.column_config.LinkColumn(
-                        "File (chip)", display_text=r".*#(.*)"
-                    ),
-                },
+                column_config=col_cfg,
             )
 
+#
         with tab_fab:
             row_raw = design_meta_to_row(fab_meta)
 
