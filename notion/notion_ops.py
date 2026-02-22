@@ -299,8 +299,8 @@ def get_page_url_by_title(
 
     db_id = get_id(db_url)
 
-    st.write(f"db id : {db_id}")
-    st.write(f"db_url: {db_url}")
+    print(f"db id : {db_id}")
+    print(f"db_url: {db_url}")
 
     db_info = client.databases.retrieve(db_id)
     for k, v in db_info["properties"].items():
