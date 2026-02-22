@@ -3487,15 +3487,15 @@ with r2c1:
                         # Show different Notion UI depending on which stage we are in
                         if target_meta == "design":
                             # st.info("Design Notion content will be added later.")
-                            st.write("**Link existing Design Notion page**")
+                            st.write("__Link Design Page__")
 
                             design_title_input = st.text_input(
-                                "Design page title",
+                                "Page title",
                                 value=st.session_state.get("loaded_device_name", ""),
                                 key=f"design_notion_title_{loaded_run_doc_id}",
                             )
 
-                            if st.button("Fetch & Save Notion URL", key=f"btn_design_notion_{loaded_run_doc_id}"):
+                            if st.button("Link", key=f"btn_design_notion_{loaded_run_doc_id}"):
 
                                 meta = st.session_state.get("update_meta", {})
                                 design_meta = meta.get("design", [])
@@ -3534,7 +3534,7 @@ with r2c1:
                                         )
 
                                         st.success("Design Notion URL saved.")
-                                        st.rerun()
+                                        # st.rerun()
 
                         elif target_meta == "fab":
                             st.write(
