@@ -3510,13 +3510,6 @@ with r2c1:
                                 if existing_url:
                                     st.warning("Design Notion URL already exists. Skipping.")
                                 else:
-                                    # notion = notion_client.Client(
-                                    #     auth=st.secrets["notion"]["NOTION_TOKEN"]
-                                    # )
-
-                                    # db_url = st.secrets["notion"]["NOTION_DESIGN_DB_URL"]
-
-                                    # page_url = get_page_url(notion, db_url, design_title_input)
                                     page_url = get_page_url_by_title(
                                         notion_token=st.secrets["notion"]["NOTION_TOKEN"],
                                         db_url=st.secrets["notion"]["NOTION_DESIGN_DB_URL"],
@@ -3541,6 +3534,7 @@ with r2c1:
                                         )
 
                                         st.success("Design Notion URL saved.")
+                                        st.rerun()
 
                         elif target_meta == "fab":
                             st.write(
