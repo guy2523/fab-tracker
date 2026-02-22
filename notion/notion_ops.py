@@ -269,3 +269,48 @@ def update_page_properties(
     db = Database("DB", url=db_url)
     page = Page("link", page_url)
     db.update_page_properties(page, properties)
+
+
+
+# ----------------------------------------------------------------------
+# Find page URL in database by title (Design linking)
+# ----------------------------------------------------------------------
+
+def get_page_url_by_title(
+    *,
+    notion_token: str,
+    db_url: str,
+    title: str,
+) -> str:
+    """
+    Search a Notion database by title (contains match)
+    and return the first matching page URL.
+    """
+
+    if not notion_token:
+        raise ValueError("notion_token is required")
+    if not db_url:
+        raise ValueError("db_url is required")
+    if not title:
+        raise ValueError("title is required")
+
+    client = get_notion_client(notion_token)
+
+    # Use your existing Database wrapper
+    db = Database("Design", url=db_url)
+
+    results = client.databases.query(
+        database_id=db.id,   # ← IMPORTANT: use db.id, not get_parent_id
+        filter={
+            "property": "title",
+            "rich_text": {
+                "contains": title,
+            },
+        },
+    )
+
+    items = results.get("results", [])
+    if not items:
+        return ""
+
+    return items[0].get("url", "")

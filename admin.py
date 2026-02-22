@@ -15,7 +15,7 @@ from services.drive import upload_file_via_cleanroom_api, delete_file_via_cleanr
 import requests, time, json
 from zoneinfo import ZoneInfo
 from notion_client.helpers import get_id
-from notion.notion_ops import update_page_properties, create_measure_page, set_relation, update_date_range, archive_page, get_page, create_fab_page
+from notion.notion_ops import update_page_properties, create_measure_page, set_relation, update_date_range, archive_page, get_page, create_fab_page, get_page_url_by_title
 from notion.notion_add_fab_content import add_fab_content
 import urllib.parse
 import notion_client
@@ -128,22 +128,22 @@ def _pick_fab_db_url(run_class: str | None) -> str:
     return st.secrets["notion"]["NOTION_FAB_DB_URL"]
 
 
-def get_page_url(notion, database_url: str, title: str):
-    database_id = get_id(database_url)
-    st.write(database_id)
-    results = notion.databases.query(
-        database_id=database_id,
-        filter={
-            "property": "title",  # make sure this matches your DB title property
-            "rich_text": {"contains": title},
-        },
-    )
+# def get_page_url(notion, database_url: str, title: str):
+#     database_id = get_id(database_url)
+#     st.write(database_id)
+#     results = notion.databases.query(
+#         database_id=database_id,
+#         filter={
+#             "property": "title",  # make sure this matches your DB title property
+#             "rich_text": {"contains": title},
+#         },
+#     )
 
-    pages = results.get("results", [])
-    if not pages:
-        return None
+#     pages = results.get("results", [])
+#     if not pages:
+#         return None
 
-    return pages[0]["url"]
+#     return pages[0]["url"]
 
 
 def run_exists(run_no, id_token):
@@ -3510,13 +3510,19 @@ with r2c1:
                                 if existing_url:
                                     st.warning("Design Notion URL already exists. Skipping.")
                                 else:
-                                    notion = notion_client.Client(
-                                        auth=st.secrets["notion"]["NOTION_TOKEN"]
+                                    # notion = notion_client.Client(
+                                    #     auth=st.secrets["notion"]["NOTION_TOKEN"]
+                                    # )
+
+                                    # db_url = st.secrets["notion"]["NOTION_DESIGN_DB_URL"]
+
+                                    # page_url = get_page_url(notion, db_url, design_title_input)
+                                    page_url = get_page_url_by_title(
+                                        notion_token=st.secrets["notion"]["NOTION_TOKEN"],
+                                        db_url=st.secrets["notion"]["NOTION_DESIGN_DB_URL"],
+                                        title=design_title_input,
                                     )
 
-                                    db_url = st.secrets["notion"]["NOTION_DESIGN_DB_URL"]
-
-                                    page_url = get_page_url(notion, db_url, design_title_input)
 
                                     if not page_url:
                                         st.warning("No matching page found.")
