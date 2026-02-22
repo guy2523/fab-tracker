@@ -3509,23 +3509,39 @@ with r2c1:
                                 elif key == "NotionTitle":
                                     existing_title = (it.get("value") or "").strip()
 
-                            # -------- Title Input --------
+                            # title_key = f"design_notion_title_{loaded_run_doc_id}"
+
+                            # if title_key not in st.session_state:
+                            #     st.session_state[title_key] = existing_title or ""
+
                             # design_title_input = st.text_input(
                             #     "Page title",
-                            #     value=existing_title if existing_title else "",
-                            #     key=f"design_notion_title_{loaded_run_doc_id}",
+                            #     key=title_key,
                             # )
 
                             title_key = f"design_notion_title_{loaded_run_doc_id}"
+                            reset_flag_key = f"{title_key}_reset_flag"
 
+                            # -------------------------------------------------
+                            # Handle reset BEFORE widget creation
+                            # -------------------------------------------------
+                            if st.session_state.get(reset_flag_key):
+                                st.session_state[title_key] = ""
+                                st.session_state[reset_flag_key] = False
+
+                            # -------------------------------------------------
+                            # Initialize only once (first load)
+                            # -------------------------------------------------
                             if title_key not in st.session_state:
                                 st.session_state[title_key] = existing_title or ""
 
+                            # -------------------------------------------------
+                            # Widget
+                            # -------------------------------------------------
                             design_title_input = st.text_input(
                                 "Page title",
                                 key=title_key,
                             )
-
                             col_link, col_reset = st.columns([1, 1])
 
                             # ==========================================================
@@ -3622,14 +3638,10 @@ with r2c1:
                                             id_token,
                                         )
 
-                                        # Clear widget state
-                                        # title_key = f"design_notion_title_{loaded_run_doc_id}"
-                                        # if title_key in st.session_state:
-                                        #     del st.session_state[title_key]
-
                                         # Clear widget state properly
                                         title_key = f"design_notion_title_{loaded_run_doc_id}"
-                                        st.session_state[title_key] = ""
+                                        # st.session_state[title_key] = ""
+                                        st.session_state[reset_flag_key] = True
 
                                         st.success("Design Notion link cleared.")
                                         st.rerun()
