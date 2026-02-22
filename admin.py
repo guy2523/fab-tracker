@@ -3560,8 +3560,8 @@ with r2c1:
                                         )
 
                                         st.success("Design Notion URL saved.")
-                                        # st.rerun()
-                                        st.stop()
+                                        st.rerun()
+                                        # st.stop()
 
 
                             # -----------------------------------------
