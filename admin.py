@@ -3499,28 +3499,42 @@ with r2c1:
                             # design_meta = meta.get("design", []) or []
 
                             # Robust existing URL detection
-                            existing_url = next(
-                                (
-                                    (it.get("value") or "").strip()
-                                    for it in design_meta
-                                    if (it.get("key") or "").strip() == "Notion"
-                                ),
-                                ""
-                            )
+                            # existing_url = next(
+                            #     (
+                            #         (it.get("value") or "").strip()
+                            #         for it in design_meta
+                            #         if (it.get("key") or "").strip() == "Notion"
+                            #     ),
+                            #     ""
+                            # )
 
+                            # meta = st.session_state.get("update_meta", {})
+                            # design_meta = meta.get("design", [])
+
+                            # # Extract existing values
+                            # existing_url = ""
+                            # existing_title = ""
+
+                            # for it in design_meta:
+                            #     key = (it.get("key") or "").strip()
+                            #     if key == "Notion":
+                            #         existing_url = it.get("value") or ""
+                            #     if key == "NotionTitle":
+                            #         existing_title = it.get("value") or ""
+                            
                             meta = st.session_state.get("update_meta", {})
-                            design_meta = meta.get("design", [])
+                            design_meta = meta.get("design", []) or []
 
-                            # Extract existing values
                             existing_url = ""
                             existing_title = ""
 
                             for it in design_meta:
                                 key = (it.get("key") or "").strip()
                                 if key == "Notion":
-                                    existing_url = it.get("value") or ""
-                                if key == "NotionTitle":
-                                    existing_title = it.get("value") or ""
+                                    existing_url = (it.get("value") or "").strip()
+                                elif key == "NotionTitle":
+                                    existing_title = (it.get("value") or "").strip()
+
 
                             design_title_input = st.text_input(
                                 "Page title",
