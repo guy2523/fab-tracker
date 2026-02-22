@@ -3526,47 +3526,47 @@ with r2c1:
                                     # 🔒 Write-once guard
                                     if existing_url:
                                         st.warning("Design Notion page already linked. Use Reset first.")
-                                        st.stop()
 
-                                    page_url = get_page_url_by_title(
-                                        notion_token=st.secrets["notion"]["NOTION_TOKEN"],
-                                        db_url=design_db_url,
-                                        title=design_title_input,
-                                    )
-
-                                    if not page_url:
-                                        st.warning("No matching page found.")
                                     else:
-                                        # Remove old Notion entries
-                                        design_meta = [
-                                            item for item in design_meta
-                                            if (item.get("key") or "").strip() not in ("Notion", "NotionTitle")
-                                        ]
-
-                                        # Add clean pair
-                                        design_meta.append({
-                                            "key": "Notion",
-                                            "value": page_url,
-                                        })
-
-                                        design_meta.append({
-                                            "key": "NotionTitle",
-                                            "value": design_title_input,
-                                        })
-
-                                        st.session_state["update_meta"]["design"] = design_meta
-
-                                        firestore_update_field(
-                                            "runs",
-                                            loaded_run_doc_id,
-                                            "metadata.design",
-                                            design_meta,
-                                            id_token,
+                                        page_url = get_page_url_by_title(
+                                            notion_token=st.secrets["notion"]["NOTION_TOKEN"],
+                                            db_url=design_db_url,
+                                            title=design_title_input,
                                         )
 
-                                        st.success("Design Notion URL saved.")
-                                        st.rerun()
-                                        # st.stop()
+                                        if not page_url:
+                                            st.warning("No matching page found.")
+                                        else:
+                                            # Remove old Notion entries
+                                            design_meta = [
+                                                item for item in design_meta
+                                                if (item.get("key") or "").strip() not in ("Notion", "NotionTitle")
+                                            ]
+
+                                            # Add clean pair
+                                            design_meta.append({
+                                                "key": "Notion",
+                                                "value": page_url,
+                                            })
+
+                                            design_meta.append({
+                                                "key": "NotionTitle",
+                                                "value": design_title_input,
+                                            })
+
+                                            st.session_state["update_meta"]["design"] = design_meta
+
+                                            firestore_update_field(
+                                                "runs",
+                                                loaded_run_doc_id,
+                                                "metadata.design",
+                                                design_meta,
+                                                id_token,
+                                            )
+
+                                            st.success("Design Notion URL saved.")
+                                            st.rerun()
+                                            # st.stop()
 
 
                             # -----------------------------------------
