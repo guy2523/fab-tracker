@@ -129,7 +129,7 @@ def _pick_fab_db_url(run_class: str | None) -> str:
 
 
 def get_page_url(notion, database_url: str, title: str):
-    database_id = get_parent_id(database_url)
+    database_id = get_id(database_url)
 
     results = notion.databases.query(
         database_id=database_id,
