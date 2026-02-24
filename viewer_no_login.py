@@ -2589,26 +2589,65 @@ for doc in filtered_runs:
             }
 
 
+            # for r in rows:
+            #     fridge_label = r.get("Fridge", "")
+            #     lot_id = r.get("Lotid") or r.get("Notion")  # depending on your row structure
+            #     notion_url = (r.get("Notion") or "").strip()
+
+            #     # -------------------------
+            #     # 1️⃣ Fridge → Measurement DB
+            #     # -------------------------
+            #     meas_db_url = NOTION_DB_MAP.get(fridge_label)
+            #     if meas_db_url:
+            #         r["Fridge"] = f"{meas_db_url}# {fridge_label}"
+
+            #     # -------------------------
+            #     # 2️⃣ Notion column → clickable LOT ID
+            #     # -------------------------
+            #     if notion_url and lot_id:
+            #         r["Notion"] = f"{notion_url}# {lot_id}"
+
+            #     r.pop("_cooldown_start", None)
+
+
+            # st.dataframe(
+            #     rows,
+            #     hide_index=True,
+            #     use_container_width=True,
+            #     column_config={
+            #         "Fridge": st.column_config.LinkColumn(
+            #             "Fridge",
+            #             display_text=r".*#(.*)",
+            #         ),
+            #         "Notion": st.column_config.LinkColumn(
+            #             "Notion",
+            #             display_text=r".*#(.*)",
+            #         ),
+            #     },
+            # )
+
+            # ------------------------------------------------------------
+            # Measurement table (clickable Fridge + clickable Notion label)
+            # ------------------------------------------------------------
+
             for r in rows:
-                fridge_label = r.get("Fridge", "")
-                lot_id = r.get("Lotid") or r.get("Notion")  # depending on your row structure
-                notion_url = (r.get("Notion") or "").strip()
+                # 1) Fridge column → link to the right Measurement DB
+                fridge_label = (r.get("Fridge") or "").strip()
+                db_url = NOTION_DB_MAP.get(fridge_label)
+                if db_url:
+                    r["Fridge"] = f"{db_url}# {fridge_label}"
 
-                # -------------------------
-                # 1️⃣ Fridge → Measurement DB
-                # -------------------------
-                meas_db_url = NOTION_DB_MAP.get(fridge_label)
-                if meas_db_url:
-                    r["Fridge"] = f"{meas_db_url}# {fridge_label}"
+                # 2) Notion column → keep your previous working behavior
+                url = (r.get("Notion") or "").strip()
+                if url:
+                    label = _meas_notion_label(
+                        fridge_label,                 # IMPORTANT: use original label text
+                        r.get("_cooldown_start", ""),
+                    )
+                    r["Notion"] = f"{url}# {label}"
 
-                # -------------------------
-                # 2️⃣ Notion column → clickable LOT ID
-                # -------------------------
-                if notion_url and lot_id:
-                    r["Notion"] = f"{notion_url}# {lot_id}"
-
+                # remove helper before display
                 r.pop("_cooldown_start", None)
-
 
             st.dataframe(
                 rows,
@@ -2625,4 +2664,3 @@ for doc in filtered_runs:
                     ),
                 },
             )
-
