@@ -361,6 +361,13 @@ if "layer_presets_loaded" not in st.session_state:
 load_layer_presets_once(st.session_state, id_token, DEFAULT_FLOW)
 
 
+mode = st.radio(
+    "",
+    ["Create Run", "Update Run", "Delete Run", "Notion Setting"],
+    horizontal=True,
+)
+
+st.divider()
 
 # r1c1, r1c2 = st.columns(2)
 
@@ -368,8 +375,9 @@ load_layer_presets_once(st.session_state, id_token, DEFAULT_FLOW)
 # 1. DELETE RUN (with confirmation)
 # ------------------------------------------------------------
 # with r1c1:
-with st.expander("🗑 Delete Run", expanded=False):
 
+# with st.expander("🗑 Delete Run", expanded=False):
+if mode == "Create Run":
     if "confirm_delete_run" not in st.session_state:
         st.session_state["confirm_delete_run"] = False
 
