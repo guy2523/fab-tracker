@@ -376,7 +376,7 @@ mode = st.radio(
 # with r1c1:
 
 # with st.expander("🗑 Delete Run", expanded=False):
-if mode == "Create Run":
+if mode == "Delete Run":
     if "confirm_delete_run" not in st.session_state:
         st.session_state["confirm_delete_run"] = False
 
@@ -568,7 +568,8 @@ load_notion_templates_once()
 # ------------------------------------------------------------
 # st.subheader("🆕 Create Run")
 # with r1c2:
-with st.expander("🆕 Create Run", expanded=False):
+# with st.expander("🆕 Create Run", expanded=False):
+if mode == "Create Run":
    
     # tabs = st.tabs(["General", "Design", "Fab", "Package", "Measurement", "Notion"])
     tabs = st.tabs(["General", "Design", "Fab", "Package", "Measurement"])
