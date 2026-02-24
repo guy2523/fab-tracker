@@ -85,38 +85,7 @@ st.markdown("""
 </style>
 """, unsafe_allow_html=True)
 
-st.markdown("""
-<style>
 
-/* ===============================
-   Admin Expander Compact Mode
-   =============================== */
-
-/* Reduce spacing between expanders */
-div[data-testid="stExpander"] {
-    margin-bottom: 6px !important;
-}
-
-/* Reduce expander header height */
-div[data-testid="stExpander"] summary {
-    padding-top: 6px !important;
-    padding-bottom: 6px !important;
-    font-size: 0.95rem !important;
-}
-
-/* Reduce inner content padding */
-div[data-testid="stExpander"] div[role="region"] {
-    padding-top: 8px !important;
-    padding-bottom: 8px !important;
-}
-
-/* Remove extra vertical gaps inside expander */
-div[data-testid="stExpander"] [data-testid="stVerticalBlock"] {
-    gap: 6px !important;
-}
-
-</style>
-""", unsafe_allow_html=True)
 
 CHI = ZoneInfo("America/Chicago")
 UTC = ZoneInfo("UTC")
