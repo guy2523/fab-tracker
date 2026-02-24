@@ -85,7 +85,29 @@ st.markdown("""
 </style>
 """, unsafe_allow_html=True)
 
+st.markdown("""
+<style>
 
+/* ---------------------------------
+   Reduce admin page usable width
+   --------------------------------- */
+
+/* Main block container */
+section.main > div {
+    max-width: 1100px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+/* Optional: slightly tighter on very large monitors */
+@media (min-width: 1800px) {
+    section.main > div {
+        max-width: 1000px;
+    }
+}
+
+</style>
+""", unsafe_allow_html=True)
 
 CHI = ZoneInfo("America/Chicago")
 UTC = ZoneInfo("UTC")
