@@ -366,8 +366,7 @@ mode = st.radio(
     ["Create Run", "Update Run", "Delete Run", "Notion Setting"],
     horizontal=True,
 )
-
-st.divider()
+# st.divider()
 
 # r1c1, r1c2 = st.columns(2)
 
