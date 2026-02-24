@@ -2591,7 +2591,8 @@ for doc in filtered_runs:
 
             for r in rows:
                 fridge_label = r.get("Fridge", "")
-                lot_id = r.get("Notion", "")   # currently this holds the URL or lot info
+                lot_id = r.get("Lotid") or r.get("Notion")  # depending on your row structure
+                notion_url = (r.get("Notion") or "").strip()
 
                 # -------------------------
                 # 1️⃣ Fridge → Measurement DB
@@ -2601,13 +2602,13 @@ for doc in filtered_runs:
                     r["Fridge"] = f"{meas_db_url}# {fridge_label}"
 
                 # -------------------------
-                # 2️⃣ Lot ID → Fab DB
+                # 2️⃣ Notion column → clickable LOT ID
                 # -------------------------
-                if lot_id:
-                    fab_db_url = st.secrets["notion"]["NOTION_FAB_DB_URL"]
-                    r["Notion"] = f"{fab_db_url}# {lot_id}"
+                if notion_url and lot_id:
+                    r["Notion"] = f"{notion_url}# {lot_id}"
 
                 r.pop("_cooldown_start", None)
+
 
             st.dataframe(
                 rows,
