@@ -1649,41 +1649,71 @@ with top_right:
             # st.session_state.refresh_counter += 1
             st.rerun()
 
+    # with legend_col:
+    #     st.markdown("""
+    # <div style="display:flex; align-items:center; justify-content:flex-end; gap:18px;">
+
+    #   <!-- completed -->
+    #   <div style="display:flex; align-items:center; gap:4px;">
+    #     <span style="width:10px; height:10px; background:#4caf50;
+    #                  border-radius:50%; display:inline-block;"></span>
+    #     <span style="font-size:1rem;">completed</span>
+    #   </div>
+
+    #   <!-- in-progress -->
+    #   <div style="display:flex; align-items:center; gap:4px;">
+    #     <span style="width:10px; height:10px; background:#ffd54f;
+    #                  border-radius:50%; display:inline-block;"></span>
+    #     <span style="font-size:1rem;">in-progress</span>
+    #   </div>
+
+    #   <!-- terminated -->
+    #   <div style="display:flex; align-items:center; gap:4px;">
+    #     <span style="width:10px; height:10px; background:#f44336;
+    #                  border-radius:50%; display:inline-block;"></span>
+    #     <span style="font-size:1rem;">terminated</span>
+    #   </div>
+
+    #   <!-- pending -->
+    #   <div style="display:flex; align-items:center; gap:4px;">
+    #     <span style="width:10px; height:10px; background:#cccccc;
+    #                  border-radius:50%; display:inline-block;"></span>
+    #     <span style="font-size:1rem;">pending</span>
+    #   </div>
+
+    # </div>
+    #     """, unsafe_allow_html=True)
+ 
     with legend_col:
         st.markdown("""
-    <div style="display:flex; align-items:center; justify-content:flex-end; gap:18px;">
+        <div class="status-legend">
 
-      <!-- completed -->
-      <div style="display:flex; align-items:center; gap:4px;">
-        <span style="width:10px; height:10px; background:#4caf50;
-                     border-radius:50%; display:inline-block;"></span>
-        <span style="font-size:1rem;">completed</span>
-      </div>
+          <!-- completed -->
+          <div class="legend-item">
+            <span class="dot" style="background:#4caf50;"></span>
+            <span>completed</span>
+          </div>
 
-      <!-- in-progress -->
-      <div style="display:flex; align-items:center; gap:4px;">
-        <span style="width:10px; height:10px; background:#ffd54f;
-                     border-radius:50%; display:inline-block;"></span>
-        <span style="font-size:1rem;">in-progress</span>
-      </div>
+          <!-- in-progress -->
+          <div class="legend-item">
+            <span class="dot" style="background:#ffd54f;"></span>
+            <span>in-progress</span>
+          </div>
 
-      <!-- terminated -->
-      <div style="display:flex; align-items:center; gap:4px;">
-        <span style="width:10px; height:10px; background:#f44336;
-                     border-radius:50%; display:inline-block;"></span>
-        <span style="font-size:1rem;">terminated</span>
-      </div>
+          <!-- terminated -->
+          <div class="legend-item">
+            <span class="dot" style="background:#f44336;"></span>
+            <span>terminated</span>
+          </div>
 
-      <!-- pending -->
-      <div style="display:flex; align-items:center; gap:4px;">
-        <span style="width:10px; height:10px; background:#cccccc;
-                     border-radius:50%; display:inline-block;"></span>
-        <span style="font-size:1rem;">pending</span>
-      </div>
+          <!-- pending -->
+          <div class="legend-item">
+            <span class="dot" style="background:#cccccc;"></span>
+            <span>pending</span>
+          </div>
 
-    </div>
+        </div>
         """, unsafe_allow_html=True)
-
 
 
 
