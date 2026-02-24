@@ -1391,8 +1391,8 @@ if mode == "Create Run":
 # 3. UPDATE EXISTING RUN
 # ------------------------------------------------------------
 # with r2c1:
-with st.expander("🛠 Update Run", expanded=False):
-
+# with st.expander("🛠 Update Run", expanded=False):
+if mode == "Update Run":
     def iter_layers_filtered(layers, layer_filter=None):
         if not layer_filter:
             return list(enumerate(layers))
@@ -4081,7 +4081,8 @@ with st.expander("🛠 Update Run", expanded=False):
 # 4. NOTION SETTING
 # ------------------------------------------------------------
 # with r2c2:
-with st.expander("🛠 Notion Setting", expanded=False):
+# with st.expander("🛠 Notion Setting", expanded=False):
+if mode == "Notion Setting":
     # load_notion_templates_once()
 
     # tmpl = st.session_state["notion_templates"].setdefault("fab_create", {})
