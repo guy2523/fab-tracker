@@ -85,6 +85,18 @@ st.markdown("""
 </style>
 """, unsafe_allow_html=True)
 
+st.markdown("""
+<style>
+/* --- Clamp main content width (Streamlit reliable) --- */
+div[data-testid="stAppViewContainer"] .main .block-container {
+    max-width: 1100px;           /* change this: 900, 1000, 1200... */
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+    margin-left: auto;
+    margin-right: auto;
+}
+</style>
+""", unsafe_allow_html=True)
 
 
 CHI = ZoneInfo("America/Chicago")
