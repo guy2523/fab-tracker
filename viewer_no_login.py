@@ -485,7 +485,7 @@ st.markdown("""
     padding: 10px;
     background: transparent;
     color: var(--text-color);
-    width: 260px;
+    width: 280px;
     min-height: 120px;
     display: flex;
     flex-direction: column;
