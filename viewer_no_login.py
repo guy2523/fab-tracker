@@ -1547,7 +1547,7 @@ def clear_viewer_state(keep_filters=True):
 
 
 # ---------------- TOP BAR ----------------
-top_left, top_right = st.columns([1.5, 1.2])
+top_left, top_right = st.columns([1.5, 1])
 
 with top_left:
     # redirect_uri = st.secrets["app"]["admin_redirect_uri"]
