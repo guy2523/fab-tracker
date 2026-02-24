@@ -1683,38 +1683,47 @@ with top_right:
 
     # </div>
     #     """, unsafe_allow_html=True)
- 
+     
     with legend_col:
         st.markdown("""
-        <div class="status-legend">
+        <div style="
+            display:grid;
+            grid-template-columns: auto auto;
+            column-gap: 24px;
+            row-gap: 6px;
+            justify-content:end;
+        ">
 
           <!-- completed -->
-          <div class="legend-item">
-            <span class="dot" style="background:#4caf50;"></span>
-            <span>completed</span>
+          <div style="display:flex; align-items:center; gap:4px;">
+            <span style="width:10px; height:10px; background:#4caf50;
+                         border-radius:50%; display:inline-block;"></span>
+            <span style="font-size:1rem;">completed</span>
           </div>
 
           <!-- in-progress -->
-          <div class="legend-item">
-            <span class="dot" style="background:#ffd54f;"></span>
-            <span>in-progress</span>
+          <div style="display:flex; align-items:center; gap:4px;">
+            <span style="width:10px; height:10px; background:#ffd54f;
+                         border-radius:50%; display:inline-block;"></span>
+            <span style="font-size:1rem;">in-progress</span>
           </div>
 
           <!-- terminated -->
-          <div class="legend-item">
-            <span class="dot" style="background:#f44336;"></span>
-            <span>terminated</span>
+          <div style="display:flex; align-items:center; gap:4px;">
+            <span style="width:10px; height:10px; background:#f44336;
+                         border-radius:50%; display:inline-block;"></span>
+            <span style="font-size:1rem;">terminated</span>
           </div>
 
           <!-- pending -->
-          <div class="legend-item">
-            <span class="dot" style="background:#cccccc;"></span>
-            <span>pending</span>
+          <div style="display:flex; align-items:center; gap:4px;">
+            <span style="width:10px; height:10px; background:#cccccc;
+                         border-radius:50%; display:inline-block;"></span>
+            <span style="font-size:1rem;">pending</span>
           </div>
 
         </div>
         """, unsafe_allow_html=True)
-
 
 
 # ------------------------------------------------------------
