@@ -209,7 +209,9 @@ if "status_nonce" not in st.session_state:
     st.session_state["status_nonce"] = 0
 
 
-st.set_page_config(page_title="Fab Tracker - Admin", page_icon="🛠", layout="wide")
+# st.set_page_config(page_title="Fab Tracker - Admin", page_icon="🛠", layout="wide")
+st.set_page_config(page_title="Fab Tracker - Admin", page_icon="🛠")
+
 
 # -----------------------------
 # Design/fab uploader reset nonce
