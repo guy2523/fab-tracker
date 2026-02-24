@@ -1677,7 +1677,7 @@ if mode == "Update Run":
                             for idx, uid in enumerate(uids, start=1):
                                 fridge_display[uid] = f"{label} ({idx})"
 
-            ncols = 3
+            ncols = 4
             cols = st.columns(ncols)
             for j, sub in enumerate(layer["substeps"]):
                 sub_uid = sub.get("chip_uid") or sub.get("fridge_uid") or j
