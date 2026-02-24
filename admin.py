@@ -305,11 +305,11 @@ if "user" not in st.session_state:
 #     </h1>
 # """, unsafe_allow_html=True)
 
-st.markdown("""
-    <h1 style="margin-top: -100px; margin-bottom: 0px;">
-        🛠️ Run Editor
-    </h1>
-""", unsafe_allow_html=True)
+# st.markdown("""
+#     <h1 style="margin-top: -100px; margin-bottom: 0px;">
+#         🛠️ Run Editor
+#     </h1>
+# """, unsafe_allow_html=True)
 
 # user = st.session_state["user"]
 # id_token = user["idToken"]
