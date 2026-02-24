@@ -90,7 +90,7 @@ st.markdown("""
 
 /* Clamp width even in wide layout */
 div[data-testid="stAppViewBlockContainer"] {
-    max-width: 1000px !important;   /* adjust width here */
+    max-width: 1200px !important;   /* adjust width here */
     margin-left: auto !important;
     margin-right: auto !important;
 }
