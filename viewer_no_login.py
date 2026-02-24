@@ -459,6 +459,13 @@ st.set_page_config(
 # </style>
 # """, unsafe_allow_html=True)
 
+st.markdown("""
+<style>
+.header-right span {
+    white-space: nowrap;
+}
+</style>
+""", unsafe_allow_html=True)
 
 
 st.markdown("""
@@ -843,31 +850,6 @@ def parse_layers(fields):
             substeps.append(substep_obj)
 
         all_chips = [c for s in substeps for c in s["chips"]]
-
-        # def is_completed(c):
-        #     status = (c.get("status") or "").lower()
-        #     return (
-        #         status == "done"
-        #         or status.startswith("store#") or status.startswith("delivery#")
-        #     )
-
-        # if progress == 0 and all_chips:
-        #     done_count = sum(1 for c in all_chips if is_completed(c))
-        #     progress = int(100 * done_count / len(all_chips))
-
-        #### terminate version
-        # def is_completed(c):
-        #     status = (c.get("status") or "").lower()
-        #     return (
-        #         status == "done"
-        #         or status == "terminate"          # ✅ treat terminate as finished
-        #         or status.startswith("store#")
-        #         or status.startswith("delivery#")
-        #     )
-
-        # if progress == 0 and all_chips:
-        #     done_count = sum(1 for c in all_chips if is_completed(c))
-        #     progress = int(100 * done_count / len(all_chips))
 
         def is_completed(c):
             status = (c.get("status") or "").lower()
