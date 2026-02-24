@@ -2253,8 +2253,11 @@ for doc in filtered_runs:
 
     # Visible label (what user sees)
     visible_label = (
-        f"#️ {run_no} ㅤ ⌨ {device} ㅤ 🆔 {lot_id} ㅤ ⚒️ fab {date_only(fab_in)} ➔ {date_only(fab_out)} ㅤ ❄️ Cooldown Start : {cooldown_banner_text}"
+        # f"#️ {run_no} ㅤ ⌨ {device} ㅤ 🆔 {lot_id} ㅤ ⚒️ fab {date_only(fab_in)} ➔ {date_only(fab_out)} ㅤ ❄️ Cooldown Start : {cooldown_banner_text}"
+        f"#️ {run_no} ㅤ ⌨ {device} ㅤ 🆔 {lot_id} ㅤ ⚒️ fab {date_only(fab_in)} ➔ {date_only(fab_out)}"
+
     )
+
     with st.expander(visible_label, expanded=auto_expand):
 
         # ---------------------------------------------------
