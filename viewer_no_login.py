@@ -513,9 +513,9 @@ st.markdown("""
 }
 
 .arrow-cell {
-    width: 15px;
+    width: 10px;
     text-align: center;
-    font-size: 1.1rem;
+    font-size: 0.9rem;
     color: #999;
 }
 
