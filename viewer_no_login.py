@@ -485,7 +485,7 @@ st.markdown("""
     padding: 10px;
     background: transparent;
     color: var(--text-color);
-    width: 250px;
+    width: 255px;
     min-height: 120px;
     display: flex;
     flex-direction: column;
@@ -506,7 +506,7 @@ st.markdown("""
 }
 
 .layer-chip {
-    padding: 0px 6px;
+    padding: 0px 4px;
     border-radius: 8px;
     font-size: 0.78rem;
     white-space: nowrap;
