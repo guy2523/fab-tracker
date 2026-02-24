@@ -485,7 +485,7 @@ st.markdown("""
     padding: 10px;
     background: transparent;
     color: var(--text-color);
-    width: 255px;
+    width: 260px;
     min-height: 120px;
     display: flex;
     flex-direction: column;
@@ -520,7 +520,7 @@ st.markdown("""
 }
 
 .step-mini-bar {
-    width: 60px;
+    width: 50px;
     height: 10px;
     background: #e0e0e0;
     border-radius: 4px;
