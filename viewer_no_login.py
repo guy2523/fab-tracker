@@ -1645,7 +1645,7 @@ with top_right:
  
     # --- Refresh Button ---
     with refresh_col:
-        if st.button("🔄 Refresh"):
+        if st.button("🔄"):
             # st.session_state.refresh_counter += 1
             st.rerun()
 
