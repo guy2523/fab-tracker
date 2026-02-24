@@ -513,7 +513,7 @@ st.markdown("""
 }
 
 .arrow-cell {
-    width: 18px;
+    width: 15px;
     text-align: center;
     font-size: 1.1rem;
     color: #999;
