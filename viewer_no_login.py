@@ -2583,34 +2583,44 @@ for doc in filtered_runs:
             #     # remove helper before display
             #     r.pop("_cooldown_start", None)
 
+            NOTION_DB_MAP = {
+                "Bluefors": st.secrets["notion"]["NOTION_MEAS_DB_URL_BLUEFORS"],
+                "ICEOxford": st.secrets["notion"]["NOTION_MEAS_DB_URL_ICEOXFORD"],
+            }
+
             for r in rows:
-                url = (r.get("Notion") or "").strip()
                 fridge_label = r.get("Fridge", "")
 
-                if url:
-                    # Make fridge clickable instead
-                    r["Fridge"] = f"{url}# {fridge_label}"
+                db_url = NOTION_DB_MAP.get(fridge_label)
 
-                # remove helper
+                if db_url:
+                    r["Fridge"] = f"{db_url}# {fridge_label}"
+
                 r.pop("_cooldown_start", None)
 
+
+            # st.dataframe(
+            #     rows,
+            #     hide_index=True,
+            #     use_container_width=True,
+            #     column_config={
+            #         "Notion": st.column_config.LinkColumn(
+            #             "Notion",
+            #             display_text=r".*#(.*)",
+            #         )
+            #     },
+            # )
 
             st.dataframe(
                 rows,
                 hide_index=True,
                 use_container_width=True,
-                # column_config={
-                #     "Notion": st.column_config.LinkColumn(
-                #         "Notion",
-                #         display_text=r".*#(.*)",
-                #     )
-                # },
                 column_config={
                     "Fridge": st.column_config.LinkColumn(
                         "Fridge",
                         display_text=r".*#(.*)",
                     )
-                }
+                },
             )
 
 
