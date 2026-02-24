@@ -607,7 +607,7 @@ st.markdown("""
 /* Overall progress bar */
 .fab-progress.overall {
     height: 14px;     /* 👈 overall height */
-    width: 70%;     /* 👈 overall width (customize freely) */
+    width: 55%;     /* 👈 overall width (customize freely) */
 }
 
 /* Layer progress bars */
