@@ -2588,28 +2588,26 @@ for doc in filtered_runs:
                 "ICEOxford": st.secrets["notion"]["NOTION_MEAS_DB_URL_ICEOXFORD"],
             }
 
+
             for r in rows:
                 fridge_label = r.get("Fridge", "")
+                lot_id = r.get("Notion", "")   # currently this holds the URL or lot info
 
-                db_url = NOTION_DB_MAP.get(fridge_label)
+                # -------------------------
+                # 1️⃣ Fridge → Measurement DB
+                # -------------------------
+                meas_db_url = NOTION_DB_MAP.get(fridge_label)
+                if meas_db_url:
+                    r["Fridge"] = f"{meas_db_url}# {fridge_label}"
 
-                if db_url:
-                    r["Fridge"] = f"{db_url}# {fridge_label}"
+                # -------------------------
+                # 2️⃣ Lot ID → Fab DB
+                # -------------------------
+                if lot_id:
+                    fab_db_url = st.secrets["notion"]["NOTION_FAB_DB_URL"]
+                    r["Notion"] = f"{fab_db_url}# {lot_id}"
 
                 r.pop("_cooldown_start", None)
-
-
-            # st.dataframe(
-            #     rows,
-            #     hide_index=True,
-            #     use_container_width=True,
-            #     column_config={
-            #         "Notion": st.column_config.LinkColumn(
-            #             "Notion",
-            #             display_text=r".*#(.*)",
-            #         )
-            #     },
-            # )
 
             st.dataframe(
                 rows,
@@ -2619,8 +2617,11 @@ for doc in filtered_runs:
                     "Fridge": st.column_config.LinkColumn(
                         "Fridge",
                         display_text=r".*#(.*)",
-                    )
+                    ),
+                    "Notion": st.column_config.LinkColumn(
+                        "Notion",
+                        display_text=r".*#(.*)",
+                    ),
                 },
             )
-
 
