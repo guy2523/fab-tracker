@@ -1547,7 +1547,7 @@ def clear_viewer_state(keep_filters=True):
 
 
 # ---------------- TOP BAR ----------------
-top_left, top_right = st.columns([1.5, 1])
+top_left, top_right = st.columns([1.5, 1.2])
 
 with top_left:
     # redirect_uri = st.secrets["app"]["admin_redirect_uri"]
@@ -1649,40 +1649,6 @@ with top_right:
             # st.session_state.refresh_counter += 1
             st.rerun()
 
-    # with legend_col:
-    #     st.markdown("""
-    # <div style="display:flex; align-items:center; justify-content:flex-end; gap:18px;">
-
-    #   <!-- completed -->
-    #   <div style="display:flex; align-items:center; gap:4px;">
-    #     <span style="width:10px; height:10px; background:#4caf50;
-    #                  border-radius:50%; display:inline-block;"></span>
-    #     <span style="font-size:1rem;">completed</span>
-    #   </div>
-
-    #   <!-- in-progress -->
-    #   <div style="display:flex; align-items:center; gap:4px;">
-    #     <span style="width:10px; height:10px; background:#ffd54f;
-    #                  border-radius:50%; display:inline-block;"></span>
-    #     <span style="font-size:1rem;">in-progress</span>
-    #   </div>
-
-    #   <!-- terminated -->
-    #   <div style="display:flex; align-items:center; gap:4px;">
-    #     <span style="width:10px; height:10px; background:#f44336;
-    #                  border-radius:50%; display:inline-block;"></span>
-    #     <span style="font-size:1rem;">terminated</span>
-    #   </div>
-
-    #   <!-- pending -->
-    #   <div style="display:flex; align-items:center; gap:4px;">
-    #     <span style="width:10px; height:10px; background:#cccccc;
-    #                  border-radius:50%; display:inline-block;"></span>
-    #     <span style="font-size:1rem;">pending</span>
-    #   </div>
-
-    # </div>
-    #     """, unsafe_allow_html=True)
      
     with legend_col:
         st.markdown("""
