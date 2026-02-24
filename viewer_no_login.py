@@ -2487,25 +2487,6 @@ for doc in filtered_runs:
 
                     chip_uid = meta_f.get("chip_uid")
 
-                    # # -----------------------------------
-                    # # Detect measure terminate (viewer only)
-                    # # -----------------------------------
-                    # measure_display = format_range_compact(
-                    #     meta_f.get("measure_start", ""),
-                    #     meta_f.get("measure_end", ""),
-                    # )
-
-                    # # find measure chip status
-                    # for layer in layers:
-                    #     if layer.get("layer_name", "").lower() == "measurement":
-                    #         for sub in layer.get("substeps", []):
-                    #             if sub.get("fridge_uid") == fridge_uid:
-                    #                 for chip in sub.get("chips", []):
-                    #                     if chip.get("name", "").lower() == "measure":
-                    #                         if (chip.get("status") or "").lower() == "terminate":
-                    #                             measure_display = "terminated"
-                    #                         break
-
                     # -----------------------------------
                     # Termination override (Option A - viewer only)
                     # -----------------------------------
@@ -2557,8 +2538,6 @@ for doc in filtered_runs:
 
 
                     rows.append({
-                        # "Fridge": fridge_label,
-                        # "Fridge": raw_fridges.get(fridge_uid, ""),
                         "Fridge": fridge_labels_no_chip.get(fridge_uid, ""),
                         "Owner": meta_f.get("owner", ""),
                         "Chip": (
@@ -2568,23 +2547,8 @@ for doc in filtered_runs:
                         ),
 
                         "Cell type": meta_f.get("cell_type", ""),
-  
-                        # "Cooldown": format_range_compact(
-                        #     meta_f.get("cooldown_start", ""),
-                        #     meta_f.get("cooldown_end", ""),
-                        # ),
                         "Cooldown": cooldown_display,
-
-                        # "Measure": format_range_compact(
-                        #     meta_f.get("measure_start", ""),
-                        #     meta_f.get("measure_end", ""),
-                        # ),
                         "Measure": measure_display,
-                        # "Warmup": format_range_compact(
-                        #     meta_f.get("warmup_start", ""),
-                        #     meta_f.get("warmup_end", ""),
-                        # ),
-
                         "Warmup": warmup_display,
 
                         # ✅ NEW (minimal)
@@ -2607,35 +2571,46 @@ for doc in filtered_runs:
             # Measurement table (clickable Notion link)
             # ------------------------------------------------------------
 
+            # for r in rows:
+            #     url = (r.get("Notion") or "").strip()
+            #     if url:
+            #         label = _meas_notion_label(
+            #             r.get("Fridge", ""),
+            #             r.get("_cooldown_start", ""),
+            #         )
+            #         r["Notion"] = f"{url}# {label}"
+
+            #     # remove helper before display
+            #     r.pop("_cooldown_start", None)
+
             for r in rows:
                 url = (r.get("Notion") or "").strip()
-                if url:
-                    label = _meas_notion_label(
-                        r.get("Fridge", ""),
-                        r.get("_cooldown_start", ""),
-                    )
-                    r["Notion"] = f"{url}# {label}"
+                fridge_label = r.get("Fridge", "")
 
-                # remove helper before display
+                if url:
+                    # Make fridge clickable instead
+                    r["Fridge"] = f"{url}# {fridge_label}"
+
+                # remove helper
                 r.pop("_cooldown_start", None)
 
-            # st.dataframe(
-            #     rows,
-            #     hide_index=True,
-            #     use_container_width=True,
-            #     column_config=column_config,
-            # )
 
             st.dataframe(
                 rows,
                 hide_index=True,
                 use_container_width=True,
+                # column_config={
+                #     "Notion": st.column_config.LinkColumn(
+                #         "Notion",
+                #         display_text=r".*#(.*)",
+                #     )
+                # },
                 column_config={
-                    "Notion": st.column_config.LinkColumn(
-                        "Notion",
+                    "Fridge": st.column_config.LinkColumn(
+                        "Fridge",
                         display_text=r".*#(.*)",
                     )
-                },
+                }
             )
 
 
