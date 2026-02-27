@@ -2214,7 +2214,7 @@ if mode == "Update Run":
                     "run_no": loaded_run_no,
                     "class": st.session_state["loaded_run_class"],  # ✅ REQUIRED
                     # "device_name": fields["device_name"]["stringValue"],
-                    "device_name": design_device_name
+                    "device_name": design_device_name,
                     "created_date": fields["created_date"]["stringValue"],
                     "creator": fields["creator"]["stringValue"],
                     "steps": st.session_state["update_layers"],
