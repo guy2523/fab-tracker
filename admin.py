@@ -3713,8 +3713,8 @@ if mode == "Update Run":
                         if not device_name:
                             # missing.append("Name (run name or Design metadata: Name)")
                             missing.append("Device Name")
-                        if not fabin:
-                            missing.append("FABIN")
+                        # if not fabin:
+                        #     missing.append("FABIN")
                         if not fab_type:
                             missing.append("Type")
                         if n_chips_int <= 0:

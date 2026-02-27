@@ -2588,44 +2588,6 @@ for doc in filtered_runs:
                 "ICEOxford": st.secrets["notion"]["NOTION_MEAS_DB_URL_ICEOXFORD"],
             }
 
-
-            # for r in rows:
-            #     fridge_label = r.get("Fridge", "")
-            #     lot_id = r.get("Lotid") or r.get("Notion")  # depending on your row structure
-            #     notion_url = (r.get("Notion") or "").strip()
-
-            #     # -------------------------
-            #     # 1️⃣ Fridge → Measurement DB
-            #     # -------------------------
-            #     meas_db_url = NOTION_DB_MAP.get(fridge_label)
-            #     if meas_db_url:
-            #         r["Fridge"] = f"{meas_db_url}# {fridge_label}"
-
-            #     # -------------------------
-            #     # 2️⃣ Notion column → clickable LOT ID
-            #     # -------------------------
-            #     if notion_url and lot_id:
-            #         r["Notion"] = f"{notion_url}# {lot_id}"
-
-            #     r.pop("_cooldown_start", None)
-
-
-            # st.dataframe(
-            #     rows,
-            #     hide_index=True,
-            #     use_container_width=True,
-            #     column_config={
-            #         "Fridge": st.column_config.LinkColumn(
-            #             "Fridge",
-            #             display_text=r".*#(.*)",
-            #         ),
-            #         "Notion": st.column_config.LinkColumn(
-            #             "Notion",
-            #             display_text=r".*#(.*)",
-            #         ),
-            #     },
-            # )
-
             # ------------------------------------------------------------
             # Measurement table (clickable Fridge + clickable Notion label)
             # ------------------------------------------------------------
