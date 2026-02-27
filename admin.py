@@ -3689,7 +3689,8 @@ if mode == "Update Run":
 
                         fab_notion_url = (_kv_get(fab_list, "Notion") or "").strip()
                         n_chips = (_kv_get(fab_list, "Qty chips") or "").strip()
-                        lotid = (_kv_get(design_list, "Lotid") or "").strip()
+                        # lotid = (_kv_get(design_list, "Lotid") or "").strip()
+                        lotid = (_kv_get(design_list, "Lotid") or "1970-01-01").strip()
                         fabin = (_kv_get(fab_list, "FABIN") or "").strip()
                         fab_type = (_kv_get(fab_list, "Type") or "").strip()
 
@@ -3713,8 +3714,8 @@ if mode == "Update Run":
                         if not device_name:
                             # missing.append("Name (run name or Design metadata: Name)")
                             missing.append("Device Name")
-                        # if not fabin:
-                        #     missing.append("FABIN")
+                        if not fabin:
+                            missing.append("FABIN")
                         if not fab_type:
                             missing.append("Type")
                         if n_chips_int <= 0:
