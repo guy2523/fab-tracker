@@ -2847,6 +2847,12 @@ if mode == "Update Run":
 
             # 2) Optional: sync Design Lotid → Fab Notion page "Lot ID"
             if sync_fab_notion_lotid:
+
+                new_device_name = _get_meta_val(
+                    st.session_state["update_meta"].get("design", []),
+                    "Device Name",
+                )
+
                 new_lotid = _get_meta_val(
                     st.session_state["update_meta"].get("design", []),
                     "Lotid",
@@ -2857,25 +2863,28 @@ if mode == "Update Run":
                     "Chip size (mm2)",
                 )
 
-
                 fab_notion_url = _get_meta_val(
                     st.session_state["update_meta"].get("fab", []),
                     "Notion",
                 )
 
 
+
                 prev_key = f"prev_design_lotid_chip_{loaded_run_doc_id}"
                 old_sig = st.session_state.get(prev_key, ("", ""))
 
-                sig_new = (new_lotid or "", new_chip_size or "")
+                sig_new = (new_lotid or "", new_chip_size or "", new_device_name or "")
 
                 # update if either Lotid OR Chip size changed
-                if fab_notion_url and (sig_new != old_sig) and (sig_new[0] or sig_new[1]):
+                # if fab_notion_url and (sig_new != old_sig) and (sig_new[0] or sig_new[1]):
+                if fab_notion_url and (sig_new != old_sig) and (sig_new[0] or sig_new[1] or sig_new[2]):
                     props = {}
                     if new_lotid:
                         props["Lot ID"] = new_lotid
                     if new_chip_size:
                         props["Chip size (mm2)"] = new_chip_size
+                    if new_device_name:
+                        props["Name"] = new_device_name
 
                     if props:
                         try:
