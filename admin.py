@@ -2200,13 +2200,21 @@ if mode == "Update Run":
             except Exception as e:
                 st.warning(f"Measurement Notion preserve/merge failed (non-blocking): {e}")
 
+            # pull Device Name from Design metadata if present
+            design_list = st.session_state["update_meta"].get("design", [])
+            design_device_name = next(
+                (x["value"] for x in design_list if x.get("key") == "Device Name"),
+                fields.get("device_name", {}).get("stringValue", "")
+            )
+
             firestore_set(
                 "runs",
                 loaded_run_doc_id,
                 {
                     "run_no": loaded_run_no,
                     "class": st.session_state["loaded_run_class"],  # ✅ REQUIRED
-                    "device_name": fields["device_name"]["stringValue"],
+                    # "device_name": fields["device_name"]["stringValue"],
+                    "device_name": design_device_name
                     "created_date": fields["created_date"]["stringValue"],
                     "creator": fields["creator"]["stringValue"],
                     "steps": st.session_state["update_layers"],
@@ -3167,6 +3175,31 @@ if mode == "Update Run":
                 with sub_details:
                     # ✅ Option A: Lotid is Design-owned → hide Lotid field in FAB details UI
                     hide_keys = ("Lotid", "Lot ID", "LotID") if target_meta == "fab" else ()
+
+                    # ------------------------------------------------------------
+                    # Inject top-level device_name into Design metadata
+                    # ------------------------------------------------------------
+                    design_list = st.session_state["update_meta"].get("design", [])
+
+                    # get current top-level value
+                    top_device_name = fields.get("device_name", {}).get("stringValue", "")
+
+                    # check if Device Name already exists in design metadata
+                    found = False
+                    for item in design_list:
+                        if item.get("key") == "Device Name":
+                            found = True
+                            # backfill if empty
+                            if not item.get("value"):
+                                item["value"] = top_device_name
+                            break
+
+                    # if not found, insert at top (like Lotid)
+                    if not found:
+                        design_list.insert(0, {
+                            "key": "Device Name",
+                            "value": top_device_name
+                        })
 
                     render_metadata_ui(
                         loaded_run_no=loaded_run_no,
