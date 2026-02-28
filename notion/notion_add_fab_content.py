@@ -27,6 +27,8 @@ def add_fab_content(
         db = Database(url=url)
         fabdata_db.append(db)
     
+    ### notion page content only shows C01
+    num_chips = 1
 
     #### Update fabdata 9 databases
     ####
