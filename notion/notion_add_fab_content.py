@@ -235,11 +235,13 @@ def main():
         print(json.dumps({"error": "Missing page_url"}))
         sys.exit(2)
 
-    num_chips = payload.get("num_chips", 0)
-    try:
-        num_chips = int(num_chips)
-    except Exception:
-        num_chips = 0
+    # num_chips = payload.get("num_chips", 0)
+    # try:
+    #     num_chips = int(num_chips)
+    # except Exception:
+    #     num_chips = 0
+
+    num_chips = 1
 
     out = add_fab_content(
         notion_token=notion_token,
