@@ -294,23 +294,13 @@ if "user" not in st.session_state:
 
 
 
-
 # ---- PAGE TITLE ----
-# st.markdown("""
-#     <h1 style="margin-top: -60px; margin-bottom: -40px;">
-#         🛠️ Run Editor
-#     </h1>
-# """, unsafe_allow_html=True)
+st.markdown("""
+    <h1 style="margin-top: -60px; margin-bottom: -40px;">
+        🛠️ Run Editor v01
+    </h1>
+""", unsafe_allow_html=True)
 
-# st.markdown("""
-#     <h1 style="margin-top: -100px; margin-bottom: 0px;">
-#         🛠️ Run Editor
-#     </h1>
-# """, unsafe_allow_html=True)
-
-# user = st.session_state["user"]
-# id_token = user["idToken"]
-# user_email = user["email"]
 
 user = st.session_state["user"]
 
