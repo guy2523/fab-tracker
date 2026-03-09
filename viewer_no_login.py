@@ -1809,7 +1809,7 @@ filtered_runs = [doc for doc in runs if matches_filters(doc["fields"])]
 
 
 # --- Sort runs by run_no descending (e.g. 003 > 002 > 001) ---
-filtered_runs.sort(key=lambda d: d["fields"]["run_no"]["stringValue"], reverse=True)
+filtered_runs.sort(key=lambda d: int(d["fields"]["run_no"]["stringValue"]), reverse=True)
 
 
 for doc in filtered_runs:
