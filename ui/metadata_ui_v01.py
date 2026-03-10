@@ -791,8 +791,8 @@ def render_measure_override(
         # ------------------------------------------------
         # Override row (single line)
         # ------------------------------------------------
-        col_cd, col_meas, col_warm, col_storage = st.columns(4)
-
+        # col_cd, col_meas, col_warm, col_storage = st.columns(4)
+        col_cd = st.columns(1)[0]
 
         def render_phase_override(col, phase_label, phase_key):
             with col:
@@ -954,8 +954,8 @@ def render_measure_override(
 
         # Render 3 grouped override sections
         render_phase_override(col_cd,   "Cooldown", "cooldown")
-        render_phase_override(col_meas, "Measure",  "measure")
-        render_phase_override(col_warm, "Warmup",   "warmup")
+        # render_phase_override(col_meas, "Measure",  "measure")
+        # render_phase_override(col_warm, "Warmup",   "warmup")
 
         # ------------------------------------------------
         # ✅ Storage date override
