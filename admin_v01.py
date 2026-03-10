@@ -558,7 +558,8 @@ load_notion_templates_once()
 if mode == "Create Run":
    
     # tabs = st.tabs(["General", "Design", "Fab", "Package", "Measurement", "Notion"])
-    tabs = st.tabs(["General", "Design", "Fab", "Package", "Measurement"])
+    # tabs = st.tabs(["General", "Design", "Fab", "Package", "Measurement"])
+    tabs = st.tabs(["General", "Design", "Fab", "Package"])
 
 
     today_str = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
@@ -1358,15 +1359,15 @@ if mode == "Create Run":
             flow_editor(layer_filter="Package", ui_mode = "flat")
 
     # ----------------- MEASUREMENT TAB -----------------
-    with tabs[4]:
-        # left, right = st.columns([1, 1])
-        subtabs = st.tabs(["Flow", "Details"])
+    # with tabs[4]:
+    #     # left, right = st.columns([1, 1])
+    #     subtabs = st.tabs(["Flow", "Details"])
 
-        with subtabs[1]:
-            st.info("📈 Measurement metadata is fridge-centric and edited per fridge after run creation.")
+    #     with subtabs[1]:
+    #         st.info("📈 Measurement metadata is fridge-centric and edited per fridge after run creation.")
 
-        with subtabs[0]:
-            flow_editor(layer_filter="Measurement", ui_mode = "flat")
+    #     with subtabs[0]:
+    #         flow_editor(layer_filter="Measurement", ui_mode = "flat")
 
 
 
