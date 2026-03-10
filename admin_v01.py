@@ -3144,385 +3144,386 @@ if mode == "Update Run":
                             key_prefix=f"{stage_key}_flow",
                         )
 
-
-                with sub_status:
-
-
-                    render_status_editor(
-                        layers_py=st.session_state["update_layers"],
-                        fields=fields,
-                        loaded_run_doc_id=loaded_run_doc_id,
-                        id_token=id_token,
-                        target_layer=target_layer,
-                        key_prefix=f"{stage_key}_status",
-                    )
+                if target_meta != "measure":
+                    with sub_status:
 
 
-                with sub_details:
-                    # ✅ Option A: Lotid is Design-owned → hide Lotid field in FAB details UI
-                    hide_keys = ("Lotid", "Lot ID", "LotID") if target_meta == "fab" else ()
+                        render_status_editor(
+                            layers_py=st.session_state["update_layers"],
+                            fields=fields,
+                            loaded_run_doc_id=loaded_run_doc_id,
+                            id_token=id_token,
+                            target_layer=target_layer,
+                            key_prefix=f"{stage_key}_status",
+                        )
 
-                    # ------------------------------------------------------------
-                    # Inject top-level device_name into Design metadata
-                    # ------------------------------------------------------------
-                    design_list = st.session_state["update_meta"].get("design", [])
+                if target_meta != "measure":
 
-                    # get current top-level value
-                    top_device_name = fields.get("device_name", {}).get("stringValue", "")
+                    with sub_details:
+                        # ✅ Option A: Lotid is Design-owned → hide Lotid field in FAB details UI
+                        hide_keys = ("Lotid", "Lot ID", "LotID") if target_meta == "fab" else ()
 
-                    # check if Device Name already exists in design metadata
-                    found = False
-                    for item in design_list:
-                        if item.get("key") == "Device Name":
-                            found = True
-                            # backfill if empty
-                            if not item.get("value"):
-                                item["value"] = top_device_name
-                            break
+                        # ------------------------------------------------------------
+                        # Inject top-level device_name into Design metadata
+                        # ------------------------------------------------------------
+                        design_list = st.session_state["update_meta"].get("design", [])
 
-                    # if not found, insert at top (like Lotid)
-                    if not found:
-                        design_list.insert(0, {
-                            "key": "Device Name",
-                            "value": top_device_name
-                        })
+                        # get current top-level value
+                        top_device_name = fields.get("device_name", {}).get("stringValue", "")
 
-                    render_metadata_ui(
-                        loaded_run_no=loaded_run_no,
-                        loaded_run_doc_id=loaded_run_doc_id,
-                        fields=fields,
-                        layers_py=st.session_state["update_layers"],
-                        update_layers=st.session_state["update_layers"],
-                        update_meta=st.session_state["update_meta"],
-                        save_full_run=save_full_run,
-                        id_token=id_token,
-                        stage_filter=target_meta,
-                        key_prefix=f"{target_meta}_",
-                        hide_keys=hide_keys,   # ✅ ADD THIS LINE
-                    )
+                        # check if Device Name already exists in design metadata
+                        found = False
+                        for item in design_list:
+                            if item.get("key") == "Device Name":
+                                found = True
+                                # backfill if empty
+                                if not item.get("value"):
+                                    item["value"] = top_device_name
+                                break
 
+                        # if not found, insert at top (like Lotid)
+                        if not found:
+                            design_list.insert(0, {
+                                "key": "Device Name",
+                                "value": top_device_name
+                            })
 
-
-                    # ==========================================
-                    # ✅ DESIGN ONLY: file upload / replace block
-                    # ==========================================
-                    st.divider()
-
-                    if target_meta == "design":
-                        # --- helper: upsert into design meta_list ---
-                        def _upsert_design_kv(key, val):
-                            design_list = st.session_state["update_meta"].setdefault("design", [])
-                            for it in design_list:
-                                if (it.get("key") or "").strip().lower() == key.lower():
-                                    it["value"] = val
-                                    return
-                            design_list.append({"key": key, "value": val})
-
-                        def _get_design_val(key):
-                            for it in st.session_state["update_meta"].get("design", []):
-                                if (it.get("key") or "").strip().lower() == key.lower():
-                                    return it.get("value", "")
-                            return ""
-
-                        file_url  = _get_design_val("File")
-                        file_id   = _get_design_val("FileId")
-                        file_name = _get_design_val("FileName")
-                        has_file = bool(file_url or file_id or file_name)
-
-                        left, right = st.columns([1, 1])
-
-                        with left:
-                            # st.markdown("**Current design file**")
-                            st.markdown("Current design file")
-                            st.caption(file_name or "None uploaded")
-
-                        with right:
-                            label = "Replace design file" if has_file else "Upload design file"
-
-                            uploaded = st.file_uploader(
-                                label,
-                                key=f"upd_design_uploader_{loaded_run_doc_id}_{st.session_state['upd_design_upload_nonce']}",
-                                type=None,
-                            )
-
-                            if uploaded is not None:
-                                sig = (uploaded.name, uploaded.size)
-
-                                if st.session_state.get("upd_design_last_sig") == sig:
-                                    st.info("Same file already uploaded (name+size match). Choose a different file to replace.")
-                                else:
-                                    btn = "Upload" if not has_file else "Upload & Replace"
-
-                                    if st.button(btn, key=f"upd_design_upload_btn_{loaded_run_doc_id}", use_container_width=True):
-                                        try:
-                                            # ✅ capture old file id BEFORE uploading (replace case)
-                                            old_id = _get_design_val("FileId") if has_file else ""
-
-                                            with st.spinner("Uploading to Drive…"):
-                                                out = upload_file_via_cleanroom_api(
-                                                    uploaded_file=uploaded,
-                                                    filename=uploaded.name,
-                                                    folder_id=st.secrets["app"]["drive_folder_id_design"],
-                                                )
-
-                                            if not out.get("success", False):
-                                                st.error(f"Upload failed: {out}")
-                                            else:
-                                                file_url  = out.get("url", "")
-                                                file_id   = out.get("id", "")
-                                                file_name = out.get("name", uploaded.name)
-
-                                                _upsert_design_kv("File", file_url)        # ✅ Viewer uses this
-                                                _upsert_design_kv("FileId", file_id)
-                                                _upsert_design_kv("FileName", file_name)
-
-                                                # ✅ Trash old file only after new upload succeeds
-                                                if old_id and old_id != file_id:
-                                                    del_out = delete_file_via_cleanroom_api(file_id=old_id)
-                                                    if not del_out.get("success", False):
-                                                        st.warning(
-                                                            "New file uploaded, but old file could not be trashed: "
-                                                            + str(del_out.get("error", "unknown error"))
-                                                        )
-
-                                                st.session_state["upd_design_last_sig"] = sig
-                                                st.session_state["upd_design_upload_nonce"] += 1
-
-                                                st.success("Design file uploaded (old file moved to Trash).")
-                                                st.rerun()
-
-                                        except Exception as e:
-                                            st.error(f"Upload error: {e}")
+                        render_metadata_ui(
+                            loaded_run_no=loaded_run_no,
+                            loaded_run_doc_id=loaded_run_doc_id,
+                            fields=fields,
+                            layers_py=st.session_state["update_layers"],
+                            update_layers=st.session_state["update_layers"],
+                            update_meta=st.session_state["update_meta"],
+                            save_full_run=save_full_run,
+                            id_token=id_token,
+                            stage_filter=target_meta,
+                            key_prefix=f"{target_meta}_",
+                            hide_keys=hide_keys,   # ✅ ADD THIS LINE
+                        )
 
 
-                    # ==========================================
-                    # ✅ FAB ONLY: multi-file upload / replace / delete
-                    # ==========================================
-                    if target_meta == "fab":
 
-                        # ----------------------------
-                        # Init per-run fab attachments
-                        # ----------------------------
-                        if st.session_state.get("_upd_fab_files_for") != loaded_run_doc_id:
-                            fab_meta = st.session_state["update_meta"].get("fab", [])
+                        # ==========================================
+                        # ✅ DESIGN ONLY: file upload / replace block
+                        # ==========================================
+                        st.divider()
 
-                            files = []
-                            for row in fab_meta:
-                                k = row.get("key", "")
-                                if k.startswith("FileId_"):
-                                    idx = int(k.split("_")[1])
-                                    fid = row.get("value", "")
-                                    fname = next(
-                                        (r["value"] for r in fab_meta if r.get("key") == f"FileName_{idx}"),
-                                        "",
-                                    )
-                                    files.append({
-                                        "id": fid,
-                                        "name": fname,
-                                        "url": "",
-                                        "sig": None,
-                                    })
+                        if target_meta == "design":
+                            # --- helper: upsert into design meta_list ---
+                            def _upsert_design_kv(key, val):
+                                design_list = st.session_state["update_meta"].setdefault("design", [])
+                                for it in design_list:
+                                    if (it.get("key") or "").strip().lower() == key.lower():
+                                        it["value"] = val
+                                        return
+                                design_list.append({"key": key, "value": val})
 
-                            st.session_state["update_fab_files"] = files
-                            st.session_state["_upd_fab_files_for"] = loaded_run_doc_id
-                            st.session_state["upd_fab_upload_nonce"] = 0
+                            def _get_design_val(key):
+                                for it in st.session_state["update_meta"].get("design", []):
+                                    if (it.get("key") or "").strip().lower() == key.lower():
+                                        return it.get("value", "")
+                                return ""
 
-                        fab_files = st.session_state.setdefault("update_fab_files", [])
+                            file_url  = _get_design_val("File")
+                            file_id   = _get_design_val("FileId")
+                            file_name = _get_design_val("FileName")
+                            has_file = bool(file_url or file_id or file_name)
 
+                            left, right = st.columns([1, 1])
 
-                        def _upsert_fab_kv(key, val):
-                            fab_list = st.session_state["update_meta"].setdefault("fab", [])
-                            for it in fab_list:
-                                if (it.get("key") or "").strip().lower() == key.lower():
-                                    it["value"] = val
-                                    return
-                            fab_list.append({"key": key, "value": val})
+                            with left:
+                                # st.markdown("**Current design file**")
+                                st.markdown("Current design file")
+                                st.caption(file_name or "None uploaded")
 
-                        def _drop_fab_prefix(prefix: str):
-                            fab_list = st.session_state["update_meta"].setdefault("fab", [])
-                            pref = prefix.lower()
-                            fab_list[:] = [
-                                it for it in fab_list
-                                if not ((it.get("key") or "").strip().lower().startswith(pref))
-                            ]
+                            with right:
+                                label = "Replace design file" if has_file else "Upload design file"
 
-                        def _sync_fab_files_to_meta():
-                            # remove old attachment keys
-                            _drop_fab_prefix("fileid_")
-                            _drop_fab_prefix("filename_")
-
-                            # legacy pointer = latest attachment (keep your existing scheme)
-                            if fab_files:
-                                last = fab_files[-1]
-                                _upsert_fab_kv("FileId", last.get("id", ""))
-                                _upsert_fab_kv("FileName", last.get("name", ""))
-                                if last.get("url"):
-                                    _upsert_fab_kv("File", last.get("url", ""))
-                            else:
-                                _upsert_fab_kv("FileId", "")
-                                _upsert_fab_kv("FileName", "")
-                                _upsert_fab_kv("File", "")
-
-                            # write numbered attachment keys back
-                            for i, f in enumerate(fab_files, start=1):
-                                _upsert_fab_kv(f"FileId_{i}", f.get("id", ""))
-                                _upsert_fab_kv(f"FileName_{i}", f.get("name", ""))
-
-
-                        tab_add, tab_edit = st.tabs(["File add", "File edit"])
-
-                        # -------------------------
-                        # ➕ Add tab
-                        # -------------------------
-                        with tab_add:
-                            col, _ = st.columns([1,1])
-                            with col:
-                                uploaded_add = st.file_uploader(
-                                    "Add",
-                                    key=f"upd_fab_add_{loaded_run_doc_id}_{st.session_state['upd_fab_upload_nonce']}",
+                                uploaded = st.file_uploader(
+                                    label,
+                                    key=f"upd_design_uploader_{loaded_run_doc_id}_{st.session_state['upd_design_upload_nonce']}",
                                     type=None,
                                 )
 
-                            if uploaded_add is not None:
-                                with col:
-                                    if st.button("Add attachment", key=f"upd_fab_add_btn_{loaded_run_doc_id}", use_container_width=True):
-                                        out = upload_file_via_cleanroom_api(
-                                            uploaded_file=uploaded_add,
-                                            filename=uploaded_add.name,
-                                            folder_id=st.secrets["app"]["drive_folder_id_fab"],
+                                if uploaded is not None:
+                                    sig = (uploaded.name, uploaded.size)
+
+                                    if st.session_state.get("upd_design_last_sig") == sig:
+                                        st.info("Same file already uploaded (name+size match). Choose a different file to replace.")
+                                    else:
+                                        btn = "Upload" if not has_file else "Upload & Replace"
+
+                                        if st.button(btn, key=f"upd_design_upload_btn_{loaded_run_doc_id}", use_container_width=True):
+                                            try:
+                                                # ✅ capture old file id BEFORE uploading (replace case)
+                                                old_id = _get_design_val("FileId") if has_file else ""
+
+                                                with st.spinner("Uploading to Drive…"):
+                                                    out = upload_file_via_cleanroom_api(
+                                                        uploaded_file=uploaded,
+                                                        filename=uploaded.name,
+                                                        folder_id=st.secrets["app"]["drive_folder_id_design"],
+                                                    )
+
+                                                if not out.get("success", False):
+                                                    st.error(f"Upload failed: {out}")
+                                                else:
+                                                    file_url  = out.get("url", "")
+                                                    file_id   = out.get("id", "")
+                                                    file_name = out.get("name", uploaded.name)
+
+                                                    _upsert_design_kv("File", file_url)        # ✅ Viewer uses this
+                                                    _upsert_design_kv("FileId", file_id)
+                                                    _upsert_design_kv("FileName", file_name)
+
+                                                    # ✅ Trash old file only after new upload succeeds
+                                                    if old_id and old_id != file_id:
+                                                        del_out = delete_file_via_cleanroom_api(file_id=old_id)
+                                                        if not del_out.get("success", False):
+                                                            st.warning(
+                                                                "New file uploaded, but old file could not be trashed: "
+                                                                + str(del_out.get("error", "unknown error"))
+                                                            )
+
+                                                    st.session_state["upd_design_last_sig"] = sig
+                                                    st.session_state["upd_design_upload_nonce"] += 1
+
+                                                    st.success("Design file uploaded (old file moved to Trash).")
+                                                    st.rerun()
+
+                                            except Exception as e:
+                                                st.error(f"Upload error: {e}")
+
+
+                        # ==========================================
+                        # ✅ FAB ONLY: multi-file upload / replace / delete
+                        # ==========================================
+                        if target_meta == "fab":
+
+                            # ----------------------------
+                            # Init per-run fab attachments
+                            # ----------------------------
+                            if st.session_state.get("_upd_fab_files_for") != loaded_run_doc_id:
+                                fab_meta = st.session_state["update_meta"].get("fab", [])
+
+                                files = []
+                                for row in fab_meta:
+                                    k = row.get("key", "")
+                                    if k.startswith("FileId_"):
+                                        idx = int(k.split("_")[1])
+                                        fid = row.get("value", "")
+                                        fname = next(
+                                            (r["value"] for r in fab_meta if r.get("key") == f"FileName_{idx}"),
+                                            "",
                                         )
-                                        if out.get("success"):
-                                            fab_files.append({
-                                                "id": out.get("id",""),
-                                                "name": out.get("name", uploaded_add.name),
-                                                "url": out.get("url",""),
-                                                "sig": (uploaded_add.name, uploaded_add.size),
-                                            })
-                                            _sync_fab_files_to_meta()
-                                            st.session_state["upd_fab_upload_nonce"] += 1
-                                            st.success("Attachment added.")
-                                            st.rerun()
-                                        else:
-                                            st.error(out.get("error","Upload failed"))
+                                        files.append({
+                                            "id": fid,
+                                            "name": fname,
+                                            "url": "",
+                                            "sig": None,
+                                        })
 
-                        # -------------------------
-                        # ✏️ Edit tab
-                        # -------------------------
+                                st.session_state["update_fab_files"] = files
+                                st.session_state["_upd_fab_files_for"] = loaded_run_doc_id
+                                st.session_state["upd_fab_upload_nonce"] = 0
 
-                        with tab_edit:
-                            if not fab_files:
-                                st.caption("No Fab attachments yet.")
-                            else:
-                                # ✅ replace-mode flag (per run)
-                                replace_flag_key = f"fab_replace_mode_{loaded_run_doc_id}"
-                                if replace_flag_key not in st.session_state:
-                                    st.session_state[replace_flag_key] = False
+                            fab_files = st.session_state.setdefault("update_fab_files", [])
 
-                                sel_c1, _, sel_c3 = st.columns([.4, .3, .3])
-                                with sel_c1:
-                                    sel = st.selectbox(
-                                        "Select files",
-                                        options=list(range(len(fab_files))),
-                                        format_func=lambda i: fab_files[i].get("name", f"Attachment {i+1}"),
-                                        key=f"upd_fab_edit_sel_{loaded_run_doc_id}",
+
+                            def _upsert_fab_kv(key, val):
+                                fab_list = st.session_state["update_meta"].setdefault("fab", [])
+                                for it in fab_list:
+                                    if (it.get("key") or "").strip().lower() == key.lower():
+                                        it["value"] = val
+                                        return
+                                fab_list.append({"key": key, "value": val})
+
+                            def _drop_fab_prefix(prefix: str):
+                                fab_list = st.session_state["update_meta"].setdefault("fab", [])
+                                pref = prefix.lower()
+                                fab_list[:] = [
+                                    it for it in fab_list
+                                    if not ((it.get("key") or "").strip().lower().startswith(pref))
+                                ]
+
+                            def _sync_fab_files_to_meta():
+                                # remove old attachment keys
+                                _drop_fab_prefix("fileid_")
+                                _drop_fab_prefix("filename_")
+
+                                # legacy pointer = latest attachment (keep your existing scheme)
+                                if fab_files:
+                                    last = fab_files[-1]
+                                    _upsert_fab_kv("FileId", last.get("id", ""))
+                                    _upsert_fab_kv("FileName", last.get("name", ""))
+                                    if last.get("url"):
+                                        _upsert_fab_kv("File", last.get("url", ""))
+                                else:
+                                    _upsert_fab_kv("FileId", "")
+                                    _upsert_fab_kv("FileName", "")
+                                    _upsert_fab_kv("File", "")
+
+                                # write numbered attachment keys back
+                                for i, f in enumerate(fab_files, start=1):
+                                    _upsert_fab_kv(f"FileId_{i}", f.get("id", ""))
+                                    _upsert_fab_kv(f"FileName_{i}", f.get("name", ""))
+
+
+                            tab_add, tab_edit = st.tabs(["File add", "File edit"])
+
+                            # -------------------------
+                            # ➕ Add tab
+                            # -------------------------
+                            with tab_add:
+                                col, _ = st.columns([1,1])
+                                with col:
+                                    uploaded_add = st.file_uploader(
+                                        "Add",
+                                        key=f"upd_fab_add_{loaded_run_doc_id}_{st.session_state['upd_fab_upload_nonce']}",
+                                        type=None,
                                     )
 
-                                with sel_c3:
-                                    st.markdown("")
-                                    st.markdown(f"**Selected:** {fab_files[sel].get('name','')}")
+                                if uploaded_add is not None:
+                                    with col:
+                                        if st.button("Add attachment", key=f"upd_fab_add_btn_{loaded_run_doc_id}", use_container_width=True):
+                                            out = upload_file_via_cleanroom_api(
+                                                uploaded_file=uploaded_add,
+                                                filename=uploaded_add.name,
+                                                folder_id=st.secrets["app"]["drive_folder_id_fab"],
+                                            )
+                                            if out.get("success"):
+                                                fab_files.append({
+                                                    "id": out.get("id",""),
+                                                    "name": out.get("name", uploaded_add.name),
+                                                    "url": out.get("url",""),
+                                                    "sig": (uploaded_add.name, uploaded_add.size),
+                                                })
+                                                _sync_fab_files_to_meta()
+                                                st.session_state["upd_fab_upload_nonce"] += 1
+                                                st.success("Attachment added.")
+                                                st.rerun()
+                                            else:
+                                                st.error(out.get("error","Upload failed"))
 
-                                # ------------------------------------------------------------
-                                # Step 1: click Replace selected → then show uploader + confirm
-                                # ------------------------------------------------------------
-                                c1, c2 = st.columns([1, 1])
+                            # -------------------------
+                            # ✏️ Edit tab
+                            # -------------------------
 
-                                with c1:
-                                    # If not in replace mode, show the "Replace selected" button
-                                    if not st.session_state[replace_flag_key]:
-                                        if st.button(
-                                            "Replace selected",
-                                            key=f"upd_fab_replace_start_{loaded_run_doc_id}",
-                                            use_container_width=True,
-                                        ):
-                                            st.session_state[replace_flag_key] = True
-                                            st.rerun()
+                            with tab_edit:
+                                if not fab_files:
+                                    st.caption("No Fab attachments yet.")
+                                else:
+                                    # ✅ replace-mode flag (per run)
+                                    replace_flag_key = f"fab_replace_mode_{loaded_run_doc_id}"
+                                    if replace_flag_key not in st.session_state:
+                                        st.session_state[replace_flag_key] = False
 
-                                    # If in replace mode, show uploader + Confirm + Cancel
-                                    else:
-                                        st.caption("Choose a replacement file")
-                                        uploaded_rep = st.file_uploader(
-                                            "Replacement file",
-                                            key=f"upd_fab_rep_{loaded_run_doc_id}_{sel}_{st.session_state['upd_fab_upload_nonce']}",
-                                            type=None,
-                                            label_visibility="collapsed",
+                                    sel_c1, _, sel_c3 = st.columns([.4, .3, .3])
+                                    with sel_c1:
+                                        sel = st.selectbox(
+                                            "Select files",
+                                            options=list(range(len(fab_files))),
+                                            format_func=lambda i: fab_files[i].get("name", f"Attachment {i+1}"),
+                                            key=f"upd_fab_edit_sel_{loaded_run_doc_id}",
                                         )
 
-                                        cc1, cc2 = st.columns([1, 1])
+                                    with sel_c3:
+                                        st.markdown("")
+                                        st.markdown(f"**Selected:** {fab_files[sel].get('name','')}")
 
-                                        with cc1:
+                                    # ------------------------------------------------------------
+                                    # Step 1: click Replace selected → then show uploader + confirm
+                                    # ------------------------------------------------------------
+                                    c1, c2 = st.columns([1, 1])
+
+                                    with c1:
+                                        # If not in replace mode, show the "Replace selected" button
+                                        if not st.session_state[replace_flag_key]:
                                             if st.button(
-                                                "Confirm replace",
-                                                disabled=(uploaded_rep is None),
-                                                key=f"upd_fab_replace_confirm_{loaded_run_doc_id}",
+                                                "Replace selected",
+                                                key=f"upd_fab_replace_start_{loaded_run_doc_id}",
                                                 use_container_width=True,
                                             ):
-                                                out = upload_file_via_cleanroom_api(
-                                                    uploaded_file=uploaded_rep,
-                                                    filename=uploaded_rep.name,
-                                                    folder_id=st.secrets["app"]["drive_folder_id_fab"],
-                                                )
-                                                if out.get("success"):
-                                                    old_id = fab_files[sel].get("id", "")
-                                                    new_id = out.get("id", "")
-
-                                                    fab_files[sel] = {
-                                                        "id": new_id,
-                                                        "name": out.get("name", uploaded_rep.name),
-                                                        "url": out.get("url", ""),
-                                                        "sig": (uploaded_rep.name, uploaded_rep.size),
-                                                    }
-
-                                                    _sync_fab_files_to_meta()
-
-                                                    if old_id and old_id != new_id:
-                                                        del_out = delete_file_via_cleanroom_api(file_id=old_id)
-                                                        if not del_out.get("success"):
-                                                            st.warning("Old file could not be trashed.")
-
-                                                    st.session_state["upd_fab_upload_nonce"] += 1
-                                                    st.session_state[replace_flag_key] = False
-                                                    st.success("Replaced.")
-                                                    st.rerun()
-                                                else:
-                                                    st.error(out.get("error", "Replace failed"))
-
-                                        with cc2:
-                                            if st.button(
-                                                "Cancel",
-                                                key=f"upd_fab_replace_cancel_{loaded_run_doc_id}",
-                                                use_container_width=True,
-                                            ):
-                                                st.session_state[replace_flag_key] = False
+                                                st.session_state[replace_flag_key] = True
                                                 st.rerun()
 
-                                # -------------------------
-                                # Delete (unchanged)
-                                # -------------------------
-                                with c2:
-                                    if st.button(
-                                        "Delete selected",
-                                        key=f"upd_fab_delete_btn_{loaded_run_doc_id}",
-                                        use_container_width=True,
-                                    ):
-                                        old_id = fab_files[sel].get("id", "")
-                                        if old_id:
-                                            del_out = delete_file_via_cleanroom_api(file_id=old_id)
-                                            if not del_out.get("success"):
-                                                st.warning("Removed from list but not trashed in Drive.")
-                                        fab_files.pop(sel)
-                                        _sync_fab_files_to_meta()
-                                        st.success("Deleted.")
-                                        st.rerun()
+                                        # If in replace mode, show uploader + Confirm + Cancel
+                                        else:
+                                            st.caption("Choose a replacement file")
+                                            uploaded_rep = st.file_uploader(
+                                                "Replacement file",
+                                                key=f"upd_fab_rep_{loaded_run_doc_id}_{sel}_{st.session_state['upd_fab_upload_nonce']}",
+                                                type=None,
+                                                label_visibility="collapsed",
+                                            )
+
+                                            cc1, cc2 = st.columns([1, 1])
+
+                                            with cc1:
+                                                if st.button(
+                                                    "Confirm replace",
+                                                    disabled=(uploaded_rep is None),
+                                                    key=f"upd_fab_replace_confirm_{loaded_run_doc_id}",
+                                                    use_container_width=True,
+                                                ):
+                                                    out = upload_file_via_cleanroom_api(
+                                                        uploaded_file=uploaded_rep,
+                                                        filename=uploaded_rep.name,
+                                                        folder_id=st.secrets["app"]["drive_folder_id_fab"],
+                                                    )
+                                                    if out.get("success"):
+                                                        old_id = fab_files[sel].get("id", "")
+                                                        new_id = out.get("id", "")
+
+                                                        fab_files[sel] = {
+                                                            "id": new_id,
+                                                            "name": out.get("name", uploaded_rep.name),
+                                                            "url": out.get("url", ""),
+                                                            "sig": (uploaded_rep.name, uploaded_rep.size),
+                                                        }
+
+                                                        _sync_fab_files_to_meta()
+
+                                                        if old_id and old_id != new_id:
+                                                            del_out = delete_file_via_cleanroom_api(file_id=old_id)
+                                                            if not del_out.get("success"):
+                                                                st.warning("Old file could not be trashed.")
+
+                                                        st.session_state["upd_fab_upload_nonce"] += 1
+                                                        st.session_state[replace_flag_key] = False
+                                                        st.success("Replaced.")
+                                                        st.rerun()
+                                                    else:
+                                                        st.error(out.get("error", "Replace failed"))
+
+                                            with cc2:
+                                                if st.button(
+                                                    "Cancel",
+                                                    key=f"upd_fab_replace_cancel_{loaded_run_doc_id}",
+                                                    use_container_width=True,
+                                                ):
+                                                    st.session_state[replace_flag_key] = False
+                                                    st.rerun()
+
+                                    # -------------------------
+                                    # Delete (unchanged)
+                                    # -------------------------
+                                    with c2:
+                                        if st.button(
+                                            "Delete selected",
+                                            key=f"upd_fab_delete_btn_{loaded_run_doc_id}",
+                                            use_container_width=True,
+                                        ):
+                                            old_id = fab_files[sel].get("id", "")
+                                            if old_id:
+                                                del_out = delete_file_via_cleanroom_api(file_id=old_id)
+                                                if not del_out.get("success"):
+                                                    st.warning("Removed from list but not trashed in Drive.")
+                                            fab_files.pop(sel)
+                                            _sync_fab_files_to_meta()
+                                            st.success("Deleted.")
+                                            st.rerun()
 
                 with sub_notion:
                     if target_meta == "design":
