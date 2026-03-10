@@ -791,8 +791,8 @@ def render_measure_override(
         # ------------------------------------------------
         # Override row (single line)
         # ------------------------------------------------
-        # col_cd, col_meas, col_warm, col_storage = st.columns(4)
-        col_cd = st.columns(1)[0]
+        col_cd, col_meas, col_warm, col_storage = st.columns(4)
+        # col_cd = st.columns(1)
 
         def render_phase_override(col, phase_label, phase_key):
             with col:
