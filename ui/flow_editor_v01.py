@@ -368,13 +368,13 @@ def flow_editor(layer_filter=None, ui_mode = "expander"):
                             "chips": [
                                 # {"name": "Electrical check"},
                                 {"name": "Cooldown"},
-                                {"name": "Measure"},
-                                {"name": "Warmup"},
-                                {
-                                    "name": "Storage",
-                                    "type": "storage",
-                                    "status": "pending",
-                                },
+                                # {"name": "Measure"},
+                                # {"name": "Warmup"},
+                                # {
+                                #     "name": "Storage",
+                                #     "type": "storage",
+                                #     "status": "pending",
+                                # },
                             ],
                         }
                     )
