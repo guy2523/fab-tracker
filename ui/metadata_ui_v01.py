@@ -969,44 +969,44 @@ def render_measure_override(
             st.session_state[cb_key] = False
             st.session_state[pending_key] = False
 
-        with col_storage:
-            if st.checkbox(
-                "Override Storage date",
-                key=f"ovr_meas_storage_time_{loaded_run_doc_id}_{fridge_uid}",
-            ):
-                current_val = meas_meta.get("storage_time", "")
-                new_val = st.text_input(
-                    "Date(YYYY-MM-DD HH:MM:SS)",
-                    value=current_val or datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
-                    key=f"text_meas_storage_time_{loaded_run_doc_id}_{fridge_uid}",
-                )
+        # with col_storage:
+        #     if st.checkbox(
+        #         "Override Storage date",
+        #         key=f"ovr_meas_storage_time_{loaded_run_doc_id}_{fridge_uid}",
+        #     ):
+        #         current_val = meas_meta.get("storage_time", "")
+        #         new_val = st.text_input(
+        #             "Date(YYYY-MM-DD HH:MM:SS)",
+        #             value=current_val or datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+        #             key=f"text_meas_storage_time_{loaded_run_doc_id}_{fridge_uid}",
+        #         )
 
-                if st.button(
-                    "Apply",
-                    key=f"apply_meas_storage_time_{loaded_run_doc_id}_{fridge_uid}",
-                ):
-                    try:
-                        datetime.fromisoformat(new_val)
+        #         if st.button(
+        #             "Apply",
+        #             key=f"apply_meas_storage_time_{loaded_run_doc_id}_{fridge_uid}",
+        #         ):
+        #             try:
+        #                 datetime.fromisoformat(new_val)
 
-                        update_meta \
-                            .setdefault("measure", {}) \
-                            .setdefault("fridges", {}) \
-                            .setdefault(fridge_uid, {})["storage_time"] = new_val
+        #                 update_meta \
+        #                     .setdefault("measure", {}) \
+        #                     .setdefault("fridges", {}) \
+        #                     .setdefault(fridge_uid, {})["storage_time"] = new_val
 
-                        firestore_update_field(
-                            "runs",
-                            loaded_run_doc_id,
-                            f"metadata.measure.fridges.{fridge_uid}.storage_time",
-                            new_val,
-                            id_token,
-                        )
+        #                 firestore_update_field(
+        #                     "runs",
+        #                     loaded_run_doc_id,
+        #                     f"metadata.measure.fridges.{fridge_uid}.storage_time",
+        #                     new_val,
+        #                     id_token,
+        #                 )
 
-                        st.success("Storage date updated")
-                        st.session_state[pending_key] = True
-                        st.rerun()
+        #                 st.success("Storage date updated")
+        #                 st.session_state[pending_key] = True
+        #                 st.rerun()
 
-                    except ValueError:
-                        st.error("Invalid datetime format (YYYY-MM-DD HH:MM:SS)")
+        #             except ValueError:
+        #                 st.error("Invalid datetime format (YYYY-MM-DD HH:MM:SS)")
 
 
 
