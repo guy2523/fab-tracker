@@ -3129,17 +3129,17 @@ if mode == "Update Run":
                 # (optional) If you also want the old "Save Fab" behavior here later, we can add it similarly.
 
 
-
                 # now create the sub-tabs
                 sub_flow, sub_status, sub_details, sub_notion = st.tabs(["Flow", "Status", "Details", "Notion"])
 
-                with sub_flow:
-                    update_flow_editor(
-                        st.session_state["update_layers"],
-                        layer_filter=target_layer,
-                        show_layer_tabs=False,
-                        key_prefix=f"{stage_key}_flow",
-                    )
+                if target_meta != "measure":
+                    with sub_flow:
+                        update_flow_editor(
+                            st.session_state["update_layers"],
+                            layer_filter=target_layer,
+                            show_layer_tabs=False,
+                            key_prefix=f"{stage_key}_flow",
+                        )
 
 
                 with sub_status:
