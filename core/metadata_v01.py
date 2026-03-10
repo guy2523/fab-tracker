@@ -104,7 +104,7 @@ def build_measure_fridge_meta(layers, old_measure_meta):
             continue
 
         prev = old_measure_meta.get(fridge_uid, {})
-        
+        prev.pop("chip_uid", None)
         fridge_meta[fridge_uid] = {
             "owner":     prev.get("owner", ""),
             # "chip_uid":  prev.get("chip_uid", ""),
