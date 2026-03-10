@@ -3130,7 +3130,10 @@ if mode == "Update Run":
 
 
                 # now create the sub-tabs
-                sub_flow, sub_status, sub_details, sub_notion = st.tabs(["Flow", "Status", "Details", "Notion"])
+                if target_meta == "measure":
+                    sub_notion = st.tabs(["Notion"])
+                else:
+                    sub_flow, sub_status, sub_details, sub_notion = st.tabs(["Flow", "Status", "Details", "Notion"])
 
                 if target_meta != "measure":
                     with sub_flow:
