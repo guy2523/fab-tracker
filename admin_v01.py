@@ -3131,7 +3131,7 @@ if mode == "Update Run":
 
                 # now create the sub-tabs
                 if target_meta == "measure":
-                    sub_notion = st.tabs(["Notion"])
+                    sub_notion = st.tabs(["Notion"])[0]
                 else:
                     sub_flow, sub_status, sub_details, sub_notion = st.tabs(["Flow", "Status", "Details", "Notion"])
 
