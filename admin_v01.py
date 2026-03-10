@@ -9,7 +9,7 @@ from services.presets import load_layer_presets_once
 from services.status_editor_v01 import handle_chip_status_change
 from services.flow_defaults_v01 import DEFAULT_FLOW
 from core.metadata import normalize_meta, ensure_kv_rows, build_package_chip_meta, get_package_chips, get_measure_fridges, build_measure_fridge_meta
-from ui.flow_editor import flow_editor, update_flow_editor
+from ui.flow_editor_v01 import flow_editor, update_flow_editor
 from ui.metadata_ui import render_metadata_ui, save_package_info_core, save_measure_info_core
 from services.drive import upload_file_via_cleanroom_api, delete_file_via_cleanroom_api
 import requests, time, json
