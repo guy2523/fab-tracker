@@ -705,6 +705,19 @@ def save_measure_info_core(
     existing = full_meta["measure"]["fridges"].get(fridge_uid, {})
 
     # ---------------------------------------------------------
+    # Remove deprecated measurement fields
+    # ---------------------------------------------------------
+    if isinstance(existing, dict):
+        for k in (
+            "measure_start",
+            "measure_end",
+            "warmup_start",
+            "warmup_end",
+            "storage_time",
+        ):
+            existing.pop(k, None)
+
+    # ---------------------------------------------------------
     # 🔒 Notion is event-driven: NEVER wipe it from a save
     # If existing notion exists, preserve it unconditionally.
     # ---------------------------------------------------------
