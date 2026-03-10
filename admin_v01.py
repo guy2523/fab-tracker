@@ -1993,7 +1993,7 @@ if mode == "Update Run":
                     sync_pkg_bond_to_fab_notion = True
 
                 elif stage == "measurement":
-                    sync_measure_notion = True
+                    sync_measure_notion = False
 
             layers = st.session_state.get("update_layers")
             if not layers:
@@ -2400,6 +2400,8 @@ if mode == "Update Run":
                                     notion_name = f"BF{name_yymmdd}"
                                 else:
                                     notion_name = f"IO[{name_yymmdd}]"
+
+                                # Measurement pages are now created manually in Notion
 
                                 result = create_measure_page(
                                     notion_token=st.secrets["notion"]["NOTION_TOKEN"],
