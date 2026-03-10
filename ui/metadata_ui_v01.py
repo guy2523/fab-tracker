@@ -687,7 +687,8 @@ def save_measure_info_core(
 
     updated = {
         "owner": (fridge_meta_live.get("owner", "") or "").strip(),
-        "chip_uid": (fridge_meta_live.get("chip_uid", "") or "").strip(),
+        # "chip_uid": (fridge_meta_live.get("chip_uid", "") or "").strip(),
+        "chip_label": (fridge_meta_live.get("chip_label", "") or "").strip(),
         "cell_type": (fridge_meta_live.get("cell_type", "") or "").strip(),
         # "notion": (fridge_meta_live.get("notion", "") or "").strip(),
         "notes": (fridge_meta_live.get("notes", "") or "").strip(),

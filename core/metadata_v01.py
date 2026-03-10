@@ -107,7 +107,8 @@ def build_measure_fridge_meta(layers, old_measure_meta):
         
         fridge_meta[fridge_uid] = {
             "owner":     prev.get("owner", ""),
-            "chip_uid":  prev.get("chip_uid", ""),
+            # "chip_uid":  prev.get("chip_uid", ""),
+            "chip_label": prev.get("chip_label", ""),   # ← changed
             "cell_type": prev.get("cell_type", ""),
             "notion":    prev.get("notion", ""),
             "notion_page_id": prev.get("notion_page_id", ""),  # ✅ PATCH
