@@ -2172,24 +2172,6 @@ if mode == "Update Run":
             except Exception as e:
                 st.warning(f"Measurement Notion preserve/merge failed (non-blocking): {e}")
 
-
-            # ------------------------------------------------------------
-            # 🧹 Remove deprecated Measurement fields
-            # ------------------------------------------------------------
-            meta_measure = st.session_state.get("update_meta", {}).get("measure", {})
-            meta_fridges = meta_measure.get("fridges", {})
-
-            if isinstance(meta_fridges, dict):
-                for uid, meta in meta_fridges.items():
-                    if not isinstance(meta, dict):
-                        continue
-
-                    meta.pop("measure_start", None)
-                    meta.pop("measure_end", None)
-                    meta.pop("warmup_start", None)
-                    meta.pop("warmup_end", None)
-
-
             # pull Device Name from Design metadata if present
             design_list = st.session_state["update_meta"].get("design", [])
             design_device_name = next(
