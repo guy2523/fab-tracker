@@ -21,6 +21,15 @@ import urllib.parse
 import notion_client
 import inspect
 
+
+# ----------------------------------------
+# health check for uptime monitoring
+# ----------------------------------------
+if st.query_params.get("health") == "1":
+    st.write("ok")
+    st.stop()
+
+
 # optional card CSS (unused directly but kept for consistency)
 st.markdown(
     """
