@@ -3876,7 +3876,7 @@ if mode == "Update Run":
                             fab_meta = st.session_state["update_meta"]["fab"]
                             fab_page_url = _get_meta_val(fab_meta, "Notion")
 
-                            st.write("DEBUG fridges:", new_meta)
+                            st.write("DEBUG fridges:", fab_meta)
                             st.write("DEBUG session:", st.session_state["update_meta"]["measure"]["fridges"])
 
                             if not fab_page_url:
