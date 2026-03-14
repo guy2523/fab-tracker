@@ -3964,6 +3964,10 @@ if mode == "Update Run":
 
                             st.session_state["update_meta"]["measure"]["fridges"] = new_meta
 
+                            # 🔹 Auto-select a fridge so Measurement save guard passes
+                            if new_substeps:
+                                st.session_state["meas_prev_fridge_uid"] = new_substeps[0]["fridge_uid"]
+
                             st.write("DEBUG fridges:", new_meta)
                             st.write("DEBUG session:", st.session_state["update_meta"]["measure"]["fridges"])
 
@@ -4206,7 +4210,6 @@ if mode == "Update Run":
 
 
                         with st.spinner("Saving run and syncing Notion…"):
-                            st.write("DEBUG: about to call save_full_run")
                             save_full_run(
                                 notion_source="status_save",
                                 notion_stage=target_layer,
