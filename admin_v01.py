@@ -3934,7 +3934,10 @@ if mode == "Update Run":
                                         "fridge_uid": fridge_uid,
                                         "label": fridge_label,
                                         "chips": [
-                                            {"name": "Cooldown"}
+                                            {
+                                                "name": "Cooldown",
+                                                "status": "done"
+                                            }
                                         ],
                                     }
                                 )
