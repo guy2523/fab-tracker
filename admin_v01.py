@@ -3936,7 +3936,6 @@ if mode == "Update Run":
                                         "chips": [
                                             {
                                                 "name": "Cooldown",
-                                                "status": "done"
                                             }
                                         ],
                                     }
