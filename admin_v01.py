@@ -15,7 +15,7 @@ from services.drive import upload_file_via_cleanroom_api, delete_file_via_cleanr
 import requests, time, json
 from zoneinfo import ZoneInfo
 from notion_client.helpers import get_id
-from notion.notion_ops import update_page_properties, create_measure_page, set_relation, update_date_range, archive_page, get_page, create_fab_page, get_page_url_by_title, get_cooldown_page, get_notion_client
+from notion.notion_ops import update_page_properties, create_measure_page, set_relation, update_date_range, archive_page, get_page, create_fab_page, get_page_url_by_title, get_notion_client
 from notion.notion_add_fab_content import add_fab_content
 import urllib.parse
 import notion_client
