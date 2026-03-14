@@ -20,6 +20,7 @@ from notion.notion_add_fab_content import add_fab_content
 import urllib.parse
 import notion_client
 import inspect
+import uuid
 
 # optional card CSS (unused directly but kept for consistency)
 st.markdown(
