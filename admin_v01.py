@@ -3916,10 +3916,10 @@ if mode == "Update Run":
                                 cooldown_pages_data.append((fridge_label, page))
 
                             cooldown_pages_data.sort(
-                                key=lambda x: x[1].get("cooldown_start", "")
+                                key=lambda x: x[1].get("cooldown_start") or ""
                             )
 
-                            for fridge_label, pid in cooldown_pages_data:
+                            for fridge_label, page in cooldown_pages_data:
                                 page_id = page["page_id"]
                                 fridge_uid = f"fridge_{page_id.replace('-', '')[:8]}"
 
@@ -3965,8 +3965,8 @@ if mode == "Update Run":
                             st.session_state["update_meta"]["measure"]["fridges"] = new_meta
 
                             st.success(f"Synced {len(new_substeps)} cooldowns from Notion.")
-                            # st.rerun()
-                            st.stop()
+                            st.rerun()
+                            # st.stop()
 
 
 
