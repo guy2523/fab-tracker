@@ -15,7 +15,7 @@ from services.drive import upload_file_via_cleanroom_api, delete_file_via_cleanr
 import requests, time, json
 from zoneinfo import ZoneInfo
 from notion_client.helpers import get_id
-from notion.notion_ops import update_page_properties, create_measure_page, set_relation, update_date_range, archive_page, get_page, create_fab_page, get_page_url_by_title
+from notion.notion_ops import update_page_properties, create_measure_page, set_relation, update_date_range, archive_page, get_page, create_fab_page, get_page_url_by_title, get_cooldown_page, get_notion_client
 from notion.notion_add_fab_content import add_fab_content
 import urllib.parse
 import notion_client
@@ -3867,7 +3867,103 @@ if mode == "Update Run":
                         st.info("Package Notion content will be added later.")
 
                     else:  # measurement
-                        st.info("Measurement Notion content will be added later.")
+                        # st.info("Measurement Notion content will be added later.")
+                        if st.button("Sync Measurement from Notion"):
+
+                            notion_token = st.secrets["notion"]["NOTION_TOKEN"]
+
+                            fab_meta = st.session_state["update_meta"]["fab"]
+                            fab_page_url = fab_meta.get("Notion", "")
+
+                            if not fab_page_url:
+                                st.error("Fab Notion page not found.")
+                                st.stop()
+
+                            client = get_notion_client(notion_token)
+
+                            from notion_client.helpers import get_id
+
+                            fab_page_id = get_id(fab_page_url)
+                            fab_page = client.pages.retrieve(page_id=fab_page_id)
+
+                            props = fab_page.get("properties", {})
+
+                            iceox_rel = props.get("IceOx Cooldowns", {}).get("relation", [])
+                            bf_rel = props.get("Bluefors Cooldowns", {}).get("relation", [])
+
+                            cooldown_pages = []
+
+                            for r in iceox_rel:
+                                cooldown_pages.append(("ICEOxford", r["id"]))
+
+                            for r in bf_rel:
+                                cooldown_pages.append(("Bluefors", r["id"]))
+
+                            # -----------------------------
+                            # Build Measurement flow
+                            # -----------------------------
+
+                            new_substeps = []
+                            new_meta = {}
+                            cooldown_pages_data = []
+
+                            for fridge_label, pid in cooldown_pages:
+                                page = get_cooldown_page(
+                                    notion_token=notion_token,
+                                    page_id=pid,
+                                )
+                                cooldown_pages_data.append((fridge_label, page))
+
+                            cooldown_pages_data.sort(
+                                key=lambda x: x[1].get("cooldown_start", "")
+                            )
+
+                            for fridge_label, pid in cooldown_pages_data:
+                                page_id = page["page_id"]
+                                fridge_uid = f"fridge_{page_id.replace('-', '')[:8]}"
+
+                                cooldown_start = page.get("cooldown_start", "")
+                                cooldown_end = page.get("cooldown_end", "")
+                                notion_url = page.get("url", "")
+
+                                # flow substep
+                                new_substeps.append(
+                                    {
+                                        "id": str(uuid.uuid4()),
+                                        "fridge_uid": fridge_uid,
+                                        "label": fridge_label,
+                                        "chips": [
+                                            {"name": "Cooldown"}
+                                        ],
+                                    }
+                                )
+
+                                # metadata
+                                new_meta[fridge_uid] = {
+                                    "label": fridge_label,
+                                    "cooldown_start": cooldown_start,
+                                    "cooldown_end": cooldown_end,
+                                    "notion": notion_url,
+                                    "notion_page_id": page_id,
+                                }
+
+                            # -----------------------------
+                            # Replace Measurement layer
+                            # -----------------------------
+
+                            layers = st.session_state["update_layers"]
+
+                            for layer in layers:
+                                if layer["layer_name"].lower() == "measurement":
+                                    layer["substeps"] = new_substeps
+                                    break
+
+                            st.session_state["update_meta"]["measure"]["fridges"] = new_meta
+
+                            st.success(f"Synced {len(new_substeps)} cooldowns from Notion.")
+                            st.rerun()
+
+
 
 
                 # ----------------------------------------------------

@@ -314,3 +314,38 @@ def get_page_url_by_title(
         return ""
 
     return items[0].get("url", "")
+
+
+
+def get_cooldown_page(
+    *,
+    notion_token: str,
+    page_id: str,
+) -> dict:
+    """
+    Retrieve cooldown page info for Measurement sync.
+    Does not modify or replace get_page().
+    """
+
+    page_id = normalize_page_id(page_id)
+    if not page_id:
+        raise ValueError("page_id is required")
+
+    client = get_notion_client(notion_token)
+
+    page = client.pages.retrieve(page_id=page_id)
+
+    props = page.get("properties") or {}
+    cd = props.get("Cooldown dates") or {}
+
+    d = (cd.get("date") or {}) if isinstance(cd, dict) else {}
+
+    start = (d.get("start") or "").strip()
+    end = (d.get("end") or "").strip()
+
+    return {
+        "page_id": page.get("id", page_id),
+        "url": page.get("url", ""),
+        "cooldown_start": start,
+        "cooldown_end": end,
+    }
