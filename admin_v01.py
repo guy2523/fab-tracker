@@ -4204,9 +4204,9 @@ if mode == "Update Run":
                             st.success("Measurement saved")
                             # st.rerun()
 
-                        st.write("DEBUG reached save_full_run")
 
                         with st.spinner("Saving run and syncing Notion…"):
+                            st.write("DEBUG: about to call save_full_run")
                             save_full_run(
                                 notion_source="status_save",
                                 notion_stage=target_layer,
