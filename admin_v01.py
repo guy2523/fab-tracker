@@ -3872,7 +3872,8 @@ if mode == "Update Run":
 
                             notion_token = st.secrets["notion"]["NOTION_TOKEN"]
 
-                            fab_meta = st.session_state["update_meta"]["fab"]
+                            # fab_meta = st.session_state["update_meta"]["fab"]
+                            fab_meta = st.session_state.get("update_meta", {}).get("fab", {})
                             fab_page_url = fab_meta.get("Notion", "")
 
                             if not fab_page_url:
