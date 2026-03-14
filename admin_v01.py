@@ -3873,8 +3873,13 @@ if mode == "Update Run":
                             notion_token = st.secrets["notion"]["NOTION_TOKEN"]
 
                             # fab_meta = st.session_state["update_meta"]["fab"]
-                            fab_meta = st.session_state.get("update_meta", {}).get("fab", {})
-                            fab_page_url = fab_meta.get("Notion", "")
+                            # fab_meta = st.session_state.get("update_meta", {}).get("fab", {})
+                            # fab_page_url = fab_meta.get("Notion", "")
+                            update_meta = st.session_state.get("update_meta") or {}
+                            fab_meta = update_meta.get("fab") or {}
+
+                            fab_page_url = fab_meta.get("Notion") or ""
+
 
                             if not fab_page_url:
                                 st.error("Fab Notion page not found.")
