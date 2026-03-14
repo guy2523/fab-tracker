@@ -3965,8 +3965,8 @@ if mode == "Update Run":
                             st.session_state["update_meta"]["measure"]["fridges"] = new_meta
 
                             st.success(f"Synced {len(new_substeps)} cooldowns from Notion.")
-                            st.rerun()
-                            # st.stop()
+                            # st.rerun()
+                            st.stop()
 
 
 
