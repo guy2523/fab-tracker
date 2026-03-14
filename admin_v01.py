@@ -3875,9 +3875,6 @@ if mode == "Update Run":
                             fab_meta = st.session_state["update_meta"]["fab"]
                             fab_page_url = _get_meta_val(fab_meta, "Notion")
 
-                            fab_page_url = fab_meta.get("Notion") or ""
-
-
                             if not fab_page_url:
                                 st.error("Fab Notion page not found.")
                                 st.stop()
