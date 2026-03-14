@@ -3936,6 +3936,7 @@ if mode == "Update Run":
                                         "chips": [
                                             {
                                                 "name": "Cooldown",
+                                                "status": "done"
                                             }
                                         ],
                                     }
@@ -3954,12 +3955,12 @@ if mode == "Update Run":
                             # Replace Measurement layer
                             # -----------------------------
 
-                            # layers = st.session_state["update_layers"]
+                            layers = st.session_state["update_layers"]
 
-                            # for layer in layers:
-                            #     if layer["layer_name"].lower() == "measurement":
-                            #         layer["substeps"] = new_substeps
-                            #         break
+                            for layer in layers:
+                                if layer["layer_name"].lower() == "measurement":
+                                    layer["substeps"] = new_substeps
+                                    break
 
                             st.session_state["update_meta"]["measure"]["fridges"] = new_meta
 
