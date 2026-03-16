@@ -3949,7 +3949,7 @@ if mode == "Update Run":
                                         "chips": [
                                             {
                                                 "name": "Cooldown",
-                                                "status": fridge_status
+                                                "status": fridge_status,
                                                 "started_at": "",
                                                 "completed_at": ""
                                             }
