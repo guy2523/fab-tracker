@@ -1586,7 +1586,7 @@ with top_left:
 
     st.markdown(
         '<div style="text-align: left;">'
-        '<a href="https://fab-tracker-7uac3bt2l3sad66hgpvjw6.streamlit.app/" '
+        '<a href="https://fab-tracker-qqulopkittfmu4th66srmh.streamlit.app/" '
         'target="_blank" '
         'style="text-decoration: none; font-weight: 600;">'
         '🔧 Editor'
