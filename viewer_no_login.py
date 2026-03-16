@@ -1245,6 +1245,9 @@ def layer_card_html(layer, idx=None, fridge_labels=None, fields=None, layers=Non
             if s.get("fridge_uid") in live_fridge_uids
         ]
 
+        st.write("DEBUG live_fridge_uids:", live_fridge_uids)
+        st.write("DEBUG measure substeps:", [(s.get("fridge_uid"), s.get("label"), s.get("name")) for s in substeps])
+
         # Measurement: NEW 3-column grid
         for i in range(0, len(substeps), 3):
 
