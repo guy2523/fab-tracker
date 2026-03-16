@@ -1232,11 +1232,19 @@ def layer_card_html(layer, idx=None, fridge_labels=None, fields=None, layers=Non
         substeps = [s for s in substeps if s.get("fridge_uid")]
 
         # Measurement: NEW 3-column grid
-        for i in range(0, len(substeps), 3):
+        # for i in range(0, len(substeps), 3):
+
+        #     body_html += "<div style='display:flex; gap:14px; margin-top:4px;'>"
+
+        #     for sub in substeps[i:i+3]:
+
+        cols = min(3, len(substeps))  # dynamic columns
+
+        for i in range(0, len(substeps), cols):
 
             body_html += "<div style='display:flex; gap:14px; margin-top:4px;'>"
 
-            for sub in substeps[i:i+3]:
+            for sub in substeps[i:i+cols]:
 
                 sub_name = sub.get("label") or sub.get("name") or "Unknown"
                 fridge_uid = sub.get("fridge_uid")
