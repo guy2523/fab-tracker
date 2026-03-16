@@ -3890,7 +3890,7 @@ if mode == "Update Run":
                             props = fab_page.get("properties", {})
 
                             iceox_rel = props.get("IceOx Cooldowns", {}).get("relation", [])
-                            bf_rel = props.get("Bluefors Cooldowns", {}).get("relation", [])
+                            bf_rel = props.get("Bluefors cooldowns", {}).get("relation", [])
 
                             cooldown_pages = []
 
