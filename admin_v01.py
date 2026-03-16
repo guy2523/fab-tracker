@@ -3892,13 +3892,32 @@ if mode == "Update Run":
                             iceox_rel = props.get("IceOx Cooldowns", {}).get("relation", [])
                             bf_rel = props.get("Bluefors cooldowns", {}).get("relation", [])
 
-                            cooldown_pages = []
+                            # cooldown_pages = []
 
-                            for r in iceox_rel:
-                                cooldown_pages.append(("ICEOxford", r["id"]))
+                            # for r in iceox_rel:
+                            #     cooldown_pages.append(("ICEOxford", r["id"]))
 
-                            for r in bf_rel:
-                                cooldown_pages.append(("Bluefors", r["id"]))
+                            # for r in bf_rel:
+                            #     cooldown_pages.append(("Bluefors", r["id"]))
+
+                            # # -----------------------------
+                            # # Build Measurement flow
+                            # # -----------------------------
+
+                            # new_substeps = []
+                            # new_meta = {}
+                            # cooldown_pages_data = []
+
+                            # for fridge_label, pid in cooldown_pages:
+                            #     page = get_cooldown_page(
+                            #         notion_token=notion_token,
+                            #         page_id=pid,
+                            #     )
+                            #     cooldown_pages_data.append((fridge_label, page))
+
+                            # cooldown_pages_data.sort(
+                            #     key=lambda x: x[1].get("cooldown_start") or ""
+                            # )
 
                             # -----------------------------
                             # Build Measurement flow
@@ -3906,18 +3925,28 @@ if mode == "Update Run":
 
                             new_substeps = []
                             new_meta = {}
-                            cooldown_pages_data = []
 
-                            for fridge_label, pid in cooldown_pages:
+                            iceox_pages = []
+                            bf_pages = []
+
+                            for r in iceox_rel:
                                 page = get_cooldown_page(
                                     notion_token=notion_token,
-                                    page_id=pid,
+                                    page_id=r["id"],
                                 )
-                                cooldown_pages_data.append((fridge_label, page))
+                                iceox_pages.append(("ICEOxford", page))
 
-                            cooldown_pages_data.sort(
-                                key=lambda x: x[1].get("cooldown_start") or ""
-                            )
+                            for r in bf_rel:
+                                page = get_cooldown_page(
+                                    notion_token=notion_token,
+                                    page_id=r["id"],
+                                )
+                                bf_pages.append(("Bluefors", page))
+
+                            iceox_pages.sort(key=lambda x: x[1].get("cooldown_start") or "")
+                            bf_pages.sort(key=lambda x: x[1].get("cooldown_start") or "")
+
+                            cooldown_pages_data = iceox_pages + bf_pages
 
                             for fridge_label, page in cooldown_pages_data:
                                 page_id = page["page_id"]
