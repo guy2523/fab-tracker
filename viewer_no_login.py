@@ -1230,7 +1230,8 @@ def layer_card_html(layer, idx=None, fridge_labels=None, fields=None, layers=Non
         # Measurement: NEW 3-column grid
         for i in range(0, len(substeps), 3):
 
-            body_html += "<div style='display:flex; gap:14px; margin-top:4px;'>"
+            # body_html += "<div style='display:flex; gap:14px; margin-top:4px;'>"
+            body_html += "<div style='display:flex; gap:14px; margin-top:4px; width:fit-content;'>"
 
             for sub in substeps[i:i+3]:
 
