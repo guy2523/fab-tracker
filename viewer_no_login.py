@@ -2582,13 +2582,13 @@ for doc in filtered_runs:
 
                         "Cell type": meta_f.get("cell_type", ""),
                         "Cooldown": cooldown_display,
-                        "Measure": measure_display,
-                        "Warmup": warmup_display,
+                        # "Measure": measure_display,
+                        # "Warmup": warmup_display,
 
                         # ✅ NEW (minimal)
-                        "Storage": meta_f.get("storage", ""),  # e.g. store#1
+                        # "Storage": meta_f.get("storage", ""),  # e.g. store#1
                         # "Storage date": format_date_compact(meta_f.get("storage_time", "")),   
-                        "Storage date": storage_display,
+                        # "Storage date": storage_display,
                
                         # 👇 ADD THIS LINE (viewer-only, hidden later)
                         "_cooldown_start": meta_f.get("cooldown_start", ""),
