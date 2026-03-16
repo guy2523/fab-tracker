@@ -3940,31 +3940,29 @@ if mode == "Update Run":
                                 else:
                                     fridge_status = "done"
 
-                                    # flow substep
-                                    new_substeps.append(
-                                        {
-                                            "id": str(uuid.uuid4()),
-                                            "fridge_uid": fridge_uid,
-                                            "label": fridge_label,
-                                            "chips": [
-                                                {
-                                                    "name": "Cooldown",
-                                                    "status": fridge_status,
-                                                    # "started_at": "",
-                                                    # "completed_at": ""
-                                                }
-                                            ],
-                                        }
-                                    )
-
-                                    # metadata
-                                    new_meta[fridge_uid] = {
+                                # flow substep
+                                new_substeps.append(
+                                    {
+                                        "id": str(uuid.uuid4()),
+                                        "fridge_uid": fridge_uid,
                                         "label": fridge_label,
-                                        "cooldown_start": cooldown_start,
-                                        "cooldown_end": cooldown_end,
-                                        "notion": notion_url,
-                                        "notion_page_id": page_id,
+                                        "chips": [
+                                            {
+                                                "name": "Cooldown",
+                                                "status": fridge_status,
+                                            }
+                                        ],
                                     }
+                                )
+
+                                # metadata
+                                new_meta[fridge_uid] = {
+                                    "label": fridge_label,
+                                    "cooldown_start": cooldown_start,
+                                    "cooldown_end": cooldown_end,
+                                    "notion": notion_url,
+                                    "notion_page_id": page_id,
+                                }
 
                             # -----------------------------
                             # Replace Measurement layer
@@ -3982,7 +3980,7 @@ if mode == "Update Run":
                             # 🔹 Auto-select a fridge so Measurement save guard passes
                             if new_substeps:
                                 st.session_state["meas_prev_fridge_uid"] = new_substeps[0]["fridge_uid"]
-                                # st.session_state["meas_selected_fridge_uid"] = new_substeps[0]["fridge_uid"]
+                                st.session_state["meas_selected_fridge_uid"] = new_substeps[0]["fridge_uid"]
 
                             st.write("DEBUG fridges:", new_meta)
                             st.write("DEBUG session:", st.session_state["update_meta"]["measure"]["fridges"])
