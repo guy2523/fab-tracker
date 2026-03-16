@@ -1303,7 +1303,8 @@ def layer_card_html(layer, idx=None, fridge_labels=None, fields=None, layers=Non
                 chips_html = " ".join(substep_chip_html(c) for c in sub["chips"])
 
                 body_html += (
-                    "<div style='flex:1;'>"
+                    # "<div style='flex:1;'>"
+                    "<div style='flex:0 0 90px;'>"
                     f"<div style='font-size:0.80rem; font-weight:600; color:#333;'>{display_name}</div>"
                     f"<div class='layer-chip-container'>{chips_html}</div>"
                     "</div>"
