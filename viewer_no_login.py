@@ -2509,6 +2509,8 @@ for doc in filtered_runs:
 
             if not fridge_labels:
                 st.info("No fridges defined in Measurement flow.")
+                rows = []
+                df = None
             else:
                 rows = []
 
@@ -2642,18 +2644,19 @@ for doc in filtered_runs:
                 # remove helper before display
                 r.pop("_cooldown_start", None)
 
-            st.dataframe(
-                rows,
-                hide_index=True,
-                use_container_width=True,
-                column_config={
-                    "Fridge": st.column_config.LinkColumn(
-                        "Fridge",
-                        display_text=r".*#(.*)",
-                    ),
-                    "Notion": st.column_config.LinkColumn(
-                        "Notion",
-                        display_text=r".*#(.*)",
-                    ),
-                },
-            )
+            if rows:
+                st.dataframe(
+                    rows,
+                    hide_index=True,
+                    use_container_width=True,
+                    column_config={
+                        "Fridge": st.column_config.LinkColumn(
+                            "Fridge",
+                            display_text=r".*#(.*)",
+                        ),
+                        "Notion": st.column_config.LinkColumn(
+                            "Notion",
+                            display_text=r".*#(.*)",
+                        ),
+                    },
+                )
