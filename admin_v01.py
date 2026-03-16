@@ -22,6 +22,14 @@ import notion_client
 import inspect
 import uuid
 
+# ----------------------------------------
+# health check for uptime monitoring
+# ----------------------------------------
+if st.query_params.get("health") == "1":
+    st.write("ok")
+    st.stop()
+
+
 # optional card CSS (unused directly but kept for consistency)
 st.markdown(
     """
@@ -3870,7 +3878,7 @@ if mode == "Update Run":
 
                     else:  # measurement
                         # st.info("Measurement Notion content will be added later.")
-                        if st.button("Sync Measurement from Notion"):
+                        if st.button("Sync Measurement"):
 
                             notion_token = st.secrets["notion"]["NOTION_TOKEN"]
 
