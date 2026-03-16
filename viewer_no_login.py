@@ -797,7 +797,9 @@ def parse_layers(fields):
         layer_name = f["layer_name"]["stringValue"]
         progress = get_num(f.get("progress", {}), 0)
 
-        sub_raw = f["substeps"]["arrayValue"]["values"]
+        # sub_raw = f["substeps"]["arrayValue"]["values"]
+        sub_raw = f.get("substeps", {}).get("arrayValue", {}).get("values", [])
+
         substeps = []
 
         for sv in sub_raw:
