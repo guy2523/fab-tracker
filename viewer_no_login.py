@@ -2508,7 +2508,8 @@ for doc in filtered_runs:
 
 
             if not fridge_labels:
-                st.info("No fridges defined in Measurement flow.")
+                # st.info("No fridges defined in Measurement flow.")
+                st.info("No fridges are added.")
                 rows = []
                 df = None
             else:
