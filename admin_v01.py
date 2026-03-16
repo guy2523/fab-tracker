@@ -3950,8 +3950,8 @@ if mode == "Update Run":
                                                 {
                                                     "name": "Cooldown",
                                                     "status": fridge_status,
-                                                    "started_at": "",
-                                                    "completed_at": ""
+                                                    # "started_at": "",
+                                                    # "completed_at": ""
                                                 }
                                             ],
                                         }
