@@ -1224,6 +1224,9 @@ def layer_card_html(layer, idx=None, fridge_labels=None, fields=None, layers=Non
 
     elif is_measure:
 
+        # remove deleted fridges
+        substeps = [s for s in substeps if s.get("fridge_uid") in (fridge_labels or {})]
+
         # Measurement: NEW 3-column grid
         for i in range(0, len(substeps), 3):
 
