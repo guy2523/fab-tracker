@@ -481,15 +481,15 @@ if mode == "Delete Run":
                             if isinstance(pid, str) and pid.strip():
                                 notion_page_ids.add(pid.strip())
 
-                    # 2) Measurement fridge pages (canonical notion_page_id)
-                    fridges = (meta_py.get("measure", {}) or {}).get("fridges", {}) or {}
-                    if isinstance(fridges, dict):
-                        for _uid, fr in fridges.items():
-                            if not isinstance(fr, dict):
-                                continue
-                            pid = (fr.get("notion_page_id") or "").strip()
-                            if pid:
-                                notion_page_ids.add(pid)
+                    # # 2) Measurement fridge pages (canonical notion_page_id)
+                    # fridges = (meta_py.get("measure", {}) or {}).get("fridges", {}) or {}
+                    # if isinstance(fridges, dict):
+                    #     for _uid, fr in fridges.items():
+                    #         if not isinstance(fr, dict):
+                    #             continue
+                    #         pid = (fr.get("notion_page_id") or "").strip()
+                    #         if pid:
+                    #             notion_page_ids.add(pid)
 
                     # 3) Archive each page (best-effort; do not block run delete)
                     for pid in sorted(notion_page_ids):
