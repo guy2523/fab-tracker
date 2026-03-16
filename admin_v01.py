@@ -3892,33 +3892,6 @@ if mode == "Update Run":
                             iceox_rel = props.get("IceOx Cooldowns", {}).get("relation", [])
                             bf_rel = props.get("Bluefors cooldowns", {}).get("relation", [])
 
-                            # cooldown_pages = []
-
-                            # for r in iceox_rel:
-                            #     cooldown_pages.append(("ICEOxford", r["id"]))
-
-                            # for r in bf_rel:
-                            #     cooldown_pages.append(("Bluefors", r["id"]))
-
-                            # # -----------------------------
-                            # # Build Measurement flow
-                            # # -----------------------------
-
-                            # new_substeps = []
-                            # new_meta = {}
-                            # cooldown_pages_data = []
-
-                            # for fridge_label, pid in cooldown_pages:
-                            #     page = get_cooldown_page(
-                            #         notion_token=notion_token,
-                            #         page_id=pid,
-                            #     )
-                            #     cooldown_pages_data.append((fridge_label, page))
-
-                            # cooldown_pages_data.sort(
-                            #     key=lambda x: x[1].get("cooldown_start") or ""
-                            # )
-
                             # -----------------------------
                             # Build Measurement flow
                             # -----------------------------
@@ -3950,7 +3923,8 @@ if mode == "Update Run":
 
                             for fridge_label, page in cooldown_pages_data:
                                 page_id = page["page_id"]
-                                fridge_uid = f"fridge_{page_id.replace('-', '')[:8]}"
+                                # fridge_uid = f"fridge_{page_id.replace('-', '')[:8]}"
+                                fridge_uid = f"fridge_{page_id.replace('-', '')}"
 
                                 cooldown_start = page.get("cooldown_start", "")
                                 cooldown_end = page.get("cooldown_end", "")
