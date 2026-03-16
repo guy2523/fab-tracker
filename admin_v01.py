@@ -3158,7 +3158,8 @@ if mode == "Update Run":
                             key_prefix=f"{stage_key}_status",
                         )
 
-                if target_meta != "measure":
+                # if target_meta != "measure":
+                if True:
 
                     with sub_details:
                         # ✅ Option A: Lotid is Design-owned → hide Lotid field in FAB details UI
