@@ -3982,7 +3982,7 @@ if mode == "Update Run":
                             # 🔹 Auto-select a fridge so Measurement save guard passes
                             if new_substeps:
                                 st.session_state["meas_prev_fridge_uid"] = new_substeps[0]["fridge_uid"]
-                                st.session_state["meas_selected_fridge_uid"] = new_substeps[0]["fridge_uid"]
+                                # st.session_state["meas_selected_fridge_uid"] = new_substeps[0]["fridge_uid"]
 
                             st.write("DEBUG fridges:", new_meta)
                             st.write("DEBUG session:", st.session_state["update_meta"]["measure"]["fridges"])
