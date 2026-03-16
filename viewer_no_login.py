@@ -1224,8 +1224,26 @@ def layer_card_html(layer, idx=None, fridge_labels=None, fields=None, layers=Non
 
     elif is_measure:
 
-        # remove deleted fridges
-        substeps = [s for s in substeps if s.get("fridge_uid") in (fridge_labels or {})]
+        # remove fridges that no longer exist in Firebase metadata.measure.fridges
+        measure_fridge_fields = (
+            (fields or {})
+            .get("metadata", {})
+            .get("mapValue", {})
+            .get("fields", {})
+            .get("measure", {})
+            .get("mapValue", {})
+            .get("fields", {})
+            .get("fridges", {})
+            .get("mapValue", {})
+            .get("fields", {})
+        )
+
+        live_fridge_uids = set(measure_fridge_fields.keys())
+
+        substeps = [
+            s for s in substeps
+            if s.get("fridge_uid") in live_fridge_uids
+        ]
 
         # Measurement: NEW 3-column grid
         for i in range(0, len(substeps), 3):
