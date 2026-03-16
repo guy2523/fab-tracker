@@ -3889,8 +3889,20 @@ if mode == "Update Run":
 
                             props = fab_page.get("properties", {})
 
-                            iceox_rel = props.get("IceOx Cooldowns", {}).get("relation", [])
-                            bf_rel = props.get("Bluefors cooldowns", {}).get("relation", [])
+                            # iceox_rel = props.get("IceOx Cooldowns", {}).get("relation", [])
+                            # bf_rel = props.get("Bluefors cooldowns", {}).get("relation", [])
+
+                            iceox_rel = (
+                                props.get("IceOx Cooldowns")
+                                or props.get("Cooldowns")
+                                or {}
+                            ).get("relation", [])
+
+                            bf_rel = (
+                                props.get("Bluefors cooldowns")
+                                or props.get("Bluefors Cooldown")
+                                or {}
+                            ).get("relation", [])
 
                             # -----------------------------
                             # Build Measurement flow
