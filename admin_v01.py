@@ -3924,7 +3924,7 @@ if mode == "Update Run":
                             for fridge_label, page in cooldown_pages_data:
                                 page_id = page["page_id"]
                                 # fridge_uid = f"fridge_{page_id.replace('-', '')[:8]}"
-                                fridge_uid = f"fridge_{page_id.replace('-', '')}"
+                                fridge_uid = f"fridge_{page_id.replace('-', '')[:12]}"
 
                                 cooldown_start = page.get("cooldown_start", "")
                                 cooldown_end = page.get("cooldown_end", "")
