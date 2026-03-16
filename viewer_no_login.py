@@ -1222,7 +1222,14 @@ def layer_card_html(layer, idx=None, fridge_labels=None, fields=None, layers=Non
             body_html += "</div>"
 
 
+    # elif is_measure:
+
+    #     # Measurement: NEW 3-column grid
+    #     for i in range(0, len(substeps), 3):
     elif is_measure:
+
+        # remove empty / orphan fridges (e.g. removed notion relation)
+        substeps = [s for s in substeps if s.get("fridge_uid")]
 
         # Measurement: NEW 3-column grid
         for i in range(0, len(substeps), 3):
