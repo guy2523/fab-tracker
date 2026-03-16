@@ -1178,7 +1178,7 @@ def layer_card_html(layer, idx=None, fridge_labels=None, fields=None, layers=Non
     # substeps expanded
     body_html = ""
     is_package = layer["layer_name"].lower() == "package"
-
+    is_measure = layer["layer_name"].lower() == "measurement"
 
     if is_package:
         # -----------------------------
@@ -1218,6 +1218,35 @@ def layer_card_html(layer, idx=None, fridge_labels=None, fields=None, layers=Non
                 )
 
             body_html += "</div>"
+
+
+        elif is_measure:
+
+            # Measurement: NEW 3-column grid
+            for i in range(0, len(substeps), 3):
+
+                body_html += "<div style='display:flex; gap:14px; margin-top:4px;'>"
+
+                for sub in substeps[i:i+3]:
+
+                    sub_name = sub.get("label") or sub.get("name") or "Unknown"
+                    fridge_uid = sub.get("fridge_uid")
+
+                    display_name = sub_name
+                    if fridge_labels and fridge_uid and fridge_uid in fridge_labels:
+                        display_name = fridge_labels[fridge_uid]
+
+                    chips_html = " ".join(substep_chip_html(c) for c in sub["chips"])
+
+                    body_html += (
+                        "<div style='flex:1;'>"
+                        f"<div style='font-size:0.80rem; font-weight:600; color:#333;'>{display_name}</div>"
+                        f"<div class='layer-chip-container'>{chips_html}</div>"
+                        "</div>"
+                    )
+
+                body_html += "</div>"
+
 
     else:
         # --------------------------------
