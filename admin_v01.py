@@ -3930,41 +3930,41 @@ if mode == "Update Run":
                                 cooldown_end = page.get("cooldown_end", "")
                                 notion_url = page.get("url", "")
 
-                            # ---------------------------------
-                            # Determine fridge status
-                            # ---------------------------------
-                            if not cooldown_start and not cooldown_end:
-                                fridge_status = "pending"
-                            elif cooldown_start and not cooldown_end:
-                                fridge_status = "in_progress"
-                            else:
-                                fridge_status = "done"
+                                # ---------------------------------
+                                # Determine fridge status
+                                # ---------------------------------
+                                if not cooldown_start and not cooldown_end:
+                                    fridge_status = "pending"
+                                elif cooldown_start and not cooldown_end:
+                                    fridge_status = "in_progress"
+                                else:
+                                    fridge_status = "done"
 
-                                # flow substep
-                                new_substeps.append(
-                                    {
-                                        "id": str(uuid.uuid4()),
-                                        "fridge_uid": fridge_uid,
+                                    # flow substep
+                                    new_substeps.append(
+                                        {
+                                            "id": str(uuid.uuid4()),
+                                            "fridge_uid": fridge_uid,
+                                            "label": fridge_label,
+                                            "chips": [
+                                                {
+                                                    "name": "Cooldown",
+                                                    "status": fridge_status,
+                                                    "started_at": "",
+                                                    "completed_at": ""
+                                                }
+                                            ],
+                                        }
+                                    )
+
+                                    # metadata
+                                    new_meta[fridge_uid] = {
                                         "label": fridge_label,
-                                        "chips": [
-                                            {
-                                                "name": "Cooldown",
-                                                "status": fridge_status,
-                                                "started_at": "",
-                                                "completed_at": ""
-                                            }
-                                        ],
+                                        "cooldown_start": cooldown_start,
+                                        "cooldown_end": cooldown_end,
+                                        "notion": notion_url,
+                                        "notion_page_id": page_id,
                                     }
-                                )
-
-                                # metadata
-                                new_meta[fridge_uid] = {
-                                    "label": fridge_label,
-                                    "cooldown_start": cooldown_start,
-                                    "cooldown_end": cooldown_end,
-                                    "notion": notion_url,
-                                    "notion_page_id": page_id,
-                                }
 
                             # -----------------------------
                             # Replace Measurement layer
