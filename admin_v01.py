@@ -3930,6 +3930,16 @@ if mode == "Update Run":
                                 cooldown_end = page.get("cooldown_end", "")
                                 notion_url = page.get("url", "")
 
+                            # ---------------------------------
+                            # Determine fridge status
+                            # ---------------------------------
+                            if not cooldown_start and not cooldown_end:
+                                fridge_status = "pending"
+                            elif cooldown_start and not cooldown_end:
+                                fridge_status = "in_progress"
+                            else:
+                                fridge_status = "done"
+
                                 # flow substep
                                 new_substeps.append(
                                     {
@@ -3939,7 +3949,7 @@ if mode == "Update Run":
                                         "chips": [
                                             {
                                                 "name": "Cooldown",
-                                                "status": "done"
+                                                "status": fridge_status
                                             }
                                         ],
                                     }
