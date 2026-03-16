@@ -1245,16 +1245,53 @@ def layer_card_html(layer, idx=None, fridge_labels=None, fields=None, layers=Non
             if s.get("fridge_uid") in live_fridge_uids
         ]
 
-        st.write("DEBUG live_fridge_uids:", live_fridge_uids)
-        st.write("DEBUG measure substeps:", [(s.get("fridge_uid"), s.get("label"), s.get("name")) for s in substeps])
+        # # Measurement: NEW 3-column grid
+        # for i in range(0, len(substeps), 3):
 
-        # Measurement: NEW 3-column grid
+        #     # body_html += "<div style='display:flex; gap:14px; margin-top:4px;'>"
+        #     body_html += "<div style='display:flex; gap:14px; margin-top:4px; width:fit-content;'>"
+
+        #     # for sub in substeps[i:i+3]:
+        #     row = substeps[i:i+3]
+
+        #     # fill missing columns so layout always has 3 slots
+        #     while len(row) < 3:
+        #         row.append(None)
+
+        #     for sub in row:
+
+        #         sub_name = sub.get("label") or sub.get("name") or "Unknown"
+        #         fridge_uid = sub.get("fridge_uid")
+
+        #         display_name = sub_name
+        #         if fridge_labels and fridge_uid and fridge_uid in fridge_labels:
+        #             display_name = fridge_labels[fridge_uid]
+
+        #         chips_html = " ".join(substep_chip_html(c) for c in sub["chips"])
+
+        #         body_html += (
+        #             # "<div style='flex:1;'>"
+        #             "<div style='flex:0 0 auto; min-width:90px;'>"
+        #             f"<div style='font-size:0.80rem; font-weight:600; color:#333;'>{display_name}</div>"
+        #             f"<div class='layer-chip-container'>{chips_html}</div>"
+        #             "</div>"
+        #         )
+
+        #     body_html += "</div>"
         for i in range(0, len(substeps), 3):
 
-            # body_html += "<div style='display:flex; gap:14px; margin-top:4px;'>"
-            body_html += "<div style='display:flex; gap:14px; margin-top:4px; width:fit-content;'>"
+            body_html += "<div style='display:flex; gap:14px; margin-top:4px;'>"
 
-            for sub in substeps[i:i+3]:
+            row = substeps[i:i+3]
+
+            while len(row) < 3:
+                row.append(None)
+
+            for sub in row:
+
+                if sub is None:
+                    body_html += "<div style='flex:1;'></div>"
+                    continue
 
                 sub_name = sub.get("label") or sub.get("name") or "Unknown"
                 fridge_uid = sub.get("fridge_uid")
@@ -1266,8 +1303,7 @@ def layer_card_html(layer, idx=None, fridge_labels=None, fields=None, layers=Non
                 chips_html = " ".join(substep_chip_html(c) for c in sub["chips"])
 
                 body_html += (
-                    # "<div style='flex:1;'>"
-                    "<div style='flex:0 0 auto; min-width:90px;'>"
+                    "<div style='flex:1;'>"
                     f"<div style='font-size:0.80rem; font-weight:600; color:#333;'>{display_name}</div>"
                     f"<div class='layer-chip-container'>{chips_html}</div>"
                     "</div>"
