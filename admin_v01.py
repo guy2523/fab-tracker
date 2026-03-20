@@ -1533,7 +1533,7 @@ if mode == "Update Run":
             unsafe_allow_html=True
         )
 
-        st.markdown("---")
+        st.write(" ")
 
 
         # 👇 EVERYTHING BELOW MUST BE INDENTED under this else:
