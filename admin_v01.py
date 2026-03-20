@@ -399,49 +399,40 @@ if mode == "Delete Run":
                 if delete_id.strip() == "":
                     st.error("Please enter a valid Run ID.")
          
-                # snap = firestore_get("runs", doc_id, id_token)
-                # if not snap or "fields" not in snap:
-                #     st.error(f"{delete_class} run '{delete_id}' does not exist.")
-
-
-                # else:
-                #     st.session_state["confirm_delete_run"] = True
-                #     st.rerun()
-
                 snap = firestore_get("runs", doc_id, id_token)
                 if not snap or "fields" not in snap:
                     st.error(f"{delete_class} run '{delete_id}' does not exist.")
 
                 else:
-                    fields = snap.get("fields", {})
+                    # fields = snap.get("fields", {})
 
-                    # ----------------------------------------
-                    # Run summary preview (before delete confirm)
-                    # ----------------------------------------
-                    meta_fields = fields.get("metadata", {}).get("mapValue", {}).get("fields", {})
-                    design_meta = firestore_to_python(meta_fields.get("design", []))
+                    # # ----------------------------------------
+                    # # Run summary preview (before delete confirm)
+                    # # ----------------------------------------
+                    # meta_fields = fields.get("metadata", {}).get("mapValue", {}).get("fields", {})
+                    # design_meta = firestore_to_python(meta_fields.get("design", []))
 
-                    def _get_meta_val(meta_list, key):
-                        key_l = key.strip().lower()
-                        for it in (meta_list or []):
-                            if (it.get("key") or "").strip().lower() == key_l:
-                                return (it.get("value") or "").strip()
-                        return ""
+                    # def _get_meta_val(meta_list, key):
+                    #     key_l = key.strip().lower()
+                    #     for it in (meta_list or []):
+                    #         if (it.get("key") or "").strip().lower() == key_l:
+                    #             return (it.get("value") or "").strip()
+                    #     return ""
 
-                    lot_id = _get_meta_val(design_meta, "Lotid") or "-"
-                    device = fields.get("device_name", {}).get("stringValue", "-")
+                    # lot_id = _get_meta_val(design_meta, "Lotid") or "-"
+                    # device = fields.get("device_name", {}).get("stringValue", "-")
 
-                    st.markdown(
-                        f"""
-                        <div style='margin-top:6px; font-size:1rem; color:#333;'>
-                            <b>Class:</b> {delete_class} Device &nbsp;&nbsp;&nbsp;
-                            <b>No:</b> {delete_id} &nbsp;&nbsp;&nbsp;
-                            <b>Device:</b> {device} &nbsp;&nbsp;&nbsp;
-                            <b>Lot ID:</b> {lot_id}
-                        </div>
-                        """,
-                        unsafe_allow_html=True
-                    )
+                    # st.markdown(
+                    #     f"""
+                    #     <div style='margin-top:6px; font-size:1rem; color:#333;'>
+                    #         <b>Class:</b> {delete_class} Device &nbsp;&nbsp;&nbsp;
+                    #         <b>No:</b> {delete_id} &nbsp;&nbsp;&nbsp;
+                    #         <b>Device:</b> {device} &nbsp;&nbsp;&nbsp;
+                    #         <b>Lot ID:</b> {lot_id}
+                    #     </div>
+                    #     """,
+                    #     unsafe_allow_html=True
+                    # )
 
                     st.session_state["confirm_delete_run"] = True
                     st.rerun()
@@ -453,10 +444,43 @@ if mode == "Delete Run":
         # -------------------------------
         else:
             # ⚠️ WARNING MUST LIVE HERE
+
+            # ----------------------------------------
+            # Fetch run info (safe here — survives rerun)
+            # ----------------------------------------
+            snap = firestore_get("runs", doc_id, id_token)
+            fields = snap.get("fields", {}) if snap else {}
+
+            meta_fields = fields.get("metadata", {}).get("mapValue", {}).get("fields", {})
+            design_meta = firestore_to_python(meta_fields.get("design", []))
+
+            def _get_meta_val(meta_list, key):
+                key_l = key.strip().lower()
+                for it in (meta_list or []):
+                    if (it.get("key") or "").strip().lower() == key_l:
+                        return (it.get("value") or "").strip()
+                return ""
+
+            lot_id = _get_meta_val(design_meta, "Lotid") or "-"
+            device = fields.get("device_name", {}).get("stringValue", "-")
+
+            # ----------------------------------------
+            # Enhanced warning (THIS is what user sees)
+            # ----------------------------------------
             st.warning(
-                f"⚠️ This will permanently delete Run '{delete_class}' '{delete_id}'. "
-                "This action cannot be undone."
+                f"""⚠️ This will permanently delete:
+
+            Run: {delete_class} {delete_id}
+            Device: {device}
+            Lot ID: {lot_id}
+
+            This action cannot be undone."""
             )
+
+            # st.warning(
+            #     f"⚠️ This will permanently delete Run '{delete_class}' '{delete_id}'. "
+            #     "This action cannot be undone."
+            # )
 
             c1, c2 = st.columns(2)
 
