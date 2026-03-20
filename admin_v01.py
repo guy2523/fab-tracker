@@ -1515,6 +1515,9 @@ if mode == "Update Run":
                     return (it.get("value") or "").strip()
             return ""
 
+        run_no = loaded_run_no
+        run_class = st.session_state.get("loaded_run_class", "")
+
         lot_id = _get_meta_val(design_meta, "Lotid") or "-"
         device = fields.get("device_name", {}).get("stringValue", "-")
 
