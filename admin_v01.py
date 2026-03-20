@@ -1520,13 +1520,15 @@ if mode == "Update Run":
 
         st.markdown(
             f"""
-            <div style='margin-top:6px; font-size:0.95rem; color:#333;'>
+            <div style='margin-top:6px; font-size:1rem; color:#333;'>
                 <b>Lot ID:</b> {lot_id} &nbsp;&nbsp;&nbsp;
                 <b>Device:</b> {device}
             </div>
             """,
             unsafe_allow_html=True
         )
+
+        st.write(" ")
 
 
         # 👇 EVERYTHING BELOW MUST BE INDENTED under this else:
