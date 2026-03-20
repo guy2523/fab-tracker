@@ -470,8 +470,9 @@ if mode == "Delete Run":
             st.warning(
                 f"""⚠️ This will permanently delete:
 
-            Run: {delete_class} {delete_id}
-            Device: {device}
+            No: {delete_id}
+            Class: {delete_class} Device
+            Name: {device}
             Lot ID: {lot_id}
 
             This action cannot be undone."""
