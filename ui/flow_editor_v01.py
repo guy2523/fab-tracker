@@ -136,12 +136,46 @@ def flow_editor(layer_filter=None, ui_mode = "expander"):
 
             #     display_map[slot_idx] = new_name
 
+            # # --- NEW: rename preset (with edit toggle) ---
+            # if preset_choice != "Default":
+
+            #     slot_idx = str(int(preset_choice))  # "0".."4"
+
+            #     edit_flag_key = f"edit_name_mode_{layer_label}"
+            #     if edit_flag_key not in st.session_state:
+            #         st.session_state[edit_flag_key] = False
+
+            #     current_name = display_map.get(
+            #         slot_idx,
+            #         f"Preset {int(preset_choice)+1}"
+            #     )
+
+            #     # --- Edit button ---
+            #     if st.button(
+            #         "Edit Name",
+            #         key=f"edit_btn_{layer_label}_{slot_idx}"
+            #     ):
+            #         st.session_state[edit_flag_key] = True
+
+            #     # --- Show input ONLY when editing ---
+            #     if st.session_state[edit_flag_key]:
+
+            #         new_name = st.text_input(
+            #             "Preset name",
+            #             value=current_name,
+            #             key=f"rename_{layer_label}_{slot_idx}",
+            #             label_visibility="collapsed",
+            #         )
+
+            #         display_map[slot_idx] = new_name
+
             # --- NEW: rename preset (with edit toggle) ---
             if preset_choice != "Default":
 
                 slot_idx = str(int(preset_choice))  # "0".."4"
 
-                edit_flag_key = f"edit_name_mode_{layer_label}"
+                # edit mode must be tied to the selected slot, not only the layer
+                edit_flag_key = f"edit_name_mode_{layer_label}_{slot_idx}"
                 if edit_flag_key not in st.session_state:
                     st.session_state[edit_flag_key] = False
 
@@ -222,7 +256,7 @@ def flow_editor(layer_filter=None, ui_mode = "expander"):
 
                 if st.button("Save Preset", key=f"save_preset_btn_{layer_idx}", disabled=save_disabled):
 
-                    st.session_state[f"edit_name_mode_{layer_label}"] = False
+                    st.session_state[f"edit_name_mode_{layer_label}_{slot_idx}"] = False
 
                     layer_name = layer["layer_name"]
 
