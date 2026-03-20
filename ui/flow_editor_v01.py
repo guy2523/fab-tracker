@@ -123,47 +123,17 @@ def flow_editor(layer_filter=None, ui_mode = "expander"):
 
                 if preset_choice != "Default":
 
-                    slot_idx = str(int(preset_choice))  # "0".."4"
+                    slot_idx = str(int(preset_choice))
 
-                    # --- reset edit mode when switching presets ---
-                    current_slot_key = f"current_edit_slot_{layer_label}"
-                    prev_slot = st.session_state.get(current_slot_key)
-
-                    if prev_slot != slot_idx:
-                        # reset all edit flags for this layer
-                        for i in range(5):
-                            st.session_state[f"edit_name_mode_{layer_label}_{i}"] = False
-
-                    st.session_state[current_slot_key] = slot_idx
-
-                    # edit mode must be tied to the selected slot, not only the layer
                     edit_flag_key = f"edit_name_mode_{layer_label}_{slot_idx}"
                     if edit_flag_key not in st.session_state:
                         st.session_state[edit_flag_key] = False
 
-                    current_name = display_map.get(
-                        slot_idx,
-                        f"Preset {int(preset_choice)+1}"
-                    )
-
-                    # --- Edit button ---
                     if st.button(
                         "Edit Name",
                         key=f"edit_btn_{layer_label}_{slot_idx}"
                     ):
                         st.session_state[edit_flag_key] = True
-
-                    # --- Show input ONLY when editing ---
-                    if st.session_state[edit_flag_key]:
-
-                        new_name = st.text_input(
-                            "Preset name",
-                            value=current_name,
-                            key=f"rename_{layer_label}_{slot_idx}",
-                            label_visibility="collapsed",
-                        )
-
-                        display_map[slot_idx] = new_name
 
 
 
@@ -210,6 +180,28 @@ def flow_editor(layer_filter=None, ui_mode = "expander"):
                     st.caption("Active: Default")
 
             st.write("")
+            
+            # --- rename input (ONLY after clicking Edit Name) ---
+            if preset_choice != "Default":
+
+                slot_idx = str(int(preset_choice))
+                edit_flag_key = f"edit_name_mode_{layer_label}_{slot_idx}"
+
+                current_name = display_map.get(
+                    slot_idx,
+                    f"Preset {int(preset_choice)+1}"
+                )
+
+                if st.session_state.get(edit_flag_key, False):
+
+                    new_name = st.text_input(
+                        "Preset name",
+                        value=current_name,
+                        key=f"rename_{layer_label}_{slot_idx}",
+                        label_visibility="collapsed",
+                    )
+
+                    display_map[slot_idx] = new_name
 
 
             with preset_row[3]:
