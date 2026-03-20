@@ -87,8 +87,8 @@ def flow_editor(layer_filter=None, ui_mode = "expander"):
 
 
             # preset_row = st.columns([0.20, 0.15, 0.15, 0.15])
-            preset_row = st.columns([0.25, 0.15, 0.35, 0.25])
-
+            # preset_row = st.columns([0.25, 0.15, 0.35, 0.25])
+            preset_row = st.columns([0.25, 0.15, 0.15, 0.25, 0.20])
 
             # ------------------------------
             # Load Preset (dropdown + Apply)
@@ -117,91 +117,42 @@ def flow_editor(layer_filter=None, ui_mode = "expander"):
                     label_visibility="collapsed",
                 )
 
-            # --- NEW: rename preset ---
-            # if preset_choice != "Default":
-
-            #     slot_idx = str(int(preset_choice))  # "0".."4"
-
-            #     current_name = display_map.get(
-            #         slot_idx,
-            #         f"Preset {int(preset_choice)+1}"
-            #     )
-
-            #     new_name = st.text_input(
-            #         "Preset name",
-            #         value=current_name,
-            #         key=f"rename_{layer_label}_{slot_idx}",
-            #         label_visibility="collapsed",
-            #     )
-
-            #     display_map[slot_idx] = new_name
-
-            # # --- NEW: rename preset (with edit toggle) ---
-            # if preset_choice != "Default":
-
-            #     slot_idx = str(int(preset_choice))  # "0".."4"
-
-            #     edit_flag_key = f"edit_name_mode_{layer_label}"
-            #     if edit_flag_key not in st.session_state:
-            #         st.session_state[edit_flag_key] = False
-
-            #     current_name = display_map.get(
-            #         slot_idx,
-            #         f"Preset {int(preset_choice)+1}"
-            #     )
-
-            #     # --- Edit button ---
-            #     if st.button(
-            #         "Edit Name",
-            #         key=f"edit_btn_{layer_label}_{slot_idx}"
-            #     ):
-            #         st.session_state[edit_flag_key] = True
-
-            #     # --- Show input ONLY when editing ---
-            #     if st.session_state[edit_flag_key]:
-
-            #         new_name = st.text_input(
-            #             "Preset name",
-            #             value=current_name,
-            #             key=f"rename_{layer_label}_{slot_idx}",
-            #             label_visibility="collapsed",
-            #         )
-
-            #         display_map[slot_idx] = new_name
 
             # --- NEW: rename preset (with edit toggle) ---
-            if preset_choice != "Default":
+            with preset_row[2]:
 
-                slot_idx = str(int(preset_choice))  # "0".."4"
+                if preset_choice != "Default":
 
-                # edit mode must be tied to the selected slot, not only the layer
-                edit_flag_key = f"edit_name_mode_{layer_label}_{slot_idx}"
-                if edit_flag_key not in st.session_state:
-                    st.session_state[edit_flag_key] = False
+                    slot_idx = str(int(preset_choice))  # "0".."4"
 
-                current_name = display_map.get(
-                    slot_idx,
-                    f"Preset {int(preset_choice)+1}"
-                )
+                    # edit mode must be tied to the selected slot, not only the layer
+                    edit_flag_key = f"edit_name_mode_{layer_label}_{slot_idx}"
+                    if edit_flag_key not in st.session_state:
+                        st.session_state[edit_flag_key] = False
 
-                # --- Edit button ---
-                if st.button(
-                    "Edit Name",
-                    key=f"edit_btn_{layer_label}_{slot_idx}"
-                ):
-                    st.session_state[edit_flag_key] = True
-
-                # --- Show input ONLY when editing ---
-                if st.session_state[edit_flag_key]:
-
-                    new_name = st.text_input(
-                        "Preset name",
-                        value=current_name,
-                        key=f"rename_{layer_label}_{slot_idx}",
-                        label_visibility="collapsed",
+                    current_name = display_map.get(
+                        slot_idx,
+                        f"Preset {int(preset_choice)+1}"
                     )
 
-                    display_map[slot_idx] = new_name
+                    # --- Edit button ---
+                    if st.button(
+                        "Edit Name",
+                        key=f"edit_btn_{layer_label}_{slot_idx}"
+                    ):
+                        st.session_state[edit_flag_key] = True
+
+                    # --- Show input ONLY when editing ---
+                    if st.session_state[edit_flag_key]:
+
+                        new_name = st.text_input(
+                            "Preset name",
+                            value=current_name,
+                            key=f"rename_{layer_label}_{slot_idx}",
+                            label_visibility="collapsed",
+                        )
+
+                        display_map[slot_idx] = new_name
 
 
 
@@ -241,7 +192,7 @@ def flow_editor(layer_filter=None, ui_mode = "expander"):
 
 
             # Optional: show active preset status (replaces ✅ on buttons)
-            with preset_row[3]:
+            with preset_row[4]:
                 if active_idx is not None:
                     st.caption(f"Active: {preset_names[active_idx]}")
                 else:
@@ -250,7 +201,7 @@ def flow_editor(layer_filter=None, ui_mode = "expander"):
             st.write("")
 
 
-            with preset_row[2]:
+            with preset_row[3]:
                 # Disable save if Default is selected
                 save_disabled = (preset_choice == "Default")
 
