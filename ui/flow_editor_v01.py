@@ -73,7 +73,18 @@ def flow_editor(layer_filter=None, ui_mode = "expander"):
             # ---------------------------
             # UNIVERSAL PRESET BAR
             # ---------------------------
-            preset_names = [f"Preset {i}" for i in range(1, 6)]
+            # preset_names = [f"Preset {i}" for i in range(1, 6)]
+            # --- NEW: editable preset names ---
+            if "preset_display_names" not in st.session_state:
+                st.session_state["preset_display_names"] = {}
+
+            display_map = st.session_state["preset_display_names"].setdefault(layer_label, {})
+
+            preset_names = [
+                display_map.get(str(i), f"Preset {i+1}")
+                for i in range(5)
+            ]
+
 
             # preset_row = st.columns([0.20, 0.15, 0.15, 0.15])
             preset_row = st.columns([0.25, 0.15, 0.35, 0.25])
@@ -105,6 +116,25 @@ def flow_editor(layer_filter=None, ui_mode = "expander"):
                     key=f"load_preset_choice_{layer_idx}",
                     label_visibility="collapsed",
                 )
+
+            # --- NEW: rename preset ---
+            if preset_choice != "Default":
+
+                slot_idx = str(int(preset_choice))  # "0".."4"
+
+                current_name = display_map.get(
+                    slot_idx,
+                    f"Preset {int(preset_choice)+1}"
+                )
+
+                new_name = st.text_input(
+                    "Preset name",
+                    value=current_name,
+                    key=f"rename_{layer_label}_{slot_idx}",
+                    label_visibility="collapsed",
+                )
+
+                display_map[slot_idx] = new_name
 
 
             with preset_row[1]:
