@@ -4,7 +4,7 @@ from firebase_client import (
     firestore_to_python,   # needed by load_layer_presets_once
 )
 
-
+import streamlit as st
 
 def load_layer_presets_once(session_state, id_token, default_flow):
 
@@ -41,10 +41,30 @@ def load_layer_presets_once(session_state, id_token, default_flow):
     session_state["layer_presets_loaded"] = True
 
 
+# def save_layer_preset(layer_name, slot_idx, substeps, id_token):
+#     data = {"substeps": substeps}
+
+#     # slot_idx is "0".."4" or 0..4
+#     i = int(slot_idx) + 1
+#     doc_id = f"{layer_name}_preset{i}"
+
+#     return firestore_set("layer_presets", doc_id, data, id_token=id_token)
 
 
 def save_layer_preset(layer_name, slot_idx, substeps, id_token):
-    data = {"substeps": substeps}
+
+    # --- NEW: get display name from session_state ---
+    display_name = (
+        st.session_state
+        .get("preset_display_names", {})
+        .get(layer_name, {})
+        .get(str(slot_idx), f"Preset {int(slot_idx)+1}")
+    )
+
+    data = {
+        "substeps": substeps,
+        "display_name": display_name,   # <-- NEW FIELD
+    }
 
     # slot_idx is "0".."4" or 0..4
     i = int(slot_idx) + 1
