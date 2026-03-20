@@ -125,6 +125,17 @@ def flow_editor(layer_filter=None, ui_mode = "expander"):
 
                     slot_idx = str(int(preset_choice))  # "0".."4"
 
+                    # --- reset edit mode when switching presets ---
+                    current_slot_key = f"current_edit_slot_{layer_label}"
+                    prev_slot = st.session_state.get(current_slot_key)
+
+                    if prev_slot != slot_idx:
+                        # reset all edit flags for this layer
+                        for i in range(5):
+                            st.session_state[f"edit_name_mode_{layer_label}_{i}"] = False
+
+                    st.session_state[current_slot_key] = slot_idx
+
                     # edit mode must be tied to the selected slot, not only the layer
                     edit_flag_key = f"edit_name_mode_{layer_label}_{slot_idx}"
                     if edit_flag_key not in st.session_state:
