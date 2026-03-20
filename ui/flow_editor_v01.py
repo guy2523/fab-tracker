@@ -120,23 +120,6 @@ def flow_editor(layer_filter=None, ui_mode = "expander"):
                 )
 
 
-            # --- NEW: rename preset (with edit toggle) ---
-            # with preset_row[2]:
-
-            #     if preset_choice != "Default":
-
-            #         slot_idx = str(int(preset_choice))
-
-            #         edit_flag_key = f"edit_name_mode_{layer_label}_{slot_idx}"
-            #         if edit_flag_key not in st.session_state:
-            #             st.session_state[edit_flag_key] = False
-
-            #         if st.button(
-            #             "Edit Name",
-            #             key=f"edit_btn_{layer_label}_{slot_idx}"
-            #         ):
-            #             st.session_state[edit_flag_key] = True
-
             with preset_row[2]:
 
                 if preset_choice != "Default":
@@ -230,7 +213,18 @@ def flow_editor(layer_filter=None, ui_mode = "expander"):
 
             with preset_row[3]:
                 # Disable save if Default is selected
-                save_disabled = (preset_choice == "Default")
+                # save_disabled = (preset_choice == "Default")
+                layer_name = layer["layer_name"]
+
+                active_idx = st.session_state.get("active_preset", {}).get(layer_name, None)
+
+                is_active = (
+                    active_idx == int(preset_choice)
+                    if preset_choice != "Default"
+                    else False
+                )
+
+                save_disabled = (preset_choice == "Default") or (not is_active)
 
                 if st.button("Save Preset", key=f"save_preset_btn_{layer_idx}", disabled=save_disabled):
 
