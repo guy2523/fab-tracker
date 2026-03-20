@@ -1501,6 +1501,34 @@ if mode == "Update Run":
         loaded_run_doc_id = st.session_state["loaded_run_doc_id"]
         fields = run["fields"]
 
+        # ----------------------------------------
+        # Run summary (Lot ID + Device)
+        # ----------------------------------------
+        meta_fields = fields.get("metadata", {}).get("mapValue", {}).get("fields", {})
+
+        design_meta = firestore_to_python(meta_fields.get("design", []))
+
+        def _get_meta_val(meta_list, key):
+            key_l = key.strip().lower()
+            for it in (meta_list or []):
+                if (it.get("key") or "").strip().lower() == key_l:
+                    return (it.get("value") or "").strip()
+            return ""
+
+        lot_id = _get_meta_val(design_meta, "Lotid") or "-"
+        device = fields.get("device_name", {}).get("stringValue", "-")
+
+        st.markdown(
+            f"""
+            <div style='margin-top:6px; font-size:0.95rem; color:#333;'>
+                <b>Lot ID:</b> {lot_id} &nbsp;&nbsp;&nbsp;
+                <b>Device:</b> {device}
+            </div>
+            """,
+            unsafe_allow_html=True
+        )
+
+
         # 👇 EVERYTHING BELOW MUST BE INDENTED under this else:
 
         # ------------------------------------------------------------
