@@ -82,7 +82,7 @@ def flow_editor(layer_filter=None, ui_mode = "expander"):
 
             preset_names = [
                 display_map.get(str(i), f"Preset {i+1}")
-                for i in range(5)
+                for i in range(10)
             ]
 
 
@@ -101,13 +101,13 @@ def flow_editor(layer_filter=None, ui_mode = "expander"):
             active_idx = st.session_state.get("active_preset", {}).get(layer_name, None)
 
             # default dropdown selection = active preset if available
-            default_i = active_idx if isinstance(active_idx, int) and 0 <= active_idx < 5 else 0
+            default_i = active_idx if isinstance(active_idx, int) and 0 <= active_idx < 10 else 0
 
-            # Options: "Default" + Preset 1..5
-            apply_options = ["Default"] + list(range(5))
+            # Options: "Default" + Preset 1..10
+            apply_options = ["Default"] + list(range(10))
 
             # index: if an active preset exists, shift by +1 because "Default" is at index 0
-            default_index = (active_idx + 1) if isinstance(active_idx, int) and 0 <= active_idx < 5 else 0
+            default_index = (active_idx + 1) if isinstance(active_idx, int) and 0 <= active_idx < 10 else 0
 
             with preset_row[0]:
                 preset_choice = st.selectbox(

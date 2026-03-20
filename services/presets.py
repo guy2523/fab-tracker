@@ -39,16 +39,6 @@ def load_layer_presets_once(session_state, id_token, default_flow):
             }
 
 
-    # 2) Convert lookup into your session_state structure
-    # for base_layer in default_flow:  # <-- use the argument, not DEFAULT_FLOW
-    #     layer_name = base_layer["layer_name"]
-    #     session_state["layer_presets"].setdefault(layer_name, {})
-
-    #     for i in range(1, 6):  # preset1 → preset5
-    #         doc_key = f"{layer_name}_preset{i}"
-    #         if doc_key in preset_lookup:
-    #             slot_idx = str(i - 1)  # "0".."4"
-    #             session_state["layer_presets"][layer_name][slot_idx] = preset_lookup[doc_key]
     session_state.setdefault("preset_display_names", {})
 
     for base_layer in default_flow:  # <-- use the argument, not DEFAULT_FLOW
@@ -56,7 +46,7 @@ def load_layer_presets_once(session_state, id_token, default_flow):
         session_state["layer_presets"].setdefault(layer_name, {})
         session_state["preset_display_names"].setdefault(layer_name, {})
 
-        for i in range(1, 6):  # preset1 → preset5
+        for i in range(1, 11):  # preset1 → preset10
             doc_key = f"{layer_name}_preset{i}"
             if doc_key in preset_lookup:
                 slot_idx = str(i - 1)  # "0".."4"
@@ -71,15 +61,6 @@ def load_layer_presets_once(session_state, id_token, default_flow):
 
     session_state["layer_presets_loaded"] = True
 
-
-# def save_layer_preset(layer_name, slot_idx, substeps, id_token):
-#     data = {"substeps": substeps}
-
-#     # slot_idx is "0".."4" or 0..4
-#     i = int(slot_idx) + 1
-#     doc_id = f"{layer_name}_preset{i}"
-
-#     return firestore_set("layer_presets", doc_id, data, id_token=id_token)
 
 
 def save_layer_preset(layer_name, slot_idx, substeps, id_token):
