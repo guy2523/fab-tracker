@@ -1524,9 +1524,10 @@ if mode == "Update Run":
         st.markdown(
             f"""
             <div style='margin-top:6px; font-size:1rem; color:#333;'>
-                <b>No.:</b> {run_class} {run_no} &nbsp;&nbsp;&nbsp;
-                <b>Device:</b> {device} &nbsp;&nbsp;&nbsp;
-                <b>Lot ID:</b> {lot_id}
+                <b>Class</b> {run_class} device &nbsp;&nbsp;&nbsp;
+                <b>No.</b> {run_no} &nbsp;&nbsp;&nbsp;
+                <b>Name</b> {device} &nbsp;&nbsp;&nbsp;
+                <b>Lot ID</b> {lot_id}
             </div>
             """,
             unsafe_allow_html=True
