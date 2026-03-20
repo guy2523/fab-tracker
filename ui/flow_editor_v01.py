@@ -135,7 +135,7 @@ def flow_editor(layer_filter=None, ui_mode = "expander"):
             #     )
 
             #     display_map[slot_idx] = new_name
-            
+
             # --- NEW: rename preset (with edit toggle) ---
             if preset_choice != "Default":
 
@@ -221,6 +221,9 @@ def flow_editor(layer_filter=None, ui_mode = "expander"):
                 save_disabled = (preset_choice == "Default")
 
                 if st.button("Save Preset", key=f"save_preset_btn_{layer_idx}", disabled=save_disabled):
+
+                    st.session_state[f"edit_name_mode_{layer_label}"] = False
+
                     layer_name = layer["layer_name"]
 
                     # preset_choice is 0..4 here
