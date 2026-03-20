@@ -1271,7 +1271,7 @@ def layer_card_html(layer, idx=None, fridge_labels=None, fields=None, layers=Non
 
                 body_html += (
                     "<div style='flex:1;'>"
-                    f"<div style='font-size:0.80rem; font-weight:600; color:#333;'>{display_name}</div>"
+                    f"<div style='font-size:0.80rem; font-weight:600; color: var(--text-color);'>{display_name}</div>"
                     f"<div class='layer-chip-container'>{chips_html}</div>"
                     "</div>"
                 )
