@@ -121,19 +121,41 @@ def flow_editor(layer_filter=None, ui_mode = "expander"):
 
 
             # --- NEW: rename preset (with edit toggle) ---
+            # with preset_row[2]:
+
+            #     if preset_choice != "Default":
+
+            #         slot_idx = str(int(preset_choice))
+
+            #         edit_flag_key = f"edit_name_mode_{layer_label}_{slot_idx}"
+            #         if edit_flag_key not in st.session_state:
+            #             st.session_state[edit_flag_key] = False
+
+            #         if st.button(
+            #             "Edit Name",
+            #             key=f"edit_btn_{layer_label}_{slot_idx}"
+            #         ):
+            #             st.session_state[edit_flag_key] = True
+
             with preset_row[2]:
 
                 if preset_choice != "Default":
 
                     slot_idx = str(int(preset_choice))
+                    layer_name = layer["layer_name"]
 
                     edit_flag_key = f"edit_name_mode_{layer_label}_{slot_idx}"
                     if edit_flag_key not in st.session_state:
                         st.session_state[edit_flag_key] = False
 
+                    # ✅ Only enable if this preset is ACTIVE (i.e., loaded)
+                    active_idx = st.session_state.get("active_preset", {}).get(layer_name, None)
+                    is_active = (active_idx == int(preset_choice))
+
                     if st.button(
                         "Edit Name",
-                        key=f"edit_btn_{layer_label}_{slot_idx}"
+                        key=f"edit_btn_{layer_label}_{slot_idx}",
+                        disabled=not is_active,
                     ):
                         st.session_state[edit_flag_key] = True
 
