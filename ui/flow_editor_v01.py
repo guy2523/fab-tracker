@@ -88,7 +88,9 @@ def flow_editor(layer_filter=None, ui_mode = "expander"):
 
             # preset_row = st.columns([0.20, 0.15, 0.15, 0.15])
             # preset_row = st.columns([0.25, 0.15, 0.35, 0.25])
-            preset_row = st.columns([0.25, 0.15, 0.15, 0.25, 0.20])
+            # preset_row = st.columns([0.25, 0.15, 0.15, 0.25, 0.20])
+            preset_row = st.columns([0.25, 0.2, 0.2, 0.2, 0.15])
+
 
             # ------------------------------
             # Load Preset (dropdown + Apply)
