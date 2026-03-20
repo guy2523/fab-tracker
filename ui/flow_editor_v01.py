@@ -114,7 +114,12 @@ def flow_editor(layer_filter=None, ui_mode = "expander"):
                     "Preset",
                     options=apply_options,
                     index=default_index,
-                    format_func=lambda x: ("Default" if x == "Default" else preset_names[x]),
+                    # format_func=lambda x: ("Default" if x == "Default" else preset_names[x]),
+                    format_func=lambda x: (
+                        "Default"
+                        if x == "Default"
+                        else display_map.get(str(x), f"Preset {int(x)+1}")
+                    ),
                     key=f"load_preset_choice_{layer_idx}",
                     label_visibility="collapsed",
                 )
