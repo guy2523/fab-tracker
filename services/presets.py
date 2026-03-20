@@ -102,3 +102,5 @@ def save_layer_preset(layer_name, slot_idx, substeps, id_token):
     doc_id = f"{layer_name}_preset{i}"
 
     return firestore_set("layer_presets", doc_id, data, id_token=id_token)
+
+    st.session_state[f"edit_name_mode_{layer_label}"] = False

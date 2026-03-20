@@ -118,23 +118,57 @@ def flow_editor(layer_filter=None, ui_mode = "expander"):
                 )
 
             # --- NEW: rename preset ---
+            # if preset_choice != "Default":
+
+            #     slot_idx = str(int(preset_choice))  # "0".."4"
+
+            #     current_name = display_map.get(
+            #         slot_idx,
+            #         f"Preset {int(preset_choice)+1}"
+            #     )
+
+            #     new_name = st.text_input(
+            #         "Preset name",
+            #         value=current_name,
+            #         key=f"rename_{layer_label}_{slot_idx}",
+            #         label_visibility="collapsed",
+            #     )
+
+            #     display_map[slot_idx] = new_name
+            
+            # --- NEW: rename preset (with edit toggle) ---
             if preset_choice != "Default":
 
                 slot_idx = str(int(preset_choice))  # "0".."4"
+
+                edit_flag_key = f"edit_name_mode_{layer_label}"
+                if edit_flag_key not in st.session_state:
+                    st.session_state[edit_flag_key] = False
 
                 current_name = display_map.get(
                     slot_idx,
                     f"Preset {int(preset_choice)+1}"
                 )
 
-                new_name = st.text_input(
-                    "Preset name",
-                    value=current_name,
-                    key=f"rename_{layer_label}_{slot_idx}",
-                    label_visibility="collapsed",
-                )
+                # --- Edit button ---
+                if st.button(
+                    "Edit Name",
+                    key=f"edit_btn_{layer_label}_{slot_idx}"
+                ):
+                    st.session_state[edit_flag_key] = True
 
-                display_map[slot_idx] = new_name
+                # --- Show input ONLY when editing ---
+                if st.session_state[edit_flag_key]:
+
+                    new_name = st.text_input(
+                        "Preset name",
+                        value=current_name,
+                        key=f"rename_{layer_label}_{slot_idx}",
+                        label_visibility="collapsed",
+                    )
+
+                    display_map[slot_idx] = new_name
+
 
 
             with preset_row[1]:
